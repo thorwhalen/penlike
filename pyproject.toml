@@ -10,14 +10,36 @@ version = "0.0.1"
 description = "Model how an author, a group or a corpus writes, register by register, and give agents the skills to write in that style"
 readme = "README.md"
 requires-python = ">=3.10"
-keywords = []
+keywords = [
+    "stylometry", "writing-style", "style-transfer", "register", "authorship",
+    "idiolect", "llm", "agent-skills", "writing",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Text Processing :: Linguistic",
+]
 authors = [
     { name = "Thor Whalen" },
 ]
-dependencies = []
+# The core measures text with the standard library alone. `dol` is the store the
+# models are read and written through, and `cw` builds the command line from the same
+# functions the library exposes. Anything that reaches a channel, a detector or an
+# agent host is an optional extra.
+dependencies = [
+    "dol",
+    "cw>=0.1.1,<0.2",
+]
+
+[project.scripts]
+penlike = "penlike.__main__:main"
+penlike-mcp = "penlike.mcp:main"
 
 [project.license]
-text = "mit"
+text = "MIT"
 
 [project.urls]
 Homepage = "https://github.com/thorwhalen/penlike"
@@ -34,9 +56,40 @@ docs = [
     "sphinx>=6.0",
     "sphinx-rtd-theme>=1.0",
 ]
+# Reading conversations through the fleet facade over communication channels.
+correspond = [
+    "correspond",
+]
+# Screening a corpus for machine-written text. The cheap tier needs nothing more;
+# the heavy tier also needs `ductus[local]` (torch and transformers).
+screen = [
+    "ductus",
+]
+# The MCP surface. >=0.1.12 is where keyword-only defaults survive
+# `from __future__ import annotations` (i2mint/py2mcp#12).
+mcp = [
+    "py2mcp>=0.1.12",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = [
+    "penlike",
+]
+
+# An allowlist, never a denylist: .claude/skills/<name> are symlinks into
+# penlike/data/, and an sdist is a copy of the working tree.
+[tool.hatch.build.targets.sdist]
+only-include = [
+    "penlike",
+    "tests",
+    ".github",
+    "README.md",
+    "LICENSE",
+    "pyproject.toml",
+]
 
 [tool.ruff]
-line-length = 88
+line-length = 100
 target-version = "py310"
 exclude = [
     "**/*.ipynb",
@@ -77,14 +130,16 @@ convention = "google"
 minversion = "6.0"
 testpaths = [
     "tests",
+    "penlike",
 ]
+addopts = "--doctest-modules"
 doctest_optionflags = [
     "NORMALIZE_WHITESPACE",
     "ELLIPSIS",
 ]
 
 [tool.wads.ci]
-project_name = ""
+project_name = "penlike"
 
 [tool.wads.ci.commands]
 pre_test = []
