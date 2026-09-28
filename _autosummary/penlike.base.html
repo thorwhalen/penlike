@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="amber" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>penlike.base - penlike</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="penlike.data" href="penlike.data.html" /><link rel="prev" title="penlike" href="penlike.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d88b86f9" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/><meta property="og:title" content="penlike.base"/>
+    <meta name="twitter:card" content="summary"/>
+  
+<link rel="alternate" type="text/markdown" href="penlike.base.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+</head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>penlike</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/thorwhalen/penlike" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="penlike.html">penlike</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">penlike.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.data.html">penlike.data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.features.html">penlike.features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.mcp.html">penlike.mcp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.profile.html">penlike.profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.routing.html">penlike.routing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.screening.html">penlike.screening</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.sourcers.html">penlike.sourcers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.store.html">penlike.store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.tools.html">penlike.tools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-agents.html">For AI agents</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#penlike.base.AI_ERA_START"><code class="docutils literal notranslate"><span class="pre">AI_ERA_START</span></code></a></li>
+<li><a class="reference internal" href="#penlike.base.DOC_FIELDS"><code class="docutils literal notranslate"><span class="pre">DOC_FIELDS</span></code></a></li>
+<li><a class="reference internal" href="#penlike.base.PenlikeError"><code class="docutils literal notranslate"><span class="pre">PenlikeError</span></code></a></li>
+<li><a class="reference internal" href="#penlike.base.RESERVED_NAMES"><code class="docutils literal notranslate"><span class="pre">RESERVED_NAMES</span></code></a></li>
+<li><a class="reference internal" href="#penlike.base.audience_of"><code class="docutils literal notranslate"><span class="pre">audience_of()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.base.check_name"><code class="docutils literal notranslate"><span class="pre">check_name()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.base.doc_id"><code class="docutils literal notranslate"><span class="pre">doc_id()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.base.normalize_doc"><code class="docutils literal notranslate"><span class="pre">normalize_doc()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.base.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.base.prose_of"><code class="docutils literal notranslate"><span class="pre">prose_of()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.base.strip_quoted"><code class="docutils literal notranslate"><span class="pre">strip_quoted()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.base.word_count"><code class="docutils literal notranslate"><span class="pre">word_count()</span></code></a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">penlike</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../api.html"><span itemprop="name">API reference</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="penlike.html"><span itemprop="name">penlike</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="3" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">penlike.base</strong>
+        <meta itemprop="position" content="4" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <article class="yue dark-code" role="main">
+          <section id="module-penlike.base">
+<span id="penlike-base"></span><h1>penlike.base<a class="headerlink" href="#module-penlike.base" title="Link to this heading">#</a></h1>
+<p>The shared vocabulary: the document record, text cleaning, dates and the error type.</p>
+<p>A <em>document</em> is one piece of writing plus the situation it was written in. It is a plain
+<code class="docutils literal notranslate"><span class="pre">dict</span></code> so that it round-trips through JSON and so that a custom sourcer can be written
+by anyone (or any agent) without importing a class. <a class="reference internal" href="#penlike.base.normalize_doc" title="penlike.base.normalize_doc"><code class="xref py py-func docutils literal notranslate"><span class="pre">normalize_doc()</span></code></a> is the one
+place that decides what a well-formed document looks like.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">doc</span> <span class="o">=</span> <span class="n">normalize_doc</span><span class="p">({</span><span class="s2">"text"</span><span class="p">:</span> <span class="s2">"Hello there."</span><span class="p">,</span> <span class="s2">"channel"</span><span class="p">:</span> <span class="s2">"email"</span><span class="p">,</span> <span class="s2">"to"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"ada@example.org"</span><span class="p">]})</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">doc</span><span class="p">[</span><span class="s2">"audience"</span><span class="p">],</span> <span class="n">doc</span><span class="p">[</span><span class="s2">"words"</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">"id"</span><span class="p">])</span>
+</span><span data-line="3"><span class="go">('one', 2, 16)</span>
+</span></pre></div>
+</div>
+<p class="rubric">Module Attributes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.base.AI_ERA_START" title="penlike.base.AI_ERA_START"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AI_ERA_START</span></code></a></p></td>
+<td><p>The public release of ChatGPT.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.base.DOC_FIELDS" title="penlike.base.DOC_FIELDS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DOC_FIELDS</span></code></a></p></td>
+<td><p>Every field a document may carry.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.base.RESERVED_NAMES" title="penlike.base.RESERVED_NAMES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RESERVED_NAMES</span></code></a></p></td>
+<td><p>Names that a model or a register may not take.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.base.audience_of" title="penlike.base.audience_of"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audience_of</span></code></a>(to[, cc, public])</p></td>
+<td><p>The size of the readership: <code class="docutils literal notranslate"><span class="pre">one</span></code>, <code class="docutils literal notranslate"><span class="pre">few</span></code> (2 to 5), <code class="docutils literal notranslate"><span class="pre">many</span></code>, <code class="docutils literal notranslate"><span class="pre">public</span></code> or <code class="docutils literal notranslate"><span class="pre">unknown</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.base.check_name" title="penlike.base.check_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_name</span></code></a>(name)</p></td>
+<td><p>Validate the name of a model or a register, which is also the name of its files.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.base.doc_id" title="penlike.base.doc_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">doc_id</span></code></a>(text)</p></td>
+<td><p>A stable id for a text: the first 16 hex digits of its SHA-256, whitespace-blind.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.base.normalize_doc" title="penlike.base.normalize_doc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_doc</span></code></a>(raw, *[, source])</p></td>
+<td><p>Make a well-formed document from whatever a sourcer yielded.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.base.parse_date" title="penlike.base.parse_date"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_date</span></code></a>(value)</p></td>
+<td><p>Turn a date in any common form into ISO 8601 UTC, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.base.prose_of" title="penlike.base.prose_of"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prose_of</span></code></a>(text)</p></td>
+<td><p>The prose of a text: code blocks, inline code and bare links replaced by placeholders.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.base.strip_quoted" title="penlike.base.strip_quoted"><code class="xref py py-obj docutils literal notranslate"><span class="pre">strip_quoted</span></code></a>(text)</p></td>
+<td><p>Remove what the author did not write: quoted replies and forwarded mail.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.base.word_count" title="penlike.base.word_count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">word_count</span></code></a>(text)</p></td>
+<td><p>Count words (letters, with inner apostrophes).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Exceptions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.base.PenlikeError" title="penlike.base.PenlikeError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PenlikeError</span></code></a></p></td>
+<td><p>An error whose message tells the caller what to do next.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="penlike.base.AI_ERA_START">
+<span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">AI_ERA_START</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'2022-11-30'</span></span><a class="headerlink" href="#penlike.base.AI_ERA_START" title="Link to this definition">#</a></dt>
+<dd><p>The public release of ChatGPT. Text dated on or after this day may have been written
+or edited by a language model, so a corpus meant to capture a person is safest when
+it stops before it. It is a default for warnings, never a silent filter.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="penlike.base.DOC_FIELDS">
+<span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">DOC_FIELDS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('id',</span> <span class="pre">'text',</span> <span class="pre">'date',</span> <span class="pre">'source',</span> <span class="pre">'ref',</span> <span class="pre">'channel',</span> <span class="pre">'kind',</span> <span class="pre">'title',</span> <span class="pre">'author',</span> <span class="pre">'is_self',</span> <span class="pre">'to',</span> <span class="pre">'cc',</span> <span class="pre">'audience',</span> <span class="pre">'reply',</span> <span class="pre">'url',</span> <span class="pre">'register',</span> <span class="pre">'pinned',</span> <span class="pre">'excluded',</span> <span class="pre">'flags',</span> <span class="pre">'words')</span></span><a class="headerlink" href="#penlike.base.DOC_FIELDS" title="Link to this definition">#</a></dt>
+<dd><p>Every field a document may carry. Only <code class="docutils literal notranslate"><span class="pre">text</span></code> is required from a sourcer.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="penlike.base.PenlikeError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">PenlikeError</span></span><a class="reference internal" href="../_modules/penlike/base.html#PenlikeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.base.PenlikeError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#Exception" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>An error whose message tells the caller what to do next.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="penlike.base.RESERVED_NAMES">
+<span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">RESERVED_NAMES</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('general',)</span></span><a class="headerlink" href="#penlike.base.RESERVED_NAMES" title="Link to this definition">#</a></dt>
+<dd><p>Names that a model or a register may not take.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.base.audience_of">
+<span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">audience_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">public</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/base.html#audience_of"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.base.audience_of" title="Link to this definition">#</a></dt>
+<dd><p>The size of the readership: <code class="docutils literal notranslate"><span class="pre">one</span></code>, <code class="docutils literal notranslate"><span class="pre">few</span></code> (2 to 5), <code class="docutils literal notranslate"><span class="pre">many</span></code>, <code class="docutils literal notranslate"><span class="pre">public</span></code> or <code class="docutils literal notranslate"><span class="pre">unknown</span></code>.</p>
+<p>Recipient count has a measured effect on how formally people write email, so it
+is part of the situation a text is filed under.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">audience_of</span><span class="p">([</span><span class="s2">"a@example.org"</span><span class="p">]),</span> <span class="n">audience_of</span><span class="p">([</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">],</span> <span class="p">[</span><span class="s2">"c"</span><span class="p">]),</span> <span class="n">audience_of</span><span class="p">([])</span>
+</span><span data-line="2"><span class="go">('one', 'few', 'unknown')</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.base.check_name">
+<span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">check_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/base.html#check_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.base.check_name" title="Link to this definition">#</a></dt>
+<dd><p>Validate the name of a model or a register, which is also the name of its files.</p>
+<p>Lowercase letters, digits, <code class="docutils literal notranslate"><span class="pre">.</span></code>, <code class="docutils literal notranslate"><span class="pre">_</span></code> and <code class="docutils literal notranslate"><span class="pre">-</span></code>, starting with a letter or a
+digit, with no <code class="docutils literal notranslate"><span class="pre">..</span></code>. Anything else could name a file outside the data folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">check_name</span><span class="p">(</span><span class="s2">"me"</span><span class="p">),</span> <span class="n">check_name</span><span class="p">(</span><span class="s2">"email.one"</span><span class="p">)</span>
+</span><span data-line="2"><span class="go">('me', 'email.one')</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">check_name</span><span class="p">(</span><span class="s2">"../outside"</span><span class="p">)</span>
+</span><span data-line="4"><span class="gt">Traceback (most recent call last):</span>
+</span><span data-line="5"><span class="w">    </span><span class="o">...</span>
+</span><span data-line="6"><span class="gr">penlike.base.PenlikeError</span>: <span class="n">'../outside' is not a usable name: use lowercase ...</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.base.doc_id">
+<span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">doc_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/base.html#doc_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.base.doc_id" title="Link to this definition">#</a></dt>
+<dd><p>A stable id for a text: the first 16 hex digits of its SHA-256, whitespace-blind.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">doc_id</span><span class="p">(</span><span class="s2">"Hello  there."</span><span class="p">)</span> <span class="o">==</span> <span class="n">doc_id</span><span class="p">(</span><span class="s2">"Hello there. "</span><span class="p">)</span>
+</span><span data-line="2"><span class="go">True</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.base.normalize_doc">
+<span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">normalize_doc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/base.html#normalize_doc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.base.normalize_doc" title="Link to this definition">#</a></dt>
+<dd><p>Make a well-formed document from whatever a sourcer yielded.</p>
+<p>Quoted material is removed, the date is put in ISO form, the audience is derived
+when it was not given, and the id is computed from the cleaned text. Unknown keys
+are kept under <code class="docutils literal notranslate"><span class="pre">flags</span></code> so that a custom sourcer can carry extra metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">doc</span> <span class="o">=</span> <span class="n">normalize_doc</span><span class="p">({</span><span class="s2">"text"</span><span class="p">:</span> <span class="s2">"&gt; quoted</span><span class="se">\n</span><span class="s2">Fine by me."</span><span class="p">,</span> <span class="s2">"date"</span><span class="p">:</span> <span class="s2">"2020"</span><span class="p">,</span> <span class="s2">"mood"</span><span class="p">:</span> <span class="s2">"calm"</span><span class="p">})</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">doc</span><span class="p">[</span><span class="s2">"text"</span><span class="p">],</span> <span class="n">doc</span><span class="p">[</span><span class="s2">"date"</span><span class="p">][:</span><span class="mi">4</span><span class="p">],</span> <span class="n">doc</span><span class="p">[</span><span class="s2">"flags"</span><span class="p">]</span>
+</span><span data-line="3"><span class="go">('Fine by me.', '2020', {'mood': 'calm'})</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.base.parse_date">
+<span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">parse_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/base.html#parse_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.base.parse_date" title="Link to this definition">#</a></dt>
+<dd><p>Turn a date in any common form into ISO 8601 UTC, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>A naive value is read as UTC. A bare year or day is accepted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_date</span><span class="p">(</span><span class="s2">"2021-03-04"</span><span class="p">)</span>
+</span><span data-line="2"><span class="go">'2021-03-04T00:00:00+00:00'</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_date</span><span class="p">(</span><span class="s2">"Thu, 4 Mar 2021 10:00:00 +0100"</span><span class="p">)</span>
+</span><span data-line="4"><span class="go">'2021-03-04T09:00:00+00:00'</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_date</span><span class="p">(</span><span class="s2">"2023"</span><span class="p">)</span>
+</span><span data-line="6"><span class="go">'2023-01-01T00:00:00+00:00'</span>
+</span><span data-line="7"><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_date</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+</span><span data-line="8"><span class="go">True</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.base.prose_of">
+<span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">prose_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/base.html#prose_of"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.base.prose_of" title="Link to this definition">#</a></dt>
+<dd><p>The prose of a text: code blocks, inline code and bare links replaced by placeholders.</p>
+<p>Style is measured on prose. Code and links are somebody else’s tokens, and they
+would swamp punctuation and word-length figures in technical writing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">prose_of</span><span class="p">(</span><span class="s2">"Call `f(x)` then see https://example.org/a for more."</span><span class="p">)</span>
+</span><span data-line="2"><span class="go">'Call CODE then see LINK for more.'</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.base.strip_quoted">
+<span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">strip_quoted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/base.html#strip_quoted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.base.strip_quoted" title="Link to this definition">#</a></dt>
+<dd><p>Remove what the author did not write: quoted replies and forwarded mail.</p>
+<p>A model of an author built from text that includes the messages they were
+answering is a model of their correspondents. Lines starting with <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> go, and
+everything from a reply header (“On &lt;date&gt;, &lt;someone&gt; wrote:”, “Original
+Message”, a block of mail headers) onward goes. This is a heuristic over
+plain text: check a sample of what was gathered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">strip_quoted</span><span class="p">(</span><span class="s2">"Sounds good.</span><span class="se">\n\n</span><span class="s2">On Mon, 1 Feb 2021, Ada wrote:</span><span class="se">\n</span><span class="s2">&gt; Shall we?"</span><span class="p">)</span>
+</span><span data-line="2"><span class="go">'Sounds good.'</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">strip_quoted</span><span class="p">(</span><span class="s2">"&gt; earlier point</span><span class="se">\n</span><span class="s2">I agree with this."</span><span class="p">)</span>
+</span><span data-line="4"><span class="go">'I agree with this.'</span>
+</span><span data-line="5"><span class="gp">&gt;&gt;&gt; </span><span class="n">strip_quoted</span><span class="p">(</span><span class="s2">"Here is the plan.</span><span class="se">\n\n</span><span class="s2">On Monday I wrote:</span><span class="se">\n</span><span class="s2">ship it"</span><span class="p">)</span>
+</span><span data-line="6"><span class="go">'Here is the plan.\n\nOn Monday I wrote:\nship it'</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.base.word_count">
+<span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">word_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/base.html#word_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.base.word_count" title="Link to this definition">#</a></dt>
+<dd><p>Count words (letters, with inner apostrophes).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">word_count</span><span class="p">(</span><span class="s2">"Don't stop, it's 3pm."</span><span class="p">)</span>
+</span><span data-line="2"><span class="go">4</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="penlike.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">penlike</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="penlike.data.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">penlike.data</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright">
+  <p>
+    Made with
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+  <a href="https://github.com/thorwhalen/penlike" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=fd10adb8"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

@@ -1,0 +1,30 @@
+# penlike
+
+> Model how an author, a group or a corpus writes, register by register, and give agents the skills to write in that style
+
+
+## Pages
+
+- [penlike](index.html.md): Model how an author writes, register by register, and give an agent what it needs to write in that s...
+- [API reference](api.html.md): | &#96;penlike&#96;   | Model how an author, a group or a corpus writes, and write in that style.   |
+- [penlike](_autosummary/penlike.html.md): Model how an author, a group or a corpus writes, and write in that style.
+- [penlike.base](_autosummary/penlike.base.html.md): The shared vocabulary: the document record, text cleaning, dates and the error type.
+- [penlike.data](_autosummary/penlike.data.html.md): The skills and agents shipped with penlike, as package data.
+- [penlike.features](_autosummary/penlike.features.html.md): Measure how a text is written: the cheap tier, standard library only.
+- [penlike.mcp](_autosummary/penlike.mcp.html.md): MCP over stdio: the same verbs, for local MCP clients.
+- [penlike.profile](_autosummary/penlike.profile.html.md): Profiles: what a set of texts has in common, and how far a draft is from it.
+- [penlike.routing](_autosummary/penlike.routing.html.md): Registers: filing texts by situation, finding new ones, and routing a request to one.
+- [penlike.screening](_autosummary/penlike.screening.html.md): Screening: keeping machine-written text out of a model of a person. Optional.
+- [penlike.sourcers](_autosummary/penlike.sourcers.html.md): Sourcers: where the writing comes from. Read-only, by construction.
+- [penlike.store](_autosummary/penlike.store.html.md): Where models live, and the one object that reads and writes them.
+- [penlike.tools](_autosummary/penlike.tools.html.md): The verbs: every operation penlike offers, as plain functions returning JSON-ready dicts.
+- [For AI agents](ai-agents.html.md): &#96;penlike&#96; ships artifacts for coding agents alongside its code. This page lists
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-09-28 07:58 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+
+## Optional
+
+- [penlike.md](penlike.md): Complete documentation in a single file.
+
+## Build
+
+- [build_info.json](build_info.json): build provenance (commit, version, tool versions, whether the docs match the package)

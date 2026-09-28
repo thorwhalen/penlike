@@ -1,0 +1,25 @@
+penlike.sourcers
+================
+
+.. automodule:: penlike.sourcers
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      SOURCERS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      claude_sessions
+      correspond
+      files
+      github
+      jsonl
+      mbox
+      requirements
+      resolve_sourcer
+   

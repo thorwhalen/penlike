@@ -1,0 +1,24 @@
+penlike.routing
+===============
+
+.. automodule:: penlike.routing
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_LAM
+      DEFAULT_MIN_SEPARATION
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      dp_means
+      nearest
+      propose
+      route
+      select_exemplars
+      situate
+   

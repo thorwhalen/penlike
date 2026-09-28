@@ -1,0 +1,22 @@
+penlike.features
+================
+
+.. automodule:: penlike.features
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      FUNCTION_WORDS
+      SCALAR_FEATURES
+      PRESENCE_FEATURES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      measure
+      sentences_of
+      words_of
+   

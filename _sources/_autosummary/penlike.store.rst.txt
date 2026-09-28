@@ -1,0 +1,22 @@
+penlike.store
+=============
+
+.. automodule:: penlike.store
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      data_dir
+      model_names
+      settings
+      text_files
+      write_settings
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ModelStore
+   

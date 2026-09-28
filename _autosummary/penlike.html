@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="amber" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>penlike - penlike</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="penlike.base" href="penlike.base.html" /><link rel="prev" title="API reference" href="../api.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d88b86f9" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/><meta property="og:title" content="penlike"/>
+    <meta name="twitter:card" content="summary"/>
+  
+<link rel="alternate" type="text/markdown" href="penlike.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+</head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>penlike</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/thorwhalen/penlike" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">penlike</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="penlike.base.html">penlike.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.data.html">penlike.data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.features.html">penlike.features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.mcp.html">penlike.mcp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.profile.html">penlike.profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.routing.html">penlike.routing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.screening.html">penlike.screening</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.sourcers.html">penlike.sourcers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.store.html">penlike.store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.tools.html">penlike.tools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-agents.html">For AI agents</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#penlike.ModelStore"><code class="docutils literal notranslate"><span class="pre">ModelStore</span></code></a><ul>
+<li><a class="reference internal" href="#penlike.ModelStore.delete"><code class="docutils literal notranslate"><span class="pre">ModelStore.delete()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.ModelStore.require"><code class="docutils literal notranslate"><span class="pre">ModelStore.require()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#penlike.PenlikeError"><code class="docutils literal notranslate"><span class="pre">PenlikeError</span></code></a></li>
+<li><a class="reference internal" href="#penlike.assign"><code class="docutils literal notranslate"><span class="pre">assign()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.batches"><code class="docutils literal notranslate"><span class="pre">batches()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.brief"><code class="docutils literal notranslate"><span class="pre">brief()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.build"><code class="docutils literal notranslate"><span class="pre">build()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.data_dir"><code class="docutils literal notranslate"><span class="pre">data_dir()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.docs"><code class="docutils literal notranslate"><span class="pre">docs()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.exclude"><code class="docutils literal notranslate"><span class="pre">exclude()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.exemplars"><code class="docutils literal notranslate"><span class="pre">exemplars()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.gather"><code class="docutils literal notranslate"><span class="pre">gather()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.install_skills"><code class="docutils literal notranslate"><span class="pre">install_skills()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.measure"><code class="docutils literal notranslate"><span class="pre">measure()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.models"><code class="docutils literal notranslate"><span class="pre">models()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.new"><code class="docutils literal notranslate"><span class="pre">new()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.normalize_doc"><code class="docutils literal notranslate"><span class="pre">normalize_doc()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.note"><code class="docutils literal notranslate"><span class="pre">note()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.notes"><code class="docutils literal notranslate"><span class="pre">notes()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.propose"><code class="docutils literal notranslate"><span class="pre">propose()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.register_add"><code class="docutils literal notranslate"><span class="pre">register_add()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.register_edit"><code class="docutils literal notranslate"><span class="pre">register_edit()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.register_merge"><code class="docutils literal notranslate"><span class="pre">register_merge()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.registers"><code class="docutils literal notranslate"><span class="pre">registers()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.remove"><code class="docutils literal notranslate"><span class="pre">remove()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.resolve_sourcer"><code class="docutils literal notranslate"><span class="pre">resolve_sourcer()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.route"><code class="docutils literal notranslate"><span class="pre">route()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.screen"><code class="docutils literal notranslate"><span class="pre">screen()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.show"><code class="docutils literal notranslate"><span class="pre">show()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.situate"><code class="docutils literal notranslate"><span class="pre">situate()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.sources"><code class="docutils literal notranslate"><span class="pre">sources()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.use"><code class="docutils literal notranslate"><span class="pre">use()</span></code></a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">penlike</span></a>
+        <meta itemprop="position" content="1" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <article class="yue dark-code" role="main">
+          <section id="module-penlike">
+<span id="penlike"></span><h1>penlike<a class="headerlink" href="#module-penlike" title="Link to this heading">#</a></h1>
+<p>Model how an author, a group or a corpus writes, and write in that style.</p>
+<p>penlike keeps a <em>model</em> of a writer: their texts, filed by register (the situation
+a text was written in), a measured profile of each register, notes on what numbers
+miss, and examples. An agent asks for a brief before writing and checks its draft
+afterwards.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">penlike</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">files</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">penlike</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"ada"</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">)</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">penlike</span><span class="o">.</span><span class="n">models</span><span class="p">(</span><span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">)[</span><span class="s2">"summary"</span><span class="p">]</span>
+</span><span data-line="5"><span class="go">'1 model(s)'</span>
+</span></pre></div>
+</div>
+<p>Everything a model holds is private and lives under the user’s data folder
+(<code class="docutils literal notranslate"><span class="pre">~/.local/share/penlike</span></code> by default), never in a project.</p>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.assign" title="penlike.assign"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assign</span></code></a>(model, register, ids, *[, data_dir, ...])</p></td>
+<td><p>File texts under a register by hand.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.batches" title="penlike.batches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">batches</span></code></a>(model, *[, register, size, ...])</p></td>
+<td><p>Write a register's texts into batch files for reader agents, and return their paths.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.brief" title="penlike.brief"><code class="xref py py-obj docutils literal notranslate"><span class="pre">brief</span></code></a>(*[, like, style, channel, to, ...])</p></td>
+<td><p>Everything needed to write in an author's style, for one piece of writing.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.build" title="penlike.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>([model, reference, situate, lam, ...])</p></td>
+<td><p>File every text under a register and measure each register's profile.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.check" title="penlike.check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check</span></code></a>(text, *[, like, style, channel, to, ...])</p></td>
+<td><p>Measure a draft against the author's register and list what differs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.data_dir" title="penlike.data_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_dir</span></code></a>([data_dir])</p></td>
+<td><p>The data root: the argument, else <code class="docutils literal notranslate"><span class="pre">$PENLIKE_DATA_DIR</span></code>, else the user data folder.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.docs" title="penlike.docs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">docs</span></code></a>([model, register, excluded, limit, ...])</p></td>
+<td><p>List a model's texts: id, date, register and the first words.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.exclude" title="penlike.exclude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exclude</span></code></a>(model, ids, *[, reason, undo, ...])</p></td>
+<td><p>Keep texts out of the model without deleting them, or put them back with <code class="docutils literal notranslate"><span class="pre">undo</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.exemplars" title="penlike.exemplars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exemplars</span></code></a>(*[, like, style, channel, to, ...])</p></td>
+<td><p>Pick texts by the author to show as examples, for the register the request routes to.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.gather" title="penlike.gather"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gather</span></code></a>(model, source[, refs, since, until, ...])</p></td>
+<td><p>Read texts from a source into a model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.install_skills" title="penlike.install_skills"><code class="xref py py-obj docutils literal notranslate"><span class="pre">install_skills</span></code></a>(*[, target, write])</p></td>
+<td><p>Link the skills and agents shipped with penlike into an agent host's folders.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.measure" title="penlike.measure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">measure</span></code></a>(text)</p></td>
+<td><p>Measure one text's style, on its own: lengths, punctuation, habits, greeting and closing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.models" title="penlike.models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">models</span></code></a>(*[, data_dir, files])</p></td>
+<td><p>List the models in the store, with what each is a model of.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.new" title="penlike.new"><code class="xref py py-obj docutils literal notranslate"><span class="pre">new</span></code></a>(model, *[, kind, description, basis, ...])</p></td>
+<td><p>Make an empty model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.normalize_doc" title="penlike.normalize_doc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_doc</span></code></a>(raw, *[, source])</p></td>
+<td><p>Make a well-formed document from whatever a sourcer yielded.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.note" title="penlike.note"><code class="xref py py-obj docutils literal notranslate"><span class="pre">note</span></code></a>(model, text, *[, register, source, ...])</p></td>
+<td><p>Record something about how the author writes that numbers do not capture.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.notes" title="penlike.notes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">notes</span></code></a>([model, register, data_dir, files])</p></td>
+<td><p>Read the notes on a model: one register's, or all of them.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.propose" title="penlike.propose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">propose</span></code></a>([model, lam, min_size, ...])</p></td>
+<td><p>Look for registers nobody named yet: groups of texts that are written differently.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.register_add" title="penlike.register_add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_add</span></code></a>(model, name, *[, parent, ...])</p></td>
+<td><p>Name a register and put texts in it, from a proposal or from a list of text ids.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.register_edit" title="penlike.register_edit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_edit</span></code></a>(model, register, *[, name, ...])</p></td>
+<td><p>Give a register a display name or a description.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.register_merge" title="penlike.register_merge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_merge</span></code></a>(model, register, into, *[, ...])</p></td>
+<td><p>Merge one register into another, when the two turn out to be written the same way.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.registers" title="penlike.registers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">registers</span></code></a>([model, data_dir, files])</p></td>
+<td><p>List a model's registers: how much text each rests on, and what it was named.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.remove" title="penlike.remove"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove</span></code></a>(model, *[, yes, data_dir, files])</p></td>
+<td><p>Delete a model and everything in it.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.resolve_sourcer" title="penlike.resolve_sourcer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_sourcer</span></code></a>(source)</p></td>
+<td><p>Find the sourcer a name refers to: built-in, <code class="docutils literal notranslate"><span class="pre">module:function</span></code>, or <code class="docutils literal notranslate"><span class="pre">file.py:function</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.route" title="penlike.route"><code class="xref py py-obj docutils literal notranslate"><span class="pre">route</span></code></a>(*[, like, style, channel, to, ...])</p></td>
+<td><p>Choose the register for a piece of writing, and say why it was chosen.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.screen" title="penlike.screen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">screen</span></code></a>(model, *[, tier, cutoff, run, ...])</p></td>
+<td><p>Screen a model's texts for machine-written content.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.show" title="penlike.show"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code></a>([model, data_dir, files])</p></td>
+<td><p>Show one model: what it is of, where its texts came from, and its registers.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.situate" title="penlike.situate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">situate</span></code></a>(doc)</p></td>
+<td><p>The situational register of a document, from its metadata alone.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.sources" title="penlike.sources"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sources</span></code></a>()</p></td>
+<td><p>List the built-in sourcers, what each reads, and whether it can run on this machine.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.use" title="penlike.use"><code class="xref py py-obj docutils literal notranslate"><span class="pre">use</span></code></a>(model, *[, data_dir, files])</p></td>
+<td><p>Make a model the default, the one meant by &quot;write like me&quot;.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Classes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.ModelStore" title="penlike.ModelStore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelStore</span></code></a>(name, *[, data_dir, files])</p></td>
+<td><p>One model's files: documents, registers, profiles and notes.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Exceptions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.PenlikeError" title="penlike.PenlikeError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PenlikeError</span></code></a></p></td>
+<td><p>An error whose message tells the caller what to do next.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="penlike.ModelStore">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">ModelStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#ModelStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.ModelStore" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>One model’s files: documents, registers, profiles and notes.</p>
+<p><code class="docutils literal notranslate"><span class="pre">files</span></code> is the seam. The default is a local folder; any <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> of
+relative path to text works, which is how tests run without touching a disk.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="penlike.ModelStore.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#ModelStore.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.ModelStore.delete" title="Link to this definition">#</a></dt>
+<dd><p>Delete every file of the model. Returns how many were removed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="penlike.ModelStore.require">
+<span class="sig-name descname"><span class="pre">require</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#ModelStore.require"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.ModelStore.require" title="Link to this definition">#</a></dt>
+<dd><p>Return self, or explain how to make the model when it does not exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="penlike.store.html#penlike.store.ModelStore" title="penlike.store.ModelStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelStore</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="penlike.PenlikeError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">PenlikeError</span></span><a class="reference internal" href="../_modules/penlike/base.html#PenlikeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.PenlikeError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#Exception" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>An error whose message tells the caller what to do next.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.assign">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">assign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#assign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.assign" title="Link to this definition">#</a></dt>
+<dd><p>File texts under a register by hand. The choice is kept through every later build.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.batches">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">batches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#batches"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.batches" title="Link to this definition">#</a></dt>
+<dd><p>Write a register’s texts into batch files for reader agents, and return their paths.</p>
+<p>The files go under the data root (<code class="docutils literal notranslate"><span class="pre">work/&lt;model&gt;/</span></code>), never into a project
+folder. Each holds <code class="docutils literal notranslate"><span class="pre">size</span></code> texts with their ids, so that a note can cite them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.brief">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">brief</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">like</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audience</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reply</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#brief"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.brief" title="Link to this definition">#</a></dt>
+<dd><p>Everything needed to write in an author’s style, for one piece of writing.</p>
+<p>Routes the request to a register, then returns that register’s measured
+profile, the notes on it, and examples by the author. Read it before
+drafting; check the draft against the same register afterwards.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.build">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">situate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.build" title="Link to this definition">#</a></dt>
+<dd><p>File every text under a register and measure each register’s profile.</p>
+<p>Texts are filed by situation (<code class="docutils literal notranslate"><span class="pre">situate</span></code>, a <code class="docutils literal notranslate"><span class="pre">module:function</span></code> reference,
+replaces the rule). Texts that a person assigned by hand stay where they were
+put. Where a register has named finer registers, each new text joins the
+nearest one if it is within <code class="docutils literal notranslate"><span class="pre">lam</span></code> of it, and otherwise waits in the parent.</p>
+<p><code class="docutils literal notranslate"><span class="pre">reference</span></code> names another model to contrast with (a population, a sector).
+Without it each register is contrasted with the author’s other registers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.check">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">like</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audience</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reply</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.check" title="Link to this definition">#</a></dt>
+<dd><p>Measure a draft against the author’s register and list what differs.</p>
+<p>Each discrepancy gives the draft’s figure and the author’s usual one, so it can
+be acted on. <code class="docutils literal notranslate"><span class="pre">ok</span></code> is true when nothing differs by more than <code class="docutils literal notranslate"><span class="pre">threshold</span></code> of
+the author’s own spread. Passing the check means the measurable surface
+matches; it does not mean the draft would pass for the author’s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.data_dir">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">data_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#data_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.data_dir" title="Link to this definition">#</a></dt>
+<dd><p>The data root: the argument, else <code class="docutils literal notranslate"><span class="pre">$PENLIKE_DATA_DIR</span></code>, else the user data folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">data_dir</span><span class="p">(</span><span class="s2">"somewhere"</span><span class="p">)</span><span class="o">.</span><span class="n">is_absolute</span><span class="p">()</span>
+</span><span data-line="2"><span class="go">True</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.docs">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">docs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excluded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#docs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.docs" title="Link to this definition">#</a></dt>
+<dd><p>List a model’s texts: id, date, register and the first words. <code class="docutils literal notranslate"><span class="pre">full</span></code> prints whole texts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.exclude">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">exclude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">reason</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'by</span> <span class="pre">hand'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#exclude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.exclude" title="Link to this definition">#</a></dt>
+<dd><p>Keep texts out of the model without deleting them, or put them back with <code class="docutils literal notranslate"><span class="pre">undo</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.exemplars">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">exemplars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">like</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audience</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reply</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#exemplars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.exemplars" title="Link to this definition">#</a></dt>
+<dd><p>Pick texts by the author to show as examples, for the register the request routes to.</p>
+<p>Texts to the same readers come first, then a spread over readers and dates.
+<code class="docutils literal notranslate"><span class="pre">words</span></code> prefers examples near the length of what is to be written.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.gather">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">gather</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">since</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">until</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_others</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry_run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#gather"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.gather" title="Link to this definition">#</a></dt>
+<dd><p>Read texts from a source into a model.</p>
+<p><code class="docutils literal notranslate"><span class="pre">source</span></code> is a built-in sourcer (see <code class="docutils literal notranslate"><span class="pre">sources</span></code>) or a reference to your own.
+<code class="docutils literal notranslate"><span class="pre">since</span></code> and <code class="docutils literal notranslate"><span class="pre">until</span></code> bound the dates kept (<code class="docutils literal notranslate"><span class="pre">until</span></code> is exclusive). For a
+person model only the author’s own texts are kept unless <code class="docutils literal notranslate"><span class="pre">include_others</span></code>.
+Texts already in the model are skipped. <code class="docutils literal notranslate"><span class="pre">option</span></code> passes <code class="docutils literal notranslate"><span class="pre">key=value</span></code>
+settings to the sourcer. <code class="docutils literal notranslate"><span class="pre">dry_run</span></code> counts without storing.</p>
+<p>The result says how many kept texts are dated in the era of language models,
+because those may not be the author’s own words.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.install_skills">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">install_skills</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#install_skills"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.install_skills" title="Link to this definition">#</a></dt>
+<dd><p>Link the skills and agents shipped with penlike into an agent host’s folders.</p>
+<p>The target defaults to <code class="docutils literal notranslate"><span class="pre">~/.claude</span></code>. Without <code class="docutils literal notranslate"><span class="pre">write</span></code> it only says what it would do.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">install_skills</span><span class="p">()</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s2">"dry_run"</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">"skills"</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</span><span data-line="3"><span class="go">(True, True)</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.measure">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">measure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#measure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.measure" title="Link to this definition">#</a></dt>
+<dd><p>Measure one text’s style, on its own: lengths, punctuation, habits, greeting and closing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.models">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.models" title="Link to this definition">#</a></dt>
+<dd><p>List the models in the store, with what each is a model of.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.new">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'person'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'self'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">me</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#new"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.new" title="Link to this definition">#</a></dt>
+<dd><p>Make an empty model.</p>
+<p><code class="docutils literal notranslate"><span class="pre">kind</span></code> is person, group or corpus. <code class="docutils literal notranslate"><span class="pre">basis</span></code> records why the texts may be
+imitated: self, consent or public. <code class="docutils literal notranslate"><span class="pre">me</span></code> lists the author’s own addresses and
+handles, used to tell their texts from their correspondents’. The first model
+made becomes the default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.normalize_doc">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">normalize_doc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/base.html#normalize_doc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.normalize_doc" title="Link to this definition">#</a></dt>
+<dd><p>Make a well-formed document from whatever a sourcer yielded.</p>
+<p>Quoted material is removed, the date is put in ISO form, the audience is derived
+when it was not given, and the id is computed from the cleaned text. Unknown keys
+are kept under <code class="docutils literal notranslate"><span class="pre">flags</span></code> so that a custom sourcer can carry extra metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">doc</span> <span class="o">=</span> <span class="n">normalize_doc</span><span class="p">({</span><span class="s2">"text"</span><span class="p">:</span> <span class="s2">"&gt; quoted</span><span class="se">\n</span><span class="s2">Fine by me."</span><span class="p">,</span> <span class="s2">"date"</span><span class="p">:</span> <span class="s2">"2020"</span><span class="p">,</span> <span class="s2">"mood"</span><span class="p">:</span> <span class="s2">"calm"</span><span class="p">})</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">doc</span><span class="p">[</span><span class="s2">"text"</span><span class="p">],</span> <span class="n">doc</span><span class="p">[</span><span class="s2">"date"</span><span class="p">][:</span><span class="mi">4</span><span class="p">],</span> <span class="n">doc</span><span class="p">[</span><span class="s2">"flags"</span><span class="p">]</span>
+</span><span data-line="3"><span class="go">('Fine by me.', '2020', {'mood': 'calm'})</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.note">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">note</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'general'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#note"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.note" title="Link to this definition">#</a></dt>
+<dd><p>Record something about how the author writes that numbers do not capture.</p>
+<p>For example how they open a request, what they explain and what they assume,
+how they disagree. <code class="docutils literal notranslate"><span class="pre">source</span></code> says what the note rests on (text ids, such as
+<code class="docutils literal notranslate"><span class="pre">doc:3f2a...</span></code>); a note without one is filed as a hypothesis. <code class="docutils literal notranslate"><span class="pre">register</span></code> is
+<code class="docutils literal notranslate"><span class="pre">general</span></code> for what holds everywhere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.notes">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">notes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#notes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.notes" title="Link to this definition">#</a></dt>
+<dd><p>Read the notes on a model: one register’s, or all of them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.propose">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">propose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_separation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#propose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.propose" title="Link to this definition">#</a></dt>
+<dd><p>Look for registers nobody named yet: groups of texts that are written differently.</p>
+<p>Returns proposals, each with the texts in it, what sets it apart and whom the
+texts were for. Read a few of its <code class="docutils literal notranslate"><span class="pre">typical_docs</span></code>, then name it with
+<code class="docutils literal notranslate"><span class="pre">register-add</span> <span class="pre">--proposal</span></code>. Lower <code class="docutils literal notranslate"><span class="pre">lam</span></code> to find finer groups, and
+<code class="docutils literal notranslate"><span class="pre">min_separation</span></code> to see groups that stand less clearly apart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.register_add">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">register_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proposal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_separation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#register_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.register_add" title="Link to this definition">#</a></dt>
+<dd><p>Name a register and put texts in it, from a proposal or from a list of text ids.</p>
+<p>The texts are pinned there, and they are what later texts are compared with.
+Use the same <code class="docutils literal notranslate"><span class="pre">lam</span></code>, <code class="docutils literal notranslate"><span class="pre">min_size</span></code> and <code class="docutils literal notranslate"><span class="pre">min_separation</span></code> as the <code class="docutils literal notranslate"><span class="pre">propose</span></code> call
+the proposal came from.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.register_edit">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">register_edit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#register_edit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.register_edit" title="Link to this definition">#</a></dt>
+<dd><p>Give a register a display name or a description. Its identifier never changes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.register_merge">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">register_merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">into</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#register_merge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.register_merge" title="Link to this definition">#</a></dt>
+<dd><p>Merge one register into another, when the two turn out to be written the same way.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.registers">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">registers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#registers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.registers" title="Link to this definition">#</a></dt>
+<dd><p>List a model’s registers: how much text each rests on, and what it was named.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.remove">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">yes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.remove" title="Link to this definition">#</a></dt>
+<dd><p>Delete a model and everything in it. Without <code class="docutils literal notranslate"><span class="pre">yes</span></code> it only says what would go.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.resolve_sourcer">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">resolve_sourcer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/sourcers.html#resolve_sourcer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.resolve_sourcer" title="Link to this definition">#</a></dt>
+<dd><p>Find the sourcer a name refers to: built-in, <code class="docutils literal notranslate"><span class="pre">module:function</span></code>, or <code class="docutils literal notranslate"><span class="pre">file.py:function</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/constants.html#Ellipsis" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]]</span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">resolve_sourcer</span><span class="p">(</span><span class="s2">"files"</span><span class="p">)</span> <span class="ow">is</span> <span class="n">files</span>
+</span><span data-line="2"><span class="go">True</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">resolve_sourcer</span><span class="p">(</span><span class="s2">"json:loads"</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+</span><span data-line="4"><span class="go">'loads'</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.route">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">route</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">like</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audience</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reply</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#route"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.route" title="Link to this definition">#</a></dt>
+<dd><p>Choose the register for a piece of writing, and say why it was chosen.</p>
+<p>Name a <code class="docutils literal notranslate"><span class="pre">style</span></code>, or describe the situation: the <code class="docutils literal notranslate"><span class="pre">channel</span></code> (email, github,
+…), whom it is <code class="docutils literal notranslate"><span class="pre">to</span></code>, the <code class="docutils literal notranslate"><span class="pre">audience</span></code> size (one, few, many, public), and
+whether it is a <code class="docutils literal notranslate"><span class="pre">reply</span></code>. With nothing given, the register with the most text
+is returned and marked as a fallback.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.screen">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">screen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">tier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'date'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2022-11-30'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#screen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.screen" title="Link to this definition">#</a></dt>
+<dd><p>Screen a model’s texts for machine-written content. States the cost first.</p>
+<p>Tiers: date (free), cheap (no model), heavy (local models), agent (tokens).
+Without <code class="docutils literal notranslate"><span class="pre">run</span></code> nothing is changed: the call reports what the tier does, what it
+costs on this corpus, and for the date tier how many texts it would exclude.
+With <code class="docutils literal notranslate"><span class="pre">run</span></code> the flagged texts are excluded (never deleted; <code class="docutils literal notranslate"><span class="pre">exclude</span> <span class="pre">--undo</span></code>
+puts them back).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.show">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.show" title="Link to this definition">#</a></dt>
+<dd><p>Show one model: what it is of, where its texts came from, and its registers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.situate">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">situate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/routing.html#situate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.situate" title="Link to this definition">#</a></dt>
+<dd><p>The situational register of a document, from its metadata alone.</p>
+<p>Email is filed by how many people it was for, GitHub writing by whether it
+opens a thread or answers in one, agent prompts and plain documents each under
+one key. Any other channel is filed as <code class="docutils literal notranslate"><span class="pre">&lt;channel&gt;.&lt;audience&gt;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.sources">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.sources" title="Link to this definition">#</a></dt>
+<dd><p>List the built-in sourcers, what each reads, and whether it can run on this machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.use">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">use</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#use"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.use" title="Link to this definition">#</a></dt>
+<dd><p>Make a model the default, the one meant by “write like me”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Modules</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="penlike.base.html#module-penlike.base" title="penlike.base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">base</span></code></a></p></td>
+<td><p>The shared vocabulary: the document record, text cleaning, dates and the error type.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="penlike.data.html#module-penlike.data" title="penlike.data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data</span></code></a></p></td>
+<td><p>The skills and agents shipped with penlike, as package data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="penlike.features.html#module-penlike.features" title="penlike.features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">features</span></code></a></p></td>
+<td><p>Measure how a text is written: the cheap tier, standard library only.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="penlike.mcp.html#module-penlike.mcp" title="penlike.mcp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mcp</span></code></a></p></td>
+<td><p>MCP over stdio: the same verbs, for local MCP clients.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="penlike.profile.html#module-penlike.profile" title="penlike.profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">profile</span></code></a></p></td>
+<td><p>Profiles: what a set of texts has in common, and how far a draft is from it.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="penlike.routing.html#module-penlike.routing" title="penlike.routing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">routing</span></code></a></p></td>
+<td><p>Registers: filing texts by situation, finding new ones, and routing a request to one.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="penlike.screening.html#module-penlike.screening" title="penlike.screening"><code class="xref py py-obj docutils literal notranslate"><span class="pre">screening</span></code></a></p></td>
+<td><p>Screening: keeping machine-written text out of a model of a person.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="penlike.sourcers.html#module-penlike.sourcers" title="penlike.sourcers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sourcers</span></code></a></p></td>
+<td><p>Sourcers: where the writing comes from.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="penlike.store.html#module-penlike.store" title="penlike.store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">store</span></code></a></p></td>
+<td><p>Where models live, and the one object that reads and writes them.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="penlike.tools.html#module-penlike.tools" title="penlike.tools"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tools</span></code></a></p></td>
+<td><p>The verbs: every operation penlike offers, as plain functions returning JSON-ready dicts.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../api.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">API reference</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="penlike.base.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">penlike.base</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright">
+  <p>
+    Made with
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+  <a href="https://github.com/thorwhalen/penlike" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=fd10adb8"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

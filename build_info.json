@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "built_at": "2026-09-28T07:58:47Z",
+  "package": {
+    "name": "penlike",
+    "version": "0.0.1",
+    "display_name": "penlike",
+    "source": "pyproject.toml"
+  },
+  "git": {
+    "available": true,
+    "commit": "61fb23ab2358037923bcf606c97860152250fb74",
+    "short_commit": "61fb23a",
+    "branch": "main",
+    "tags": [],
+    "dirty": false,
+    "remote_url": "https://github.com/thorwhalen/penlike",
+    "commit_url": "https://github.com/thorwhalen/penlike/commit/61fb23ab2358037923bcf606c97860152250fb74",
+    "error": null
+  },
+  "ci": {
+    "provider": "github",
+    "repository": "thorwhalen/penlike",
+    "sha": "61fb23ab2358037923bcf606c97860152250fb74",
+    "sha_in_history": true,
+    "ref": "refs/heads/main",
+    "ref_name": "main",
+    "run_id": "36394493708",
+    "run_url": "https://github.com/thorwhalen/penlike/actions/runs/36394493708",
+    "server_url": "https://github.com"
+  },
+  "tools": {
+    "epythet": "0.2.12",
+    "sphinx": "9.1.0",
+    "docutils": "0.22.4",
+    "python": "3.12.14"
+  },
+  "config": {
+    "theme": "auto",
+    "html_theme": "shibuya",
+    "accent": "#814a00",
+    "mode": "auto",
+    "api_generator": "autosummary",
+    "ignore": [
+      "tests/",
+      "scrap/",
+      "examples/"
+    ],
+    "agent_outputs": true,
+    "aggregates": [
+      "md"
+    ],
+    "ai_artifacts": true,
+    "provenance": true,
+    "docs_dir": "docsrc"
+  },
+  "site": {
+    "modules_documented": 11,
+    "objects_documented": 99
+  },
+  "pypi": {
+    "checked": true,
+    "latest": null,
+    "relation": "unknown",
+    "error": null
+  },
+  "reproduce": "git clone https://github.com/thorwhalen/penlike && cd penlike\ngit checkout 61fb23ab2358037923bcf606c97860152250fb74\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "warnings": [],
+  "alignment": {
+    "aligned": true,
+    "notes": []
+  }
+}

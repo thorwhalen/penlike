@@ -1,0 +1,14 @@
+penlike.mcp
+===========
+
+.. automodule:: penlike.mcp
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      main
+      mk_server
+      tool_names
+   

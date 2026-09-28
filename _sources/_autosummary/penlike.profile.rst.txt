@@ -1,0 +1,28 @@
+penlike.profile
+===============
+
+.. automodule:: penlike.profile
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      NORM_FORMAT
+      DISTANCE
+      LABELS
+      VECTOR_FEATURES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_profile
+      compare
+      contrast
+      function_word_vector
+      norm_is_current
+      render_profile
+      style_vector
+      vector_distance
+   

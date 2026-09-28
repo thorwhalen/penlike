@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="amber" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>penlike.profile - penlike</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="penlike.routing" href="penlike.routing.html" /><link rel="prev" title="penlike.mcp" href="penlike.mcp.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d88b86f9" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/><meta property="og:title" content="penlike.profile"/>
+    <meta name="twitter:card" content="summary"/>
+  
+<link rel="alternate" type="text/markdown" href="penlike.profile.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+</head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>penlike</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/thorwhalen/penlike" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="penlike.html">penlike</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="penlike.base.html">penlike.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.data.html">penlike.data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.features.html">penlike.features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.mcp.html">penlike.mcp</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">penlike.profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.routing.html">penlike.routing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.screening.html">penlike.screening</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.sourcers.html">penlike.sourcers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.store.html">penlike.store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.tools.html">penlike.tools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-agents.html">For AI agents</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#penlike.profile.DISTANCE"><code class="docutils literal notranslate"><span class="pre">DISTANCE</span></code></a></li>
+<li><a class="reference internal" href="#penlike.profile.LABELS"><code class="docutils literal notranslate"><span class="pre">LABELS</span></code></a></li>
+<li><a class="reference internal" href="#penlike.profile.NORM_FORMAT"><code class="docutils literal notranslate"><span class="pre">NORM_FORMAT</span></code></a></li>
+<li><a class="reference internal" href="#penlike.profile.VECTOR_FEATURES"><code class="docutils literal notranslate"><span class="pre">VECTOR_FEATURES</span></code></a></li>
+<li><a class="reference internal" href="#penlike.profile.build_profile"><code class="docutils literal notranslate"><span class="pre">build_profile()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.profile.compare"><code class="docutils literal notranslate"><span class="pre">compare()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.profile.contrast"><code class="docutils literal notranslate"><span class="pre">contrast()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.profile.function_word_vector"><code class="docutils literal notranslate"><span class="pre">function_word_vector()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.profile.norm_is_current"><code class="docutils literal notranslate"><span class="pre">norm_is_current()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.profile.render_profile"><code class="docutils literal notranslate"><span class="pre">render_profile()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.profile.style_vector"><code class="docutils literal notranslate"><span class="pre">style_vector()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.profile.vector_distance"><code class="docutils literal notranslate"><span class="pre">vector_distance()</span></code></a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">penlike</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../api.html"><span itemprop="name">API reference</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="penlike.html"><span itemprop="name">penlike</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="3" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">penlike.profile</strong>
+        <meta itemprop="position" content="4" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <article class="yue dark-code" role="main">
+          <section id="module-penlike.profile">
+<span id="penlike-profile"></span><h1>penlike.profile<a class="headerlink" href="#module-penlike.profile" title="Link to this heading">#</a></h1>
+<p>Profiles: what a set of texts has in common, and how far a draft is from it.</p>
+<p>A profile is built per register, never across registers: an average over a
+person’s email and their technical writing describes neither. Every figure keeps
+the number of texts it rests on, and a profile built on little text says so
+(<code class="docutils literal notranslate"><span class="pre">provisional</span></code>).</p>
+<p>Three operations:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#penlike.profile.build_profile" title="penlike.profile.build_profile"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_profile()</span></code></a> aggregates the measurements of many texts;</p></li>
+<li><p><a class="reference internal" href="#penlike.profile.contrast" title="penlike.profile.contrast"><code class="xref py py-func docutils literal notranslate"><span class="pre">contrast()</span></code></a> says what sets one profile apart from a reference;</p></li>
+<li><p><a class="reference internal" href="#penlike.profile.compare" title="penlike.profile.compare"><code class="xref py py-func docutils literal notranslate"><span class="pre">compare()</span></code></a> measures a draft against a profile and lists the discrepancies
+in words a writer can act on.</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">penlike.features</span><span class="w"> </span><span class="kn">import</span> <span class="n">measure</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Short one. Very short."</span><span class="p">,</span> <span class="s2">"Another short one. Tiny."</span><span class="p">,</span> <span class="s2">"Small again. Yes."</span><span class="p">]</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">profile</span> <span class="o">=</span> <span class="n">build_profile</span><span class="p">([</span><span class="n">measure</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">],</span> <span class="n">register</span><span class="o">=</span><span class="s2">"notes"</span><span class="p">)</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">profile</span><span class="p">[</span><span class="s2">"n_docs"</span><span class="p">],</span> <span class="n">profile</span><span class="p">[</span><span class="s2">"provisional"</span><span class="p">],</span> <span class="n">profile</span><span class="p">[</span><span class="s2">"scalars"</span><span class="p">][</span><span class="s2">"sentence_len_mean"</span><span class="p">][</span><span class="s2">"n"</span><span class="p">]</span>
+</span><span data-line="5"><span class="go">(3, True, 3)</span>
+</span></pre></div>
+</div>
+<p class="rubric">Module Attributes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.profile.NORM_FORMAT" title="penlike.profile.NORM_FORMAT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NORM_FORMAT</span></code></a></p></td>
+<td><p>The version of the stored figures.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.profile.DISTANCE" title="penlike.profile.DISTANCE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DISTANCE</span></code></a></p></td>
+<td><p>The distance that style vectors are compared with, recorded next to the figures it produced: thresholds set for one distance mean nothing for another.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.profile.LABELS" title="penlike.profile.LABELS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LABELS</span></code></a></p></td>
+<td><p>What each feature is called when speaking to a writer.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.profile.VECTOR_FEATURES" title="penlike.profile.VECTOR_FEATURES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VECTOR_FEATURES</span></code></a></p></td>
+<td><p>every scalar but raw length (its logarithm is used, since length otherwise dominates), plus four structural habits.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.profile.build_profile" title="penlike.profile.build_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_profile</span></code></a>(measurements, *[, register, ...])</p></td>
+<td><p>Aggregate the measurements of a register's texts into its profile.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.profile.compare" title="penlike.profile.compare"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare</span></code></a>(measured, profile, *[, norm, ...])</p></td>
+<td><p>Measure a draft against a register's profile and list what differs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.profile.contrast" title="penlike.profile.contrast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contrast</span></code></a>(profile, reference, *[, top])</p></td>
+<td><p>What sets <code class="docutils literal notranslate"><span class="pre">profile</span></code> apart from <code class="docutils literal notranslate"><span class="pre">reference</span></code>: the largest differences, in both directions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.profile.function_word_vector" title="penlike.profile.function_word_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">function_word_vector</span></code></a>(measured, norm)</p></td>
+<td><p>A text's function-word rates as z-scores against <code class="docutils literal notranslate"><span class="pre">norm</span></code>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if too short.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.profile.norm_is_current" title="penlike.profile.norm_is_current"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norm_is_current</span></code></a>(norm)</p></td>
+<td><p>Whether stored figures were made by this version's features, word list and distance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.profile.render_profile" title="penlike.profile.render_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_profile</span></code></a>(profile, *[, differences])</p></td>
+<td><p>A profile as plain lines an agent can follow when writing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.profile.style_vector" title="penlike.profile.style_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">style_vector</span></code></a>(measured, norm)</p></td>
+<td><p>A text's style vector: each feature as a clipped z-score against <code class="docutils literal notranslate"><span class="pre">norm</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.profile.vector_distance" title="penlike.profile.vector_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vector_distance</span></code></a>(a, b)</p></td>
+<td><p>Root-mean-square difference between two style vectors.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="penlike.profile.DISTANCE">
+<span class="sig-prename descclassname"><span class="pre">penlike.profile.</span></span><span class="sig-name descname"><span class="pre">DISTANCE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'features-rms-z'</span></span><a class="headerlink" href="#penlike.profile.DISTANCE" title="Link to this definition">#</a></dt>
+<dd><p>The distance that style vectors are compared with, recorded next to the figures it
+produced: thresholds set for one distance mean nothing for another.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="penlike.profile.LABELS">
+<span class="sig-prename descclassname"><span class="pre">penlike.profile.</span></span><span class="sig-name descname"><span class="pre">LABELS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'allcaps_per_100w':</span> <span class="pre">'all-capital</span> <span class="pre">words</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'colon_per_100w':</span> <span class="pre">'colons</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'comma_per_100w':</span> <span class="pre">'commas</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'contraction_per_100w':</span> <span class="pre">'contractions</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'dash_per_100w':</span> <span class="pre">'dashes</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'ellipsis_per_100w':</span> <span class="pre">'ellipses</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'emoji_per_100w':</span> <span class="pre">'emoji</span> <span class="pre">and</span> <span class="pre">emoticons</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'exclamation_per_100w':</span> <span class="pre">'exclamation</span> <span class="pre">marks</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'first_plural_per_100w':</span> <span class="pre">'we/us/our</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'first_singular_per_100w':</span> <span class="pre">'I/me/my</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'function_word_share':</span> <span class="pre">'share</span> <span class="pre">of</span> <span class="pre">function</span> <span class="pre">words',</span> <span class="pre">'has_bold':</span> <span class="pre">'bold</span> <span class="pre">text',</span> <span class="pre">'has_code':</span> <span class="pre">'code</span> <span class="pre">formatting',</span> <span class="pre">'has_dash':</span> <span class="pre">'dashes',</span> <span class="pre">'has_emoji':</span> <span class="pre">'emoji</span> <span class="pre">or</span> <span class="pre">emoticons',</span> <span class="pre">'has_exclamation':</span> <span class="pre">'exclamation</span> <span class="pre">marks',</span> <span class="pre">'has_greeting':</span> <span class="pre">'a</span> <span class="pre">greeting</span> <span class="pre">line',</span> <span class="pre">'has_heading':</span> <span class="pre">'headings',</span> <span class="pre">'has_link':</span> <span class="pre">'links',</span> <span class="pre">'has_list':</span> <span class="pre">'bulleted</span> <span class="pre">or</span> <span class="pre">numbered</span> <span class="pre">lists',</span> <span class="pre">'has_semicolon':</span> <span class="pre">'semicolons',</span> <span class="pre">'has_signoff':</span> <span class="pre">'a</span> <span class="pre">closing</span> <span class="pre">formula',</span> <span class="pre">'hedge_per_100w':</span> <span class="pre">'hedging</span> <span class="pre">words</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'intensifier_per_100w':</span> <span class="pre">'intensifiers</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'lexical_diversity':</span> <span class="pre">'variety</span> <span class="pre">of</span> <span class="pre">vocabulary',</span> <span class="pre">'long_sentence_share':</span> <span class="pre">'share</span> <span class="pre">of</span> <span class="pre">very</span> <span class="pre">long</span> <span class="pre">sentences</span> <span class="pre">(30</span> <span class="pre">words</span> <span class="pre">or</span> <span class="pre">more)',</span> <span class="pre">'long_word_share':</span> <span class="pre">'share</span> <span class="pre">of</span> <span class="pre">long</span> <span class="pre">words</span> <span class="pre">(7</span> <span class="pre">letters</span> <span class="pre">or</span> <span class="pre">more)',</span> <span class="pre">'lowercase_start_share':</span> <span class="pre">'share</span> <span class="pre">of</span> <span class="pre">sentences</span> <span class="pre">starting</span> <span class="pre">in</span> <span class="pre">lower</span> <span class="pre">case',</span> <span class="pre">'paragraph_len_mean':</span> <span class="pre">'words</span> <span class="pre">per</span> <span class="pre">paragraph',</span> <span class="pre">'parenthesis_per_100w':</span> <span class="pre">'parentheses</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'question_per_100w':</span> <span class="pre">'question</span> <span class="pre">marks</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'second_person_per_100w':</span> <span class="pre">'you/your</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'semicolon_per_100w':</span> <span class="pre">'semicolons</span> <span class="pre">per</span> <span class="pre">100</span> <span class="pre">words',</span> <span class="pre">'sentence_len_mean':</span> <span class="pre">'words</span> <span class="pre">per</span> <span class="pre">sentence',</span> <span class="pre">'sentence_len_sd':</span> <span class="pre">'spread</span> <span class="pre">of</span> <span class="pre">sentence</span> <span class="pre">lengths',</span> <span class="pre">'short_sentence_share':</span> <span class="pre">'share</span> <span class="pre">of</span> <span class="pre">very</span> <span class="pre">short</span> <span class="pre">sentences</span> <span class="pre">(5</span> <span class="pre">words</span> <span class="pre">or</span> <span class="pre">fewer)',</span> <span class="pre">'word_len_mean':</span> <span class="pre">'letters</span> <span class="pre">per</span> <span class="pre">word',</span> <span class="pre">'words':</span> <span class="pre">'length</span> <span class="pre">in</span> <span class="pre">words'}</span></span><a class="headerlink" href="#penlike.profile.LABELS" title="Link to this definition">#</a></dt>
+<dd><p>What each feature is called when speaking to a writer.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="penlike.profile.NORM_FORMAT">
+<span class="sig-prename descclassname"><span class="pre">penlike.profile.</span></span><span class="sig-name descname"><span class="pre">NORM_FORMAT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="headerlink" href="#penlike.profile.NORM_FORMAT" title="Link to this definition">#</a></dt>
+<dd><p>The version of the stored figures. It changes when their layout does.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="penlike.profile.VECTOR_FEATURES">
+<span class="sig-prename descclassname"><span class="pre">penlike.profile.</span></span><span class="sig-name descname"><span class="pre">VECTOR_FEATURES</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('log_words',</span> <span class="pre">'sentence_len_mean',</span> <span class="pre">'sentence_len_sd',</span> <span class="pre">'short_sentence_share',</span> <span class="pre">'long_sentence_share',</span> <span class="pre">'word_len_mean',</span> <span class="pre">'long_word_share',</span> <span class="pre">'paragraph_len_mean',</span> <span class="pre">'lexical_diversity',</span> <span class="pre">'function_word_share',</span> <span class="pre">'comma_per_100w',</span> <span class="pre">'semicolon_per_100w',</span> <span class="pre">'colon_per_100w',</span> <span class="pre">'dash_per_100w',</span> <span class="pre">'parenthesis_per_100w',</span> <span class="pre">'ellipsis_per_100w',</span> <span class="pre">'exclamation_per_100w',</span> <span class="pre">'question_per_100w',</span> <span class="pre">'contraction_per_100w',</span> <span class="pre">'first_singular_per_100w',</span> <span class="pre">'first_plural_per_100w',</span> <span class="pre">'second_person_per_100w',</span> <span class="pre">'hedge_per_100w',</span> <span class="pre">'intensifier_per_100w',</span> <span class="pre">'allcaps_per_100w',</span> <span class="pre">'emoji_per_100w',</span> <span class="pre">'lowercase_start_share',</span> <span class="pre">'has_greeting',</span> <span class="pre">'has_signoff',</span> <span class="pre">'has_list',</span> <span class="pre">'has_code')</span></span><a class="headerlink" href="#penlike.profile.VECTOR_FEATURES" title="Link to this definition">#</a></dt>
+<dd><p>every scalar but raw length (its
+logarithm is used, since length otherwise dominates), plus four structural habits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The features a text’s style vector is made of</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.profile.build_profile">
+<span class="sig-prename descclassname"><span class="pre">penlike.profile.</span></span><span class="sig-name descname"><span class="pre">build_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">others</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_phrase_docs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_phrases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/profile.html#build_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.profile.build_profile" title="Link to this definition">#</a></dt>
+<dd><p>Aggregate the measurements of a register’s texts into its profile.</p>
+<p><code class="docutils literal notranslate"><span class="pre">norm</span></code> (from <code class="xref py py-func docutils literal notranslate"><span class="pre">build_norm()</span></code>) adds the register’s centroid and the
+function-word calibration: how far the register’s own texts sit from it (the
+ceiling for a draft) and how far texts of <code class="docutils literal notranslate"><span class="pre">others</span></code> registers sit (the floor).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.profile.compare">
+<span class="sig-prename descclassname"><span class="pre">penlike.profile.</span></span><span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measured</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_words_for_rates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/profile.html#compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.profile.compare" title="Link to this definition">#</a></dt>
+<dd><p>Measure a draft against a register’s profile and list what differs.</p>
+<p>A discrepancy is reported when the draft sits more than <code class="docutils literal notranslate"><span class="pre">threshold</span></code> of the
+author’s own standard deviations from their average, when it shows a habit the
+author almost never has, or lacks one they almost always have. Each comes with
+the figures, so the next revision has something concrete to change.</p>
+<p>The function-word distance, when both the draft and the profile are long enough,
+is reported next to two references from the author’s own texts: how far they sit
+from each other (<code class="docutils literal notranslate"><span class="pre">own</span></code>) and how far their other registers sit (<code class="docutils literal notranslate"><span class="pre">others</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.profile.contrast">
+<span class="sig-prename descclassname"><span class="pre">penlike.profile.</span></span><span class="sig-name descname"><span class="pre">contrast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">top</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/profile.html#contrast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.profile.contrast" title="Link to this definition">#</a></dt>
+<dd><p>What sets <code class="docutils literal notranslate"><span class="pre">profile</span></code> apart from <code class="docutils literal notranslate"><span class="pre">reference</span></code>: the largest differences, in both directions.</p>
+<p>Differences in averages are given in pooled standard deviations, differences in
+habits as shares of texts, and function words as a ratio of rates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.profile.function_word_vector">
+<span class="sig-prename descclassname"><span class="pre">penlike.profile.</span></span><span class="sig-name descname"><span class="pre">function_word_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measured</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/profile.html#function_word_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.profile.function_word_vector" title="Link to this definition">#</a></dt>
+<dd><p>A text’s function-word rates as z-scores against <code class="docutils literal notranslate"><span class="pre">norm</span></code>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if too short.</p>
+<p>This is the vector Cosine Delta compares. <code class="docutils literal notranslate"><span class="pre">norm</span></code> holds the mean and standard
+deviation of each word’s rate over a population of texts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.profile.norm_is_current">
+<span class="sig-prename descclassname"><span class="pre">penlike.profile.</span></span><span class="sig-name descname"><span class="pre">norm_is_current</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">norm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/profile.html#norm_is_current"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.profile.norm_is_current" title="Link to this definition">#</a></dt>
+<dd><p>Whether stored figures were made by this version’s features, word list and distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.profile.render_profile">
+<span class="sig-prename descclassname"><span class="pre">penlike.profile.</span></span><span class="sig-name descname"><span class="pre">render_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">differences</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/profile.html#render_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.profile.render_profile" title="Link to this definition">#</a></dt>
+<dd><p>A profile as plain lines an agent can follow when writing.</p>
+<p>Figures are given as the author’s typical value and range, because a target
+range is something a draft can be held to and a bare average is not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.profile.style_vector">
+<span class="sig-prename descclassname"><span class="pre">penlike.profile.</span></span><span class="sig-name descname"><span class="pre">style_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measured</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/profile.html#style_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.profile.style_vector" title="Link to this definition">#</a></dt>
+<dd><p>A text’s style vector: each feature as a clipped z-score against <code class="docutils literal notranslate"><span class="pre">norm</span></code>.</p>
+<p>A feature the text is too short to have counts as average (zero).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.profile.vector_distance">
+<span class="sig-prename descclassname"><span class="pre">penlike.profile.</span></span><span class="sig-name descname"><span class="pre">vector_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/profile.html#vector_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.profile.vector_distance" title="Link to this definition">#</a></dt>
+<dd><p>Root-mean-square difference between two style vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">vector_distance</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">])</span>
+</span><span data-line="2"><span class="go">3.5355</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="penlike.mcp.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">penlike.mcp</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="penlike.routing.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">penlike.routing</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright">
+  <p>
+    Made with
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+  <a href="https://github.com/thorwhalen/penlike" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=fd10adb8"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

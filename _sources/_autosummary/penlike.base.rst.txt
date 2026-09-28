@@ -1,0 +1,33 @@
+penlike.base
+============
+
+.. automodule:: penlike.base
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      AI_ERA_START
+      DOC_FIELDS
+      RESERVED_NAMES
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      audience_of
+      check_name
+      doc_id
+      normalize_doc
+      parse_date
+      prose_of
+      strip_quoted
+      word_count
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      PenlikeError
+   

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="amber" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>penlike.store - penlike</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="penlike.tools" href="penlike.tools.html" /><link rel="prev" title="penlike.sourcers" href="penlike.sourcers.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d88b86f9" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    
+  <meta property="og:type" content="website"/><meta property="og:title" content="penlike.store"/>
+    <meta name="twitter:card" content="summary"/>
+  
+<link rel="alternate" type="text/markdown" href="penlike.store.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+</head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>penlike</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials">
+  <a href="https://github.com/thorwhalen/penlike" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="penlike.html">penlike</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="penlike.base.html">penlike.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.data.html">penlike.data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.features.html">penlike.features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.mcp.html">penlike.mcp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.profile.html">penlike.profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.routing.html">penlike.routing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.screening.html">penlike.screening</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.sourcers.html">penlike.sourcers</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">penlike.store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="penlike.tools.html">penlike.tools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-agents.html">For AI agents</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#penlike.store.ModelStore"><code class="docutils literal notranslate"><span class="pre">ModelStore</span></code></a><ul>
+<li><a class="reference internal" href="#penlike.store.ModelStore.delete"><code class="docutils literal notranslate"><span class="pre">ModelStore.delete()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.store.ModelStore.require"><code class="docutils literal notranslate"><span class="pre">ModelStore.require()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#penlike.store.data_dir"><code class="docutils literal notranslate"><span class="pre">data_dir()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.store.model_names"><code class="docutils literal notranslate"><span class="pre">model_names()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.store.settings"><code class="docutils literal notranslate"><span class="pre">settings()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.store.text_files"><code class="docutils literal notranslate"><span class="pre">text_files()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.store.write_settings"><code class="docutils literal notranslate"><span class="pre">write_settings()</span></code></a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">penlike</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../api.html"><span itemprop="name">API reference</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="penlike.html"><span itemprop="name">penlike</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="3" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">penlike.store</strong>
+        <meta itemprop="position" content="4" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  <article class="yue dark-code" role="main">
+          <section id="module-penlike.store">
+<span id="penlike-store"></span><h1>penlike.store<a class="headerlink" href="#module-penlike.store" title="Link to this heading">#</a></h1>
+<p>Where models live, and the one object that reads and writes them.</p>
+<p>Everything penlike learns about a writer is private: the documents, the measured
+profiles, the notes. None of it belongs in a repository. It lives under the data
+root, one folder per kind of data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="o">&lt;</span><span class="n">data</span> <span class="n">root</span><span class="o">&gt;/</span>
+</span><span data-line="2">    <span class="n">config</span><span class="o">/</span><span class="n">settings</span><span class="o">.</span><span class="n">json</span>            <span class="n">the</span> <span class="n">default</span> <span class="n">model</span>
+</span><span data-line="3">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">model</span><span class="o">.</span><span class="n">json</span>        <span class="n">what</span> <span class="n">the</span> <span class="n">model</span> <span class="ow">is</span> <span class="n">of</span><span class="p">,</span> <span class="ow">and</span> <span class="n">on</span> <span class="n">what</span> <span class="n">basis</span>
+</span><span data-line="4">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">docs</span><span class="o">.</span><span class="n">jsonl</span>        <span class="n">the</span> <span class="n">documents</span><span class="p">,</span> <span class="n">one</span> <span class="n">per</span> <span class="n">line</span>
+</span><span data-line="5">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">registers</span><span class="o">.</span><span class="n">json</span>    <span class="n">the</span> <span class="n">registers</span> <span class="ow">and</span> <span class="n">their</span> <span class="n">names</span>
+</span><span data-line="6">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">profiles</span><span class="o">/&lt;</span><span class="n">register</span><span class="o">&gt;.</span><span class="n">json</span>
+</span><span data-line="7">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">notes</span><span class="o">/&lt;</span><span class="n">register</span><span class="o">&gt;.</span><span class="n">md</span>
+</span><span data-line="8">    <span class="n">work</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/...</span>                 <span class="n">batch</span> <span class="n">files</span> <span class="n">handed</span> <span class="n">to</span> <span class="n">reader</span> <span class="n">agents</span>
+</span></pre></div>
+</div>
+<p>The data root is the <code class="docutils literal notranslate"><span class="pre">data_dir</span></code> argument, else <code class="docutils literal notranslate"><span class="pre">$PENLIKE_DATA_DIR</span></code>, else
+<code class="docutils literal notranslate"><span class="pre">~/.local/share/penlike</span></code> (<code class="docutils literal notranslate"><span class="pre">$XDG_DATA_HOME</span></code> and <code class="docutils literal notranslate"><span class="pre">%LOCALAPPDATA%</span></code> are honoured).</p>
+<p>Code reaches files through a <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> of relative path to text, so the local
+folder can be swapped for any other store without touching the rest:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">ModelStore</span><span class="p">(</span><span class="s2">"ada"</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="p">{})</span>
+</span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">write_model</span><span class="p">({</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"ada"</span><span class="p">,</span> <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"person"</span><span class="p">})</span>
+</span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">write_docs</span><span class="p">([{</span><span class="s2">"id"</span><span class="p">:</span> <span class="s2">"1"</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">:</span> <span class="s2">"Hello."</span><span class="p">}])</span>
+</span><span data-line="4"><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">read_model</span><span class="p">()[</span><span class="s2">"kind"</span><span class="p">],</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">store</span><span class="o">.</span><span class="n">read_docs</span><span class="p">()]</span>
+</span><span data-line="5"><span class="go">('person', ['1'])</span>
+</span><span data-line="6"><span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">store</span><span class="o">.</span><span class="n">files</span><span class="p">)</span>
+</span><span data-line="7"><span class="go">['models/ada/docs.jsonl', 'models/ada/model.json']</span>
+</span></pre></div>
+</div>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.store.data_dir" title="penlike.store.data_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_dir</span></code></a>([data_dir])</p></td>
+<td><p>The data root: the argument, else <code class="docutils literal notranslate"><span class="pre">$PENLIKE_DATA_DIR</span></code>, else the user data folder.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.store.model_names" title="penlike.store.model_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_names</span></code></a>(*[, data_dir, files])</p></td>
+<td><p>The names of the models in the store, sorted.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.store.settings" title="penlike.store.settings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">settings</span></code></a>(*[, data_dir, files])</p></td>
+<td><p>The settings, <code class="docutils literal notranslate"><span class="pre">{}</span></code> when none were ever written.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.store.text_files" title="penlike.store.text_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">text_files</span></code></a>(root)</p></td>
+<td><p>A <code class="docutils literal notranslate"><span class="pre">dol</span></code> files store under <code class="docutils literal notranslate"><span class="pre">root</span></code>: <code class="docutils literal notranslate"><span class="pre">/</span></code>-separated keys, UTF-8 text values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.store.write_settings" title="penlike.store.write_settings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_settings</span></code></a>(values, *[, data_dir, files])</p></td>
+<td><p>Replace the settings.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Classes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.store.ModelStore" title="penlike.store.ModelStore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelStore</span></code></a>(name, *[, data_dir, files])</p></td>
+<td><p>One model's files: documents, registers, profiles and notes.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="penlike.store.ModelStore">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">penlike.store.</span></span><span class="sig-name descname"><span class="pre">ModelStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#ModelStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.store.ModelStore" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>One model’s files: documents, registers, profiles and notes.</p>
+<p><code class="docutils literal notranslate"><span class="pre">files</span></code> is the seam. The default is a local folder; any <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> of
+relative path to text works, which is how tests run without touching a disk.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="penlike.store.ModelStore.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#ModelStore.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.store.ModelStore.delete" title="Link to this definition">#</a></dt>
+<dd><p>Delete every file of the model. Returns how many were removed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="penlike.store.ModelStore.require">
+<span class="sig-name descname"><span class="pre">require</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#ModelStore.require"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.store.ModelStore.require" title="Link to this definition">#</a></dt>
+<dd><p>Return self, or explain how to make the model when it does not exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#penlike.store.ModelStore" title="penlike.store.ModelStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelStore</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.store.data_dir">
+<span class="sig-prename descclassname"><span class="pre">penlike.store.</span></span><span class="sig-name descname"><span class="pre">data_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#data_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.store.data_dir" title="Link to this definition">#</a></dt>
+<dd><p>The data root: the argument, else <code class="docutils literal notranslate"><span class="pre">$PENLIKE_DATA_DIR</span></code>, else the user data folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">data_dir</span><span class="p">(</span><span class="s2">"somewhere"</span><span class="p">)</span><span class="o">.</span><span class="n">is_absolute</span><span class="p">()</span>
+</span><span data-line="2"><span class="go">True</span>
+</span></pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.store.model_names">
+<span class="sig-prename descclassname"><span class="pre">penlike.store.</span></span><span class="sig-name descname"><span class="pre">model_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#model_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.store.model_names" title="Link to this definition">#</a></dt>
+<dd><p>The names of the models in the store, sorted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.store.settings">
+<span class="sig-prename descclassname"><span class="pre">penlike.store.</span></span><span class="sig-name descname"><span class="pre">settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.store.settings" title="Link to this definition">#</a></dt>
+<dd><p>The settings, <code class="docutils literal notranslate"><span class="pre">{}</span></code> when none were ever written.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.store.text_files">
+<span class="sig-prename descclassname"><span class="pre">penlike.store.</span></span><span class="sig-name descname"><span class="pre">text_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#text_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.store.text_files" title="Link to this definition">#</a></dt>
+<dd><p>A <code class="docutils literal notranslate"><span class="pre">dol</span></code> files store under <code class="docutils literal notranslate"><span class="pre">root</span></code>: <code class="docutils literal notranslate"><span class="pre">/</span></code>-separated keys, UTF-8 text values.</p>
+<p>Folders are made on write and never on read, and a delete is permanent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutableMapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.store.write_settings">
+<span class="sig-prename descclassname"><span class="pre">penlike.store.</span></span><span class="sig-name descname"><span class="pre">write_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#write_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.store.write_settings" title="Link to this definition">#</a></dt>
+<dd><p>Replace the settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="penlike.sourcers.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">penlike.sourcers</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="penlike.tools.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">penlike.tools</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright">
+  <p>
+    Made with
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials">
+  <a href="https://github.com/thorwhalen/penlike" aria-label="GitHub">
+    <iconify-icon icon="simple-icons:github"></iconify-icon>
+  </a></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=fd10adb8"></script>
+      <script src="../_static/shibuya.js?v=50760d75"></script></body>
+</html>

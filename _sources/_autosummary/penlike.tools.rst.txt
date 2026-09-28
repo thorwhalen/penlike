@@ -1,0 +1,22 @@
+penlike.tools
+=============
+
+.. automodule:: penlike.tools
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      KINDS
+      BASES
+      HIDDEN_PARAMETERS
+      TOOLS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      host_mutating
+      without
+   

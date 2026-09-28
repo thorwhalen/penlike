@@ -1,0 +1,69 @@
+﻿penlike
+=======
+
+.. automodule:: penlike
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assign
+      batches
+      brief
+      build
+      check
+      data_dir
+      docs
+      exclude
+      exemplars
+      gather
+      install_skills
+      measure
+      models
+      new
+      normalize_doc
+      note
+      notes
+      propose
+      register_add
+      register_edit
+      register_merge
+      registers
+      remove
+      resolve_sourcer
+      route
+      screen
+      show
+      situate
+      sources
+      use
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ModelStore
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      PenlikeError
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   base
+   data
+   features
+   mcp
+   profile
+   routing
+   screening
+   sourcers
+   store
+   tools
