@@ -141,7 +141,7 @@ def test_a_named_register_keeps_its_texts(model):
         "quinn",
         "announcements",
         parent="email.many",
-        docs=ids[:10],
+        ids=ids[:10],
         description="formal notices to the whole team",
         files=model,
     )
@@ -205,3 +205,65 @@ def test_only_the_authors_own_texts_are_kept(tmp_path):
     assert kept["skipped"] == {"by someone else": 1}
     penlike.new("team", kind="group", basis="consent", files=files)
     assert penlike.gather("team", "jsonl", [str(source)], files=files)["added"] == 2
+
+
+# -- what an independent review found before the first release ------------------------
+
+
+def test_a_register_name_cannot_leave_the_data_folder(tmp_path):
+    def hostile(*refs, **_):
+        yield {"text": "A text whose sourcer names a register.", "register": "../../outside"}
+
+    files = {}
+    penlike.new("quinn", files=files)
+    assert penlike.gather("quinn", hostile, files=files)["skipped"] == {"not usable": 1}
+
+    def up(doc):
+        return "../outside"
+
+    import tests.test_smoke as here
+
+    here.up = up
+    source = tmp_path / "one.jsonl"
+    source.write_text(json.dumps({"text": "One plain text, long enough to be kept."}))
+    penlike.gather("quinn", "jsonl", [str(source)], files=files)
+    with pytest.raises(penlike.PenlikeError, match="not a usable name"):
+        penlike.build("quinn", situate="tests.test_smoke:up", files=files)
+    assert all(key.startswith(("models/quinn/", "config/")) for key in files)
+
+
+def test_naming_a_finer_register_does_not_empty_its_parent(model):
+    docs = penlike.ModelStore("quinn", files=model).read_docs()
+    ids = [d["id"] for d in docs if d["register"] == "email.one"][:2]
+    penlike.register_add("quinn", "board", parent="email.one", ids=ids, files=model)
+    found = penlike.registers("quinn", files=model)["registers"]
+    assert found["board"]["n_docs"] >= 2 and found["email.one"]["n_docs"] >= 1
+
+
+def test_register_changes_refuse_what_would_lose_data(model):
+    penlike.note("quinn", "Keeps it short.", register="email.one", source="doc:abc", files=model)
+    with pytest.raises(penlike.PenlikeError, match="into itself"):
+        penlike.register_merge("quinn", "email.one", "email.one", files=model)
+    assert "Keeps it short." in penlike.notes("quinn", files=model)["text"]
+    with pytest.raises(penlike.PenlikeError, match="no such texts"):
+        penlike.register_add("quinn", "ghost", ids=["nope"], files=model)
+    assert "ghost" not in penlike.registers("quinn", files=model)["registers"]
+
+
+def test_figures_from_another_version_ask_for_a_rebuild(model):
+    store = penlike.ModelStore("quinn", files=model)
+    stored = store.read_profile("_all")
+    stored["norm"]["features"] = stored["norm"]["features"][:-1]
+    store.write_profile("_all", stored)
+    with pytest.raises(penlike.PenlikeError, match="penlike build quinn"):
+        penlike.brief(like="quinn", style="email.one", files=model)
+
+
+def test_a_named_channel_is_not_overridden_by_the_reader(model):
+    routed = penlike.route(like="quinn", channel="github", to=[FRIEND], reply=True, files=model)
+    assert routed["register"] == "github.reply"
+
+
+def test_show_keeps_addresses_and_paths_to_itself(model):
+    shown = penlike.show("quinn", files=model)
+    assert "quinn@example.org" not in json.dumps(shown)

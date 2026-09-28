@@ -23,7 +23,9 @@ __all__ = [
     "AI_ERA_START",
     "DOC_FIELDS",
     "PenlikeError",
+    "RESERVED_NAMES",
     "audience_of",
+    "check_name",
     "doc_id",
     "normalize_doc",
     "parse_date",
@@ -66,6 +68,34 @@ _WORD_RE = re.compile(r"[^\W\d_]+(?:['’][^\W\d_]+)*")
 
 class PenlikeError(Exception):
     """An error whose message tells the caller what to do next."""
+
+
+_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{0,63}$")
+#: Names that a model or a register may not take.
+RESERVED_NAMES = ("general",)
+
+
+def check_name(name: Any) -> str:
+    """Validate the name of a model or a register, which is also the name of its files.
+
+    Lowercase letters, digits, ``.``, ``_`` and ``-``, starting with a letter or a
+    digit, with no ``..``. Anything else could name a file outside the data folder.
+
+    >>> check_name("me"), check_name("email.one")
+    ('me', 'email.one')
+    >>> check_name("../outside")
+    Traceback (most recent call last):
+        ...
+    penlike.base.PenlikeError: '../outside' is not a usable name: use lowercase ...
+    """
+    if not isinstance(name, str) or not _NAME_RE.match(name) or ".." in name:
+        raise PenlikeError(
+            f"{name!r} is not a usable name: use lowercase letters, digits, '.', '_' "
+            "or '-', starting with a letter or digit (for example 'me' or 'house-style')"
+        )
+    if name in RESERVED_NAMES:
+        raise PenlikeError(f"{name!r} is reserved; choose another name")
+    return name
 
 
 def word_count(text: str) -> int:
@@ -127,17 +157,40 @@ def parse_date(value: Any) -> str | None:
     return moment.astimezone(timezone.utc).isoformat()
 
 
-_QUOTE_HEADER_RE = re.compile(
+#: A reply header names a date or an address: "On Mon, 1 Feb 2021, Ada wrote:". Prose
+#: such as "On Monday I wrote:" names neither and is the author's own.
+_REPLY_HEADER_RE = re.compile(
     r"^\s*(?:"
-    r"On .{5,200}wrote:\s*$"
-    r"|Le .{5,200}a écrit\s*:\s*$"
-    r"|-{2,}\s*Original Message\s*-{2,}"
-    r"|-{2,}\s*Forwarded message\s*-{2,}"
-    r"|_{5,}\s*$"
-    r"|From:\s.+$"
-    r")",
+    r"On\b(?=.*(?:\d|@)).{5,300}\bwrote:"
+    r"|Le\b(?=.*(?:\d|@)).{5,300}\ba écrit\s*:"
+    r"|Am\b(?=.*(?:\d|@)).{5,300}\bschrieb\b.{0,200}:"
+    r"|El\b(?=.*(?:\d|@)).{5,300}\bescribió\s*:"
+    r")\s*$",
     re.IGNORECASE,
 )
+_SEPARATOR_RE = re.compile(
+    r"^\s*(?:-{2,}\s*(?:Original Message|Forwarded message)\s*-{2,}|_{10,})\s*$",
+    re.IGNORECASE,
+)
+_MAIL_HEADER_RE = re.compile(r"^\s*(From|Sent|Date|To|Cc|Subject)\s*:\s*\S", re.IGNORECASE)
+
+
+def _starts_quoted_mail(lines: list[str], index: int) -> bool:
+    """Whether the quoted or forwarded part of a message starts at ``lines[index]``."""
+    line = lines[index]
+    following = lines[index + 1 : index + 5]
+    header_lines = sum(bool(_MAIL_HEADER_RE.match(nxt)) for nxt in following)
+    if _REPLY_HEADER_RE.match(line):
+        return True
+    # Mail programs wrap a long reply header over two lines.
+    if index + 1 < len(lines) and re.match(r"^\s*(On|Le|Am|El)\b", line):
+        if _REPLY_HEADER_RE.match(f"{line.rstrip()} {lines[index + 1].strip()}"):
+            return True
+    if _SEPARATOR_RE.match(line):
+        return "message" in line.lower() or header_lines >= 1
+    if re.match(r"^\s*From\s*:\s*\S", line, re.IGNORECASE):
+        return header_lines >= 2
+    return False
 
 
 def strip_quoted(text: str) -> str:
@@ -145,24 +198,21 @@ def strip_quoted(text: str) -> str:
 
     A model of an author built from text that includes the messages they were
     answering is a model of their correspondents. Lines starting with ``>`` go, and
-    everything from a reply header ("On ... wrote:", "Original Message") onward goes.
+    everything from a reply header ("On <date>, <someone> wrote:", "Original
+    Message", a block of mail headers) onward goes. This is a heuristic over
+    plain text: check a sample of what was gathered.
 
     >>> strip_quoted("Sounds good.\\n\\nOn Mon, 1 Feb 2021, Ada wrote:\\n> Shall we?")
     'Sounds good.'
     >>> strip_quoted("> earlier point\\nI agree with this.")
     'I agree with this.'
+    >>> strip_quoted("Here is the plan.\\n\\nOn Monday I wrote:\\nship it")
+    'Here is the plan.\\n\\nOn Monday I wrote:\\nship it'
     """
     lines = text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
     kept: list[str] = []
     for index, line in enumerate(lines):
-        if _QUOTE_HEADER_RE.match(line):
-            # "From:" only counts as a forwarded header when a header block follows.
-            if line.lstrip().lower().startswith("from:") and not any(
-                re.match(r"^\s*(Sent|Date|To|Subject):", nxt, re.IGNORECASE)
-                for nxt in lines[index + 1 : index + 4]
-            ):
-                kept.append(line)
-                continue
+        if _starts_quoted_mail(lines, index):
             break
         if line.lstrip().startswith(">"):
             continue
@@ -234,6 +284,9 @@ def normalize_doc(raw: Mapping[str, Any], *, source: str = "") -> dict[str, Any]
     channel = str(raw.get("channel") or "document")
     audience = raw.get("audience") or audience_of(to, cc)
     extras = {k: v for k, v in raw.items() if k not in DOC_FIELDS}
+    hint = raw.get("register") or None
+    if hint is not None:
+        check_name(hint)  # a register names a file, so a sourcer may not choose freely
     return {
         "id": doc_id(text),
         "text": text,
@@ -250,8 +303,8 @@ def normalize_doc(raw: Mapping[str, Any], *, source: str = "") -> dict[str, Any]
         "audience": str(audience),
         "reply": raw.get("reply"),
         "url": str(raw.get("url") or ""),
-        "register": raw.get("register") or None,
-        "pinned": bool(raw.get("pinned")) or bool(raw.get("register")),
+        "register": hint,
+        "pinned": bool(raw.get("pinned")) or bool(hint),
         "excluded": raw.get("excluded") or None,
         "flags": {**dict(raw.get("flags") or {}), **extras},
         "words": word_count(prose_of(text)),

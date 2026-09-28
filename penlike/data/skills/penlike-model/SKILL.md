@@ -78,7 +78,7 @@ Each proposal lists the texts in a group, what sets it apart, whom the texts wer
 
 ```bash
 penlike register-add me close-colleagues --proposal email.one#2 --description "short, no greeting, to people I work with daily"
-penlike register-add me board --parent email.few --docs 3f2a9c1b7d4e8a10 9d1aadd22b0aece7
+penlike register-add me board --parent email.few --ids 3f2a9c1b7d4e8a10 9d1aadd22b0aece7
 ```
 
 A named register keeps its identifier for good. Later texts join the nearest named register when they are close enough, and wait in the parent when they are not, where the next `propose` will find them. That is how a new register shows up over time.

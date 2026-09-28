@@ -35,6 +35,7 @@ from penlike.features import measure as _measure
 from penlike.profile import (
     build_norm,
     build_profile,
+    norm_is_current,
     compare,
     contrast,
     render_profile,
@@ -70,8 +71,9 @@ BASES = {
     "consent": "the author agreed to be modelled",
     "public": "a published style or corpus, imitated as a style and not attributed to a person",
 }
-#: Arguments that belong to the host, not to a caller on a remote surface.
-HIDDEN_PARAMETERS = ("data_dir", "files")
+#: Arguments that belong to the host, not to a caller on a remote surface: where the
+#: data lives, and ``situate``, which loads a function from a module or a file.
+HIDDEN_PARAMETERS = ("data_dir", "files", "situate")
 #: The reserved register for notes that hold in every register.
 GENERAL = "general"
 _NORM = "_all"
@@ -170,7 +172,7 @@ def models(*, data_dir: str | None = None, files: MutableMapping | None = None) 
 
 
 def new(
-    name: str,
+    model: str,
     *,
     kind: str = "person",
     description: str = "",
@@ -194,15 +196,13 @@ def new(
             f"basis must be one of {', '.join(BASES)}; got {basis!r}. It records on what "
             "ground this writer may be imitated"
         )
-    check_name(name)
-    if name == GENERAL:
-        raise PenlikeError(f"{GENERAL!r} is reserved; choose another name")
-    store = ModelStore(name, data_dir=data_dir, files=files)
+    check_name(model)
+    store = ModelStore(model, data_dir=data_dir, files=files)
     if store.exists():
-        raise PenlikeError(f"a model named {name!r} already exists; see: penlike show {name}")
+        raise PenlikeError(f"a model named {model!r} already exists; see: penlike show {model}")
     store.write_model(
         {
-            "name": name,
+            "name": model,
             "kind": kind,
             "description": description,
             "basis": basis,
@@ -215,22 +215,22 @@ def new(
     current = settings(data_dir=data_dir, files=files)
     made_default = default or not current.get("default_model")
     if made_default:
-        write_settings({**current, "default_model": name}, data_dir=data_dir, files=files)
+        write_settings({**current, "default_model": model}, data_dir=data_dir, files=files)
     return {
         "ok": True,
-        "summary": f"made the {kind} model {name!r}"
+        "summary": f"made the {kind} model {model!r}"
         + (" (now the default)" if made_default else ""),
-        "model": name,
-        "text": f"Made {name!r}. Next, give it texts: penlike gather {name} <source> <references>",
+        "model": model,
+        "text": f"Made {model!r}. Next, give it texts: penlike gather {model} <source> <references>",
     }
 
 
-def use(name: str, *, data_dir: str | None = None, files: MutableMapping | None = None) -> dict:
+def use(model: str, *, data_dir: str | None = None, files: MutableMapping | None = None) -> dict:
     """Make a model the default, the one meant by "write like me"."""
-    ModelStore(name, data_dir=data_dir, files=files).require()
+    ModelStore(model, data_dir=data_dir, files=files).require()
     current = settings(data_dir=data_dir, files=files)
-    write_settings({**current, "default_model": name}, data_dir=data_dir, files=files)
-    return {"ok": True, "summary": f"{name!r} is now the default model", "model": name}
+    write_settings({**current, "default_model": model}, data_dir=data_dir, files=files)
+    return {"ok": True, "summary": f"{model!r} is now the default model", "model": model}
 
 
 def show(
@@ -259,7 +259,7 @@ def show(
     return {
         "ok": True,
         "summary": f"{meta['name']}: {len(_live(docs))} texts, {len(records)} registers",
-        "model": meta,
+        "model": {k: v for k, v in meta.items() if k not in ("me", "gathered")},
         "registers": records,
         "text": "\n".join(lines),
     }
@@ -278,7 +278,8 @@ def remove(
     keys = list(store.keys())
     if not yes:
         return {
-            "ok": False,
+            "ok": True,
+            "dry_run": True,
             "summary": f"would delete {len(keys)} files of {model!r}; repeat with --yes to do it",
             "files": keys,
         }
@@ -310,6 +311,17 @@ def sources() -> dict:
         "sources": found,
         "text": "\n".join(lines),
     }
+
+
+def _call_sourcer(sourcer, refs, since, until, limit, meta, option):
+    return sourcer(
+        *refs,
+        since=since,
+        until=until,
+        limit=limit,
+        me=tuple(meta.get("me", [])),
+        **_options(option),
+    )
 
 
 def _options(pairs: list[str] | None) -> dict[str, Any]:
@@ -362,20 +374,19 @@ def gather(
     counts: Counter[str] = Counter()
     added: list[dict[str, Any]] = []
     refs = list(refs or [])
-    produced = sourcer(
-        *refs,
-        since=since,
-        until=until,
-        limit=limit,
-        me=tuple(meta.get("me", [])),
-        **_options(option),
-    )
+    try:
+        produced = _call_sourcer(sourcer, refs, since, until, limit, meta, option)
+    except TypeError as error:
+        raise PenlikeError(
+            f"the sourcer {source!r} could not be called ({error}). A sourcer is "
+            "def read(*refs, since=None, until=None, limit=None, me=(), **options)"
+        ) from None
     for raw in produced:
         counts["read"] += 1
         try:
             doc = normalize_doc(raw, source=source if isinstance(source, str) else "custom")
         except PenlikeError:
-            counts["empty"] += 1
+            counts["not usable"] += 1
             continue
         if person and doc["is_self"] is False and not include_others:
             counts["by someone else"] += 1
@@ -626,7 +637,7 @@ def build(
     records = store.read_registers()
     for doc in live:
         if not doc.get("pinned"):
-            doc["register"] = rule(doc)
+            doc["register"] = check_name(rule(doc))
     measured = {doc["id"]: _measure(doc["text"]) for doc in live}
     norm = build_norm(measured.values())
     vectors = {doc_id: style_vector(m, norm["style"]) for doc_id, m in measured.items()}
@@ -641,11 +652,16 @@ def build(
             members = [vectors[d["id"]] for d in live if d.get("pinned") and d["register"] == kid]
             if members:
                 centroids[kid] = [sum(c) / len(c) for c in zip(*members)]
-        for doc in live:
-            if doc.get("pinned") or doc["register"] != parent or not centroids:
-                continue
+        waiting = [d for d in live if not d.get("pinned") and d["register"] == parent and centroids]
+        if not waiting:
+            continue
+        # A text leaves the parent only when it is nearer a named register than it is
+        # to the texts waiting with it; being close to a name is not enough.
+        home = [sum(c) / len(c) for c in zip(*(vectors[d["id"]] for d in waiting))]
+        for doc in waiting:
             kid, distance = _registers.nearest(vectors[doc["id"]], centroids)
-            if kid and distance <= lam:
+            stays = _registers.vector_distance(vectors[doc["id"]], home)
+            if kid and distance <= lam and distance < stays:
                 doc["register"] = kid
 
     by_register: dict[str, list[dict[str, Any]]] = {}
@@ -663,7 +679,8 @@ def build(
     store.clear_profiles()
     for rid, members in by_register.items():
         inside = [measured[d["id"]] for d in members]
-        outside = [m for doc_id, m in measured.items() if doc_id not in {d["id"] for d in members}]
+        member_ids = {d["id"] for d in members}
+        outside = [m for doc_id, m in measured.items() if doc_id not in member_ids]
         profile = build_profile(inside, register=rid, norm=norm, others=outside)
         against = reference_profile or (build_profile(outside) if outside else None)
         profile["reference"] = reference or ("the author's other registers" if outside else None)
@@ -709,6 +726,11 @@ def _built(store: ModelStore) -> tuple[dict[str, Any], dict[str, Any]]:
     if not norm or not store.read_model().get("built"):
         raise PenlikeError(
             f"{store.name!r} changed since it was last built, or never was; run: penlike build {store.name}"
+        )
+    if not norm_is_current(norm["norm"]):
+        raise PenlikeError(
+            f"{store.name!r} was built by another version of penlike, which measured "
+            f"differently; run: penlike build {store.name}"
         )
     return records, norm["norm"]
 
@@ -780,25 +802,30 @@ def register_add(
     parent: str | None = None,
     description: str = "",
     proposal: str | None = None,
-    docs: list[str] | None = None,
+    ids: list[str] | None = None,
     lam: float = _registers.DEFAULT_LAM,
     min_size: int = 5,
+    min_separation: float = _registers.DEFAULT_MIN_SEPARATION,
     data_dir: str | None = None,
     files: MutableMapping | None = None,
 ) -> dict:
     """Name a register and put texts in it, from a proposal or from a list of text ids.
 
     The texts are pinned there, and they are what later texts are compared with.
-    Use the same ``lam`` and ``min_size`` as the ``propose`` call the proposal came from.
+    Use the same ``lam``, ``min_size`` and ``min_separation`` as the ``propose`` call
+    the proposal came from.
     """
     store = _store(model, data_dir=data_dir, files=files)
     check_name(name)
     records = store.read_registers()
     if name in records or name in (GENERAL, _NORM):
         raise PenlikeError(f"a register named {name!r} already exists or is reserved")
-    ids = set(docs or [])
+    ids = set(ids or [])
     if proposal:
-        found = propose(store.name, lam=lam, min_size=min_size, data_dir=data_dir, files=files)
+        found = propose(
+            store.name, lam=lam, min_size=min_size, min_separation=min_separation,
+            data_dir=data_dir, files=files,
+        )  # fmt: skip
         match = [p for p in found["proposals"] if p["proposal"] == proposal]
         if not match:
             raise PenlikeError(
@@ -807,12 +834,16 @@ def register_add(
         ids |= set(match[0]["docs"])
         parent = parent or match[0]["parent"]
     if not ids:
-        raise PenlikeError(
-            "give the texts of the register: --proposal <id> or --docs <id> <id> ..."
-        )
+        raise PenlikeError("give the texts of the register: --proposal <id> or --ids <id> <id> ...")
     if parent and parent not in records:
         raise PenlikeError(f"no register named {parent!r} to put it within")
     all_docs = store.read_docs()
+    unknown = ids - {doc["id"] for doc in _live(all_docs)}
+    if unknown:
+        raise PenlikeError(
+            f"no such texts in {store.name!r}: {', '.join(sorted(unknown))}; "
+            f"list them with: penlike docs {store.name}"
+        )
     moved = 0
     for doc in all_docs:
         if doc["id"] in ids:
@@ -824,7 +855,7 @@ def register_add(
     rebuilt = build(store.name, data_dir=data_dir, files=files)
     return {
         "ok": True,
-        "summary": f"added the register {name!r} with {moved} texts",
+        "summary": f"added the register {name!r}, naming {moved} texts as its own",
         "registers": rebuilt["registers"],
         "text": rebuilt["text"],
     }
@@ -862,6 +893,8 @@ def register_merge(
 ) -> dict:
     """Merge one register into another, when the two turn out to be written the same way."""
     store = _store(model, data_dir=data_dir, files=files)
+    if register == into:
+        raise PenlikeError(f"{register!r} cannot be merged into itself")
     records = store.read_registers()
     for rid in (register, into):
         if rid not in records:
@@ -1197,6 +1230,8 @@ def check(
     the author's own spread. Passing the check means the measurable surface
     matches; it does not mean the draft would pass for the author's.
     """
+    if not text or not text.strip():
+        raise PenlikeError("there is no draft to check: the text is empty")
     chosen = route(
         like=like,
         style=style,

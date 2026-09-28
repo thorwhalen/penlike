@@ -269,6 +269,7 @@ def route(
             if not doc.get("excluded")
             and doc.get("register") in usable
             and readers & {r.lower() for r in doc.get("to", [])}
+            and (not channel or doc.get("channel") == channel)
         )
         if used:
             rid, count = used.most_common(1)[0]
@@ -359,4 +360,4 @@ def select_exemplars(
 def _newest_first(doc: Mapping[str, Any]) -> str:
     # ISO dates sort as text; invert so that a later date sorts first, undated last.
     date = doc.get("date") or ""
-    return "".join(chr(255 - ord(c)) if ord(c) < 255 else c for c in date) if date else "~"
+    return "".join(chr(255 - ord(c)) if ord(c) < 255 else c for c in date) if date else "\uffff"

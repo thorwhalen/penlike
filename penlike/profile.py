@@ -30,16 +30,37 @@ from typing import Any
 from penlike.features import FUNCTION_WORDS, PRESENCE_FEATURES, SCALAR_FEATURES
 
 __all__ = [
+    "DISTANCE",
     "LABELS",
+    "NORM_FORMAT",
     "VECTOR_FEATURES",
     "build_profile",
     "compare",
     "contrast",
     "function_word_vector",
+    "norm_is_current",
     "render_profile",
     "style_vector",
     "vector_distance",
 ]
+
+#: The version of the stored figures. It changes when their layout does.
+NORM_FORMAT = 1
+#: The distance that style vectors are compared with, recorded next to the figures it
+#: produced: thresholds set for one distance mean nothing for another.
+DISTANCE = "features-rms-z"
+
+
+def norm_is_current(norm: Mapping[str, Any] | None) -> bool:
+    """Whether stored figures were made by this version's features, word list and distance."""
+    return bool(
+        norm
+        and norm.get("format") == NORM_FORMAT
+        and norm.get("distance") == DISTANCE
+        and norm.get("features") == list(VECTOR_FEATURES)
+        and norm.get("function_word_list") == list(FUNCTION_WORDS)
+    )
+
 
 #: Below this many words a register's distributional figures are provisional. The
 #: authorship literature puts the floor for a stable frequency profile at a few
@@ -211,7 +232,14 @@ def build_norm(measurements: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
             "sd": [round(statistics.pstdev(r), 4) for r in rates],
             "n": len(long_enough),
         }
-    return {"style": style, "function_words": words}
+    return {
+        "format": NORM_FORMAT,
+        "distance": DISTANCE,
+        "features": list(VECTOR_FEATURES),
+        "function_word_list": list(FUNCTION_WORDS),
+        "style": style,
+        "function_words": words,
+    }
 
 
 def build_profile(
@@ -452,7 +480,10 @@ def compare(
             if shown and share <= _RARE_SHARE:
                 message = f"the draft uses {LABELS[name]}; the author does in {share:.0%} of {n_docs} texts"
             elif not shown and share >= _USUAL_SHARE:
-                message = f"the draft has no {LABELS[name]}; the author has in {share:.0%} of {n_docs} texts"
+                thing = LABELS[name].removeprefix("a ")
+                message = (
+                    f"the draft has no {thing}; the author has in {share:.0%} of {n_docs} texts"
+                )
             else:
                 continue
             discrepancies.append(

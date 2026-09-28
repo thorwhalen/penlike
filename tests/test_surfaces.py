@@ -70,6 +70,11 @@ def test_mcp_exposes_the_same_verbs_without_host_reach():
     names = mcp.tool_names()
     assert "brief" in names and "check" in names
     assert not {"gather", "remove", "batches", "install_skills"} & set(names)
+    import inspect
+
+    from penlike.tools import build, without
+
+    assert not {"situate", "data_dir", "files"} & set(inspect.signature(without(build)).parameters)
     assert mcp.mk_server() is not None
 
 

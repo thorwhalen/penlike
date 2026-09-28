@@ -32,12 +32,11 @@ from __future__ import annotations
 
 import json
 import os
-import re
 from collections.abc import Iterable, Iterator, MutableMapping
 from pathlib import Path
 from typing import Any
 
-from penlike.base import PenlikeError
+from penlike.base import PenlikeError, check_name
 
 __all__ = [
     "APP_NAME",
@@ -52,7 +51,6 @@ __all__ = [
 
 APP_NAME = "penlike"
 DATA_DIR_ENVVAR = "PENLIKE_DATA_DIR"
-_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{0,63}$")
 _SETTINGS_KEY = "config/settings.json"
 
 
@@ -98,18 +96,9 @@ def _files(files: MutableMapping[str, str] | None, root: Any) -> MutableMapping[
     return text_files(data_dir(root)) if files is None else files
 
 
-def check_name(name: str) -> str:
-    """Validate a model or register name: lowercase letters, digits, ``.``, ``_``, ``-``.
-
-    >>> check_name("me"), check_name("tech-writing")
-    ('me', 'tech-writing')
-    """
-    if not _NAME_RE.match(name or ""):
-        raise PenlikeError(
-            f"{name!r} is not a usable name: use lowercase letters, digits, '.', '_' "
-            "or '-', starting with a letter or digit (for example 'me' or 'house-style')"
-        )
-    return name
+def _file_name(register: str) -> str:
+    """A register's file name: a valid name, or one of the store's own (``_all``, ``general``)."""
+    return register if register in ("_all", "general") else check_name(register)
 
 
 def settings(
@@ -198,10 +187,10 @@ class ModelStore:
         self._write_json(self._key("registers.json"), registers)
 
     def read_profile(self, register: str) -> dict[str, Any] | None:
-        return self._read_json(self._key("profiles", f"{register}.json"), None)
+        return self._read_json(self._key("profiles", f"{_file_name(register)}.json"), None)
 
     def write_profile(self, register: str, profile: dict[str, Any]) -> None:
-        self._write_json(self._key("profiles", f"{register}.json"), profile)
+        self._write_json(self._key("profiles", f"{_file_name(register)}.json"), profile)
 
     def clear_profiles(self) -> None:
         for key in [k for k in self.files if k.startswith(self._key("profiles") + "/")]:
@@ -220,11 +209,11 @@ class ModelStore:
 
     # -- notes -------------------------------------------------------------------
     def read_notes(self, register: str) -> str:
-        key = self._key("notes", f"{register}.md")
+        key = self._key("notes", f"{_file_name(register)}.md")
         return self.files[key] if key in self.files else ""
 
     def write_notes(self, register: str, text: str) -> None:
-        self.files[self._key("notes", f"{register}.md")] = text
+        self.files[self._key("notes", f"{_file_name(register)}.md")] = text
 
     def note_registers(self) -> list[str]:
         prefix = self._key("notes") + "/"

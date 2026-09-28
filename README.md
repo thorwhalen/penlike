@@ -69,7 +69,7 @@ penlike sources
 | Sourcer | Reads |
 |---|---|
 | `mbox` | a mailbox archive, such as a webmail export |
-| `github` | what one login wrote: discussions, issues, pull requests, comments (through the `gh` tool) |
+| `github` | what one login wrote: discussions, issues, pull requests and the comments on them, not line-by-line review comments (through the `gh` tool) |
 | `correspond` | any channel of the [correspond](https://github.com/thorwhalen/correspond) package (`pip install 'penlike[correspond]'`) |
 | `files` | text files, folders of them, `.eml` messages |
 | `jsonl` | one JSON document per line |
@@ -88,7 +88,7 @@ def read(*refs, since=None, until=None, limit=None, me=(), **options):
 penlike gather me ~/.config/penlike/sourcers/chat.py:read ~/exports/chat.json
 ```
 
-Only `text` is required. `to` and `channel` decide the register, `date` allows a cutoff, `is_self` keeps other people's writing out. Quoted replies and forwarded messages are removed from every text. The `penlike-source` skill tells an agent how to write one for you.
+Only `text` is required. `to` and `channel` decide the register, `date` allows a cutoff, `is_self` keeps other people's writing out. Quoted replies and forwarded messages are removed from every text by rules over plain text, which can miss an unusual mail program: read a sample of what was gathered (`penlike docs me --full`). The `penlike-source` skill tells an agent how to write one for you.
 
 ## Registers
 
@@ -159,7 +159,7 @@ for item in report["discrepancies"]:
     print(item["message"])
 ```
 
-Every verb returns a JSON-ready dict with `ok`, a `summary` and usually a `text`. The same verbs are served over MCP by `penlike-mcp` (`pip install 'penlike[mcp]'`).
+Every verb returns a JSON-ready dict with `ok`, a `summary` and usually a `text`. The same verbs are served over MCP by `penlike-mcp` (`pip install 'penlike[mcp]'`), except those that reach into the machine: gathering, deleting a model, writing batch files and linking skills stay at the terminal.
 
 ## Limits
 

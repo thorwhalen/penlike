@@ -188,3 +188,64 @@ def test_dates_bound_what_is_kept(tmp_path):
     )
     assert result["added"] == 1
     assert result["skipped"] == {"outside the dates": 2, "undated": 1}
+
+
+def test_what_the_author_did_not_write_is_removed():
+    from penlike.base import strip_quoted
+
+    wrapped = (
+        "Fine.\n\nOn Mon, 4 Mar 2019 at 10:00, Mira Example <mira@example.org>\nwrote:\n> Shall we?"
+    )
+    assert strip_quoted(wrapped) == "Fine."
+    assert strip_quoted("Gut.\n\nAm 04.03.2019 um 10:00 schrieb Mira:\n> Ja?") == "Gut."
+    outlook = "Agreed.\n\nFrom: Mira\nSent: Monday\nTo: Quinn\nSubject: Release\n\nShall we?"
+    assert strip_quoted(outlook) == "Agreed."
+
+
+def test_the_authors_own_prose_is_kept():
+    from penlike.base import strip_quoted
+
+    for prose in (
+        "Here is the plan.\n\nOn Monday I wrote:\nship it",
+        "Two fields matter.\nFrom: the sender\nThat is all.",
+        "Above the line.\n_____\nBelow the line.",
+    ):
+        assert strip_quoted(prose) == prose
+
+
+def test_html_mail_and_attached_messages(tmp_path):
+    from email.message import EmailMessage
+
+    rich = EmailMessage()
+    rich["From"], rich["To"] = ME, "mira@example.org"
+    rich.set_content(
+        "<div>I&#39;m here&nbsp;now &amp; ready.</div>"
+        '<div class="gmail_quote">On Monday Mira wrote:<blockquote>secret</blockquote></div>',
+        subtype="html",
+    )
+    assert sourcers._message_text(rich).strip() == "I'm here now & ready."
+
+    inner = _mail("mira@example.org", ME, "Words that the author never wrote.\n")
+    outer = _mail(ME, "tomas@example.org", "See the attached note.\n")
+    outer.add_attachment(inner)
+    assert sourcers._message_text(outer).strip() == "See the attached note."
+
+
+def test_github_kinds_are_checked():
+    run = _github_run({})
+    assert list(sourcers.github("quinn", kinds="issue", run=run)) == []
+    assert len(run.calls) == 2
+    with pytest.raises(penlike.PenlikeError, match="kinds must be"):
+        list(sourcers.github("quinn", kinds=["wiki"], run=run))
+    list(sourcers.github("quinn", since="2019-01-01", kinds="issue", run=run))
+    assert not any("created:" in a for call in run.calls for a in call)
+
+
+def test_a_sourcer_with_the_wrong_signature_is_explained():
+    def bare(path):
+        yield {"text": "never reached"}
+
+    files = {}
+    penlike.new("quinn", files=files)
+    with pytest.raises(penlike.PenlikeError, match="A sourcer is"):
+        penlike.gather("quinn", bare, ["x"], files=files)

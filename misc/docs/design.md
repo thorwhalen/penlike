@@ -48,6 +48,8 @@ NOT seams:      feature extraction, example selection, profile rendering, the cl
 
 Seam candidates, left as direct code until a replacement is wanted: syntactic features through spaCy, a style embedding as the distance and as a further check, a fine-tuned or local generation back end.
 
+So that those can be added without a silent break, the stored figures carry their own description: a format number, the name of the distance (`features-rms-z`), the list of features and the list of function words. A model whose figures were made differently refuses to brief and asks for a rebuild. The thresholds of `propose` are in units of that distance; a different distance will need its own defaults.
+
 ## Would each surface need the core to change?
 
 | Surface | Answer |
@@ -80,6 +82,12 @@ returns a brief with a measured profile and examples, and a list of what in the 
 8. **Screening states its cost first** and excludes texts without deleting them.
 9. **Every model records its basis** (self, consent, public), and the brief carries the responsible-use text.
 10. **The word lists are English.** On other languages the language-neutral features hold and the word-list rates read low. Stated in the module and the README.
+
+## What the review before release changed
+
+An independent review, briefed to refute the release, found two blocking faults and both were fixed before the first version: a register name taken from a sourcer or from a custom `situate` was used as a file name unchecked, and `build(situate=)`, which loads a function from a file, was reachable over MCP. Register names are now validated wherever they enter, and `situate` is hidden on remote surfaces. It also found that naming a finer register emptied its parent, that quote stripping both leaked and over-cut, and that stored figures had no version. Each has a test in `tests/`.
+
+Known and accepted: `propose` shows whom the texts of a group were mostly for, with addresses, because that is what a person needs to name the group. It is the user's own data, shown to the user's own agent.
 
 ## Privacy
 

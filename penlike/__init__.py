@@ -16,7 +16,6 @@ Everything a model holds is private and lives under the user's data folder
 """
 
 from penlike.base import AI_ERA_START, PenlikeError, normalize_doc
-from penlike.features import measure as measure_text
 from penlike.routing import situate
 from penlike.sourcers import SOURCERS, resolve_sourcer
 from penlike.store import ModelStore, data_dir
@@ -68,7 +67,6 @@ __all__ = [
     "gather",
     "install_skills",
     "measure",
-    "measure_text",
     "models",
     "new",
     "normalize_doc",

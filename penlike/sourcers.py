@@ -74,11 +74,23 @@ def _addresses(value: Any) -> list[str]:
     return [addr.lower() for _, addr in getaddresses([str(value or "")]) if addr]
 
 
+def _own_parts(message: Any) -> Iterator[Any]:
+    """The parts of a message that its sender wrote: attached messages are not descended into."""
+    if message.get_content_type() == "message/rfc822":
+        return
+    if message.is_multipart():
+        for part in message.get_payload():
+            yield from _own_parts(part)
+    else:
+        yield message
+
+
 def _message_text(message: Any) -> str:
     """The plain-text body of an email message; HTML-only mail is reduced to its text."""
-    plain, html = [], []
-    parts = message.walk() if message.is_multipart() else [message]
-    for part in parts:
+    import html as _html
+
+    plain, rich = [], []
+    for part in _own_parts(message):
         if part.get_content_maintype() != "text" or part.get_filename():
             continue
         payload = part.get_payload(decode=True)
@@ -89,12 +101,18 @@ def _message_text(message: Any) -> str:
             body = payload.decode(charset, errors="replace")
         except LookupError:
             body = payload.decode("utf-8", errors="replace")
-        (plain if part.get_content_subtype() == "plain" else html).append(body)
+        (plain if part.get_content_subtype() == "plain" else rich).append(body)
     if plain:
         return "\n".join(plain)
-    text = re.sub(r"(?is)<(script|style|blockquote).*?</\1>", " ", "\n".join(html))
+    text = "\n".join(rich)
+    # Webmail wraps what is being answered in a marked block; all of it goes.
+    text = re.split(
+        r"(?i)<(?:div|blockquote)[^>]*class=\"[^\"]*(?:gmail_quote|moz-cite-prefix|yahoo_quoted)",
+        text,
+    )[0]
+    text = re.sub(r"(?is)<(script|style|blockquote).*?</\1>", " ", text)
     text = re.sub(r"(?i)<br\s*/?>|</p>|</div>", "\n", text)
-    return re.sub(r"<[^>]+>", "", text)
+    return _html.unescape(re.sub(r"<[^>]+>", "", text)).replace("\xa0", " ")
 
 
 def _email_doc(message: Any, *, me: Iterable[str], ref: str) -> dict[str, Any] | None:
@@ -319,18 +337,28 @@ def github(
     Each reference is a login, optionally narrowed to a repository or an owner:
     ``octocat``, ``octocat@owner/repo``, ``octocat@owner``. It goes through the
     ``gh`` command line tool and its login, so private repositories the login can
-    read are included. GitHub search returns at most 1000 threads per query.
+    read are included.
+
+    Limits: GitHub search returns at most 1000 threads per query; the first 100
+    comments of a thread are read (50 for a discussion, with 50 replies each);
+    review comments on the lines of a pull request are not read. ``kinds`` keeps
+    ``discussion``, ``issue`` (which includes pull requests) or both.
     """
     if not shutil.which("gh") and run is subprocess.run:
         raise PenlikeError("the github sourcer needs the GitHub CLI: https://cli.github.com")
     if not refs:
         raise PenlikeError("give the login to collect, for example: github octocat")
-    window = ""
-    if since or until:
-        low = (parse_date(since) or "")[:10] or "*"
-        high = (parse_date(until) or "")[:10] or "*"
-        window = f" created:{low}..{high}"
-    types = [t for t in ("DISCUSSION", "ISSUE") if t.lower() in set(kinds)]
+    # Only `until` narrows the search: a thread's creation date bounds the dates of
+    # everything in it from below, so `since` would drop later comments on older threads.
+    window = f" created:*..{parse_date(until)[:10]}" if until else ""
+    wanted = {k.strip().lower() for k in ([kinds] if isinstance(kinds, str) else kinds)}
+    wanted = {k for kind in wanted for k in kind.split(",") if k}
+    unknown = wanted - {"discussion", "issue"}
+    if unknown or not wanted:
+        raise PenlikeError(
+            f"kinds must be 'discussion', 'issue' or both; got {sorted(unknown) or 'nothing'}"
+        )
+    types = [t for t in ("DISCUSSION", "ISSUE") if t.lower() in wanted]
     seen: set[str] = set()
     produced = 0
     for ref in refs:
