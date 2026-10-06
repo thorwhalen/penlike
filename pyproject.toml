@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "penlike"
-version = "0.0.1"
+version = "0.0.2"
 description = "Model how an author, a group or a corpus writes, register by register, and give agents the skills to write in that style"
 readme = "README.md"
 requires-python = ">=3.10"
