@@ -36,6 +36,8 @@ from penlike.profile import (
     build_norm,
     build_profile,
     norm_is_current,
+    plain_number,
+    show_figure,
     compare,
     contrast,
     render_profile,
@@ -1074,7 +1076,9 @@ def exemplars(
     """Pick texts by the author to show as examples, for the register the request routes to.
 
     Texts to the same readers come first, then a spread over readers and dates.
-    ``words`` prefers examples near the length of what is to be written.
+    ``words`` prefers examples near the length of what is to be written. A register
+    of long texts gives up to three excerpts of about ``words`` words instead:
+    whole paragraphs from the middle of a text, labelled with the text's id.
     """
     chosen = route(
         like=like,
@@ -1090,16 +1094,24 @@ def exemplars(
     members = [d for d in store.read_docs() if d.get("register") == chosen["register"]]
     picked = _registers.select_exemplars(members, n=n, to=to or (), words=words)
     shown = [
-        {"id": d["id"], "date": (d["date"] or "")[:10], "words": d["words"], "text": d["text"]}
+        {
+            "id": d["id"],
+            "date": (d["date"] or "")[:10],
+            "words": d["words"],
+            "text": d["text"],
+            **({"excerpt": True, "of_words": d["of_words"]} if d.get("excerpt") else {}),
+        }
         for d in picked
     ]
     blocks = [
-        f'<example id="{d["id"]}" date="{d["date"] or "undated"}">\n{d["text"]}\n</example>'
+        f'<example id="{d["id"]}" date="{d["date"] or "undated"}"'
+        + (f' excerpt="true" of_words="{d["of_words"]}"' if d.get("excerpt") else "")
+        + f">\n{d['text']}\n</example>"
         for d in shown
     ]
     return {
         "ok": bool(shown),
-        "summary": f"{len(shown)} examples from {chosen['register']}",
+        "summary": f"{len(shown)} {'excerpts' if any(d.get('excerpt') for d in shown) else 'examples'} from {chosen['register']}",
         "register": chosen["register"],
         "exemplars": shown,
         "text": "\n\n".join(blocks),
@@ -1168,6 +1180,13 @@ def brief(
         "",
         f"## Examples by {subject}",
         "Take the style from these, never the content. They are private: do not quote them in what you write.",
+        *(
+            [
+                "Texts in this register are long: these are excerpts (whole paragraphs from the middle of a text), not whole texts."
+            ]
+            if any(d.get("excerpt") for d in found["exemplars"])
+            else []
+        ),
         found["text"] or "(no example of usable length in this register)",
         "",
         "## After drafting",
@@ -1205,7 +1224,11 @@ def measure(text: str) -> dict:
         )
     }
     lines = [f"{found['n_words']} words, {found['n_sentences']} sentences"]
-    lines += [f"{name}: {value}" for name, value in found["scalars"].items() if value is not None]
+    lines += [
+        f"{name}: {show_figure(name, value)}"
+        for name, value in found["scalars"].items()
+        if value is not None
+    ]
     lines += [f"{name}: yes" for name, value in found["presence"].items() if value]
     return {"ok": True, "summary": lines[0], **lean, "text": "\n".join(lines)}
 
@@ -1256,8 +1279,8 @@ def check(
         own = distance["own"]
         verdict = "within" if distance["within_own_range"] else "outside"
         lines.append(
-            f"function-word distance {distance['value']:g}: {verdict} the range of the author's own "
-            f"texts (mean {own['mean']:g}, spread {own['sd']:g}, over {own['n']} texts)"
+            f"function-word distance {plain_number(distance['value'])}: {verdict} the range of the author's own "
+            f"texts (mean {plain_number(own['mean'])}, spread {plain_number(own['sd'])}, over {own['n']} texts)"
         )
     else:
         lines.append(
