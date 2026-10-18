@@ -30,6 +30,7 @@ __all__ = [
     "DEFAULT_LAM",
     "DEFAULT_MIN_SEPARATION",
     "dp_means",
+    "excerpt",
     "nearest",
     "propose",
     "route",
@@ -316,6 +317,8 @@ def select_exemplars(
     words: int | None = None,
     min_words: int = 15,
     max_words: int = 400,
+    max_excerpts: int = 3,
+    excerpt_words: int = 150,
 ) -> list[Mapping[str, Any]]:
     """Pick the texts to show as examples of a register.
 
@@ -323,13 +326,14 @@ def select_exemplars(
     for similarity of topic to the task: one text per reader or thread in turn,
     newest first, because examples narrow in topic pull the imitation toward their
     content and away from the style. ``words`` prefers texts near a target length.
+
+    Texts longer than ``max_words`` are too long to show whole. When the whole texts
+    do not fill ``n`` places, up to ``max_excerpts`` of those long texts fill the rest
+    as excerpts (see :func:`excerpt`) of about ``words`` (else ``excerpt_words``) words.
     """
     readers = {r.lower() for r in to}
-    pool = [
-        doc
-        for doc in docs
-        if not doc.get("excluded") and min_words <= doc.get("words", 0) <= max_words
-    ]
+    live = [doc for doc in docs if not doc.get("excluded")]
+    pool = [doc for doc in live if min_words <= doc.get("words", 0) <= max_words]
 
     def closeness(doc: Mapping[str, Any]) -> float:
         return abs(doc["words"] - words) if words else 0.0
@@ -354,7 +358,74 @@ def select_exemplars(
 
     same = [d for d in pool if readers & {r.lower() for r in d.get("to", [])}]
     rest = [d for d in pool if d not in same]
-    return (spread(same) + spread(rest))[:n]
+    whole = (spread(same) + spread(rest))[:n]
+
+    room = min(n - len(whole), max_excerpts)
+    if room <= 0:
+        return whole
+    target = words or excerpt_words
+    long_texts = [doc for doc in live if doc.get("words", 0) > max_words]
+    excerpts = (excerpt(doc, words=target) for doc in spread(long_texts))
+    return whole + [found for found in excerpts if found][:room]
+
+
+_SENTENCE_RE = re.compile(r"(?<=[.!?])\s+")
+
+
+def excerpt(doc: Mapping[str, Any], *, words: int) -> Mapping[str, Any] | None:
+    """A contiguous passage of about ``words`` words from the middle of a long text.
+
+    The passage is whole paragraphs (whole sentences where one paragraph alone is
+    longer than the target), taken from the middle half of the text, because the
+    opening of a text is atypical of how the rest is written. Of the passages that
+    could be taken there, the one nearest the target length wins, and of those the
+    one nearest the middle. Returns the document with its text replaced by the
+    passage, ``excerpt`` set, and ``of_words`` the length of the whole; ``None`` when
+    the text has nothing to cut.
+    """
+    units: list[tuple[str, int]] = []  # (text, paragraph index)
+    for index, paragraph in enumerate(re.split(r"\n\s*\n", doc.get("text", "").strip())):
+        if not paragraph.strip():
+            continue
+        if len(paragraph.split()) > 2 * words:
+            units += [(part, index) for part in _SENTENCE_RE.split(paragraph.strip())]
+        else:
+            units.append((paragraph.strip(), index))
+    sizes = [len(text.split()) for text, _ in units]
+    total = sum(sizes)
+    if not units or total <= words:
+        return None
+    before = [0]
+    for size in sizes:
+        before.append(before[-1] + size)
+
+    def offset_from_middle(first: int, last: int) -> float:
+        return abs((before[first] + before[last + 1]) / 2 - total / 2)
+
+    best: tuple[float, float, int, int] | None = None
+    for first in range(len(units)):
+        if not total / 4 <= before[first] <= 3 * total / 4:
+            continue
+        for last in range(first, len(units)):
+            size = before[last + 1] - before[first]
+            if size > 2 * words and last > first:
+                break
+            key = (abs(size - words), offset_from_middle(first, last), first, last)
+            if best is None or key < best:
+                best = key
+    if best is None:
+        return None
+    _, _, first, last = best
+    passage = units[first][0]
+    for (text, paragraph), (_, previous) in zip(units[first + 1 : last + 1], units[first:last]):
+        passage += (" " if paragraph == previous else "\n\n") + text
+    return {
+        **doc,
+        "text": passage,
+        "words": len(passage.split()),
+        "excerpt": True,
+        "of_words": total,
+    }
 
 
 def _newest_first(doc: Mapping[str, Any]) -> str:

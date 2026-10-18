@@ -25,6 +25,7 @@ import math
 import statistics
 from collections import Counter
 from collections.abc import Iterable, Mapping, Sequence
+from decimal import Decimal
 from typing import Any
 
 from penlike.features import FUNCTION_WORDS, PRESENCE_FEATURES, SCALAR_FEATURES
@@ -39,6 +40,7 @@ __all__ = [
     "contrast",
     "function_word_vector",
     "norm_is_current",
+    "plain_number",
     "render_profile",
     "style_vector",
     "vector_distance",
@@ -415,11 +417,29 @@ def contrast(
     return {"features": features[:top], "habits": habits[:top], "words": words[:top]}
 
 
+_COUNT_LIKE = ("words", "sentence_len_mean", "sentence_len_sd", "paragraph_len_mean")
+
+
+def plain_number(value: float, *, significant: int = 2) -> str:
+    """A number as a reader writes it: never scientific notation, ``significant`` digits.
+
+    >>> plain_number(0.01234), plain_number(12.34), plain_number(2840.0), plain_number(0)
+    ('0.012', '12', '2800', '0')
+    """
+    if value == 0:
+        return "0"
+    rounded = Decimal(f"{value:.{significant}g}")
+    return format(rounded, "f")
+
+
 def _show(name: str, value: float) -> str:
-    """A figure as a reader wants it: shares as percentages, the rest to three digits."""
+    """A figure as a reader wants it: shares as percentages, counts and lengths as
+    integers, rates to two significant digits."""
     if name.endswith("_share") or name.startswith("has_"):
         return f"{value:.0%}"
-    return f"{value:.3g}"
+    if name in _COUNT_LIKE:
+        return f"{round(value):d}"
+    return plain_number(value)
 
 
 def _describe(name: str, value: float, stats: Mapping[str, float]) -> str:

@@ -106,3 +106,40 @@ def fictional_corpus(*, seed: int = 7, per_register: int = 14) -> list[dict]:
             }
         )
     return docs
+
+
+_ESSAY = [
+    "A harbour town keeps its accounts in the weather, and the weather rarely lies.",
+    "Nobody planned the market square; it happened where three roads gave up arguing.",
+    "The baker's ledger shows a loaf costing the same in March as in the dry August that followed.",
+    "I used to think a map was a promise, but it is closer to a polite guess.",
+    "Ask a ferryman how long the crossing takes and he will describe the tide, not the clock.",
+    "Rules of thumb survive because they are cheap to carry and hard to disprove.",
+    "The lamp-lighter stopped coming in the spring, and no one noticed until the autumn.",
+    "A long sentence can hold a whole afternoon if the writer is patient with its commas.",
+    "Short ones land like pebbles; the reader feels each ripple before the next arrives.",
+    "Every town I have visited has one street that the locals refuse to explain.",
+    "What looks like thrift is often just a slow kind of fear.",
+    "The orchard wall was built twice, once for the apples and once for the argument.",
+]
+
+
+def fictional_essays(*, seed: int = 11, n_texts: int = 6, paragraphs: int = 12) -> list[dict]:
+    """Long documents by an invented essayist: each is far over the example length limit."""
+    rng = random.Random(seed)
+    docs = []
+    for index in range(n_texts):
+        body = []
+        for number in range(paragraphs):
+            sentences = rng.sample(_ESSAY, rng.randint(5, 8))
+            body.append(f"[{index}.{number}] " + " ".join(sentences))
+        docs.append(
+            {
+                "text": "\n\n".join(body),
+                "date": f"2018-{1 + index:02d}-15",
+                "channel": "document",
+                "author": "essayist@example.org",
+                "is_self": True,
+            }
+        )
+    return docs
