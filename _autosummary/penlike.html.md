@@ -150,13 +150,13 @@ matches; it does not mean the draft would pass for the author’s.
 
 The data root: the argument, else `$PENLIKE_DATA_DIR`, else the user data folder.
 
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
-
 ```pycon
 >>> data_dir("somewhere").is_absolute()
 True
 ```
+
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
 ### penlike.docs(model=None, , register=None, excluded=False, limit=20, full=False, data_dir=None, files=None)
 
@@ -177,7 +177,9 @@ Keep texts out of the model without deleting them, or put them back with `undo`.
 Pick texts by the author to show as examples, for the register the request routes to.
 
 Texts to the same readers come first, then a spread over readers and dates.
-`words` prefers examples near the length of what is to be written.
+`words` prefers examples near the length of what is to be written. A register
+of long texts gives up to three excerpts of about `words` words instead:
+whole paragraphs from the middle of a text, labelled with the text’s id.
 
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
@@ -204,14 +206,14 @@ Link the skills and agents shipped with penlike into an agent host’s folders.
 
 The target defaults to `~/.claude`. Without `write` it only says what it would do.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
-
 ```pycon
 >>> result = install_skills()
 >>> result["dry_run"], len(result["skills"]) > 0
 (True, True)
 ```
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### penlike.measure(text)
 
@@ -247,14 +249,14 @@ Quoted material is removed, the date is put in ISO form, the audience is derived
 when it was not given, and the id is computed from the cleaned text. Unknown keys
 are kept under `flags` so that a custom sourcer can carry extra metadata.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> doc = normalize_doc({"text": "> quoted\nFine by me.", "date": "2020", "mood": "calm"})
 >>> doc["text"], doc["date"][:4], doc["flags"]
 ('Fine by me.', '2020', {'mood': 'calm'})
 ```
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### penlike.note(model, text, , register='general', source=None, data_dir=None, files=None)
 
@@ -330,15 +332,15 @@ Delete a model and everything in it. Without `yes` it only says what would go.
 
 Find the sourcer a name refers to: built-in, `module:function`, or `file.py:function`.
 
-* **Return type:**
-  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]]
-
 ```pycon
 >>> resolve_sourcer("files") is files
 True
 >>> resolve_sourcer("json:loads").__name__
 'loads'
 ```
+
+* **Return type:**
+  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]]
 
 ### penlike.route(, like=None, style=None, channel=None, to=None, audience=None, reply=False, data_dir=None, files=None)
 

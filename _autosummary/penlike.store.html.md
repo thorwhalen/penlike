@@ -74,13 +74,13 @@ Return self, or explain how to make the model when it does not exist.
 
 The data root: the argument, else `$PENLIKE_DATA_DIR`, else the user data folder.
 
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
-
 ```pycon
 >>> data_dir("somewhere").is_absolute()
 True
 ```
+
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
 ### penlike.store.model_names(, data_dir=None, files=None)
 

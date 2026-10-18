@@ -2,16 +2,18 @@
 
 # About this build
 
-This documentation was built on **2026-09-28 07:58 UTC** from commit <a href="https://github.com/thorwhalen/penlike/commit/61fb23ab2358037923bcf606c97860152250fb74"><code>61fb23a</code></a> on branch <code>main</code>, for **penlike 0.0.1** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-18 07:29 UTC** from commit <a href="https://github.com/thorwhalen/penlike/commit/298a7962319056c2785cac2ce18149f1c5df222a"><code>298a796</code></a> on branch <code>main</code>, for **penlike 0.0.2** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.2) is behind the latest release on PyPI (0.0.3): `pip install penlike` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                           |
 |---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/penlike/commit/61fb23ab2358037923bcf606c97860152250fb74"><code>61fb23ab2358037923bcf606c97860152250fb74</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/penlike/commit/298a7962319056c2785cac2ce18149f1c5df222a"><code>298a7962319056c2785cac2ce18149f1c5df222a</code></a> |
 | Branch              | <code>main</code>                                                                                                                                         |
 | Tags at this commit | none                                                                                                                                                      |
 | Working tree        | clean                                                                                                                                                     |
@@ -22,18 +24,18 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/penlike</code>                                                            |
-| Run          | <a href="https://github.com/thorwhalen/penlike/actions/runs/36394493708">36394493708</a>   |
+| Run          | <a href="https://github.com/thorwhalen/penlike/actions/runs/39107750910">39107750910</a>   |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>61fb23ab2358037923bcf606c97860152250fb74</code> (in the history of the built commit) |
+| Event commit | <code>298a7962319056c2785cac2ce18149f1c5df222a</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.12  |
+| epythet  | 0.2.17  |
 | Sphinx   | 9.1.0   |
 | docutils | 0.22.4  |
-| Python   | 3.12.14 |
+| Python   | 3.12.15 |
 
 ## Configuration as resolved
 
@@ -49,14 +51,14 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-<code>penlike</code> is not on PyPI.
+Latest release: <a href="https://pypi.org/project/penlike/0.0.3/">0.0.3</a>, newer than the documented version (0.0.2).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/penlike && cd penlike
-git checkout 61fb23ab2358037923bcf606c97860152250fb74
-pip install "epythet==0.2.12"
+git checkout 298a7962319056c2785cac2ce18149f1c5df222a
+pip install "epythet==0.2.17"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

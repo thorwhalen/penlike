@@ -32,15 +32,17 @@ Three operations:
 
 ### Functions
 
-| [`build_profile`](#penlike.profile.build_profile)(measurements, \*[, register, ...])   | Aggregate the measurements of a register's texts into its profile.                       |
-|-----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
-| [`compare`](#penlike.profile.compare)(measured, profile, \*[, norm, ...])        | Measure a draft against a register's profile and list what differs.                      |
-| [`contrast`](#penlike.profile.contrast)(profile, reference, \*[, top])            | What sets `profile` apart from `reference`: the largest differences, in both directions. |
-| [`function_word_vector`](#penlike.profile.function_word_vector)(measured, norm)               | A text's function-word rates as z-scores against `norm`, or `None` if too short.         |
-| [`norm_is_current`](#penlike.profile.norm_is_current)(norm)                              | Whether stored figures were made by this version's features, word list and distance.     |
-| [`render_profile`](#penlike.profile.render_profile)(profile, \*[, differences])         | A profile as plain lines an agent can follow when writing.                               |
-| [`style_vector`](#penlike.profile.style_vector)(measured, norm)                       | A text's style vector: each feature as a clipped z-score against `norm`.                 |
-| [`vector_distance`](#penlike.profile.vector_distance)(a, b)                              | Root-mean-square difference between two style vectors.                                   |
+| [`build_profile`](#penlike.profile.build_profile)(measurements, \*[, register, ...])   | Aggregate the measurements of a register's texts into its profile.                                                                                  |
+|-----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`compare`](#penlike.profile.compare)(measured, profile, \*[, norm, ...])        | Measure a draft against a register's profile and list what differs.                                                                                 |
+| [`contrast`](#penlike.profile.contrast)(profile, reference, \*[, top])            | What sets `profile` apart from `reference`: the largest differences, in both directions.                                                            |
+| [`function_word_vector`](#penlike.profile.function_word_vector)(measured, norm)               | A text's function-word rates as z-scores against `norm`, or `None` if too short.                                                                    |
+| [`norm_is_current`](#penlike.profile.norm_is_current)(norm)                              | Whether stored figures were made by this version's features, word list and distance.                                                                |
+| [`plain_number`](#penlike.profile.plain_number)(value, \*[, significant])             | A number as a reader writes it: never scientific notation, `significant` digits.                                                                    |
+| [`render_profile`](#penlike.profile.render_profile)(profile, \*[, differences])         | A profile as plain lines an agent can follow when writing.                                                                                          |
+| [`show_figure`](#penlike.profile.show_figure)(name, value)                           | A figure as a reader wants it: shares as percentages, counts and lengths as integers (to three digits when small), rates to two significant digits. |
+| [`style_vector`](#penlike.profile.style_vector)(measured, norm)                       | A text's style vector: each feature as a clipped z-score against `norm`.                                                                            |
+| [`vector_distance`](#penlike.profile.vector_distance)(a, b)                              | Root-mean-square difference between two style vectors.                                                                                              |
 
 ### penlike.profile.DISTANCE *= 'features-rms-z'*
 
@@ -117,12 +119,32 @@ Whether stored figures were made by this version’s features, word list and dis
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
+### penlike.profile.plain_number(value, , significant=2)
+
+A number as a reader writes it: never scientific notation, `significant` digits.
+
+```pycon
+>>> plain_number(0.01234), plain_number(12.34), plain_number(2840.0), plain_number(0)
+('0.012', '12', '2800', '0')
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### penlike.profile.render_profile(profile, , differences=None)
 
 A profile as plain lines an agent can follow when writing.
 
 Figures are given as the author’s typical value and range, because a target
 range is something a draft can be held to and a bare average is not.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### penlike.profile.show_figure(name, value)
+
+A figure as a reader wants it: shares as percentages, counts and lengths as
+integers (to three digits when small), rates to two significant digits.
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
@@ -140,10 +162,10 @@ A feature the text is too short to have counts as average (zero).
 
 Root-mean-square difference between two style vectors.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> vector_distance([0.0, 0.0], [3.0, 4.0])
 3.5355
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)

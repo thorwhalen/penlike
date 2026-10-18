@@ -1,39 +1,39 @@
 {
   "schema_version": 1,
-  "built_at": "2026-09-28T07:58:47Z",
+  "built_at": "2026-10-18T07:29:19Z",
   "package": {
     "name": "penlike",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "display_name": "penlike",
     "source": "pyproject.toml"
   },
   "git": {
     "available": true,
-    "commit": "61fb23ab2358037923bcf606c97860152250fb74",
-    "short_commit": "61fb23a",
+    "commit": "298a7962319056c2785cac2ce18149f1c5df222a",
+    "short_commit": "298a796",
     "branch": "main",
     "tags": [],
     "dirty": false,
     "remote_url": "https://github.com/thorwhalen/penlike",
-    "commit_url": "https://github.com/thorwhalen/penlike/commit/61fb23ab2358037923bcf606c97860152250fb74",
+    "commit_url": "https://github.com/thorwhalen/penlike/commit/298a7962319056c2785cac2ce18149f1c5df222a",
     "error": null
   },
   "ci": {
     "provider": "github",
     "repository": "thorwhalen/penlike",
-    "sha": "61fb23ab2358037923bcf606c97860152250fb74",
+    "sha": "298a7962319056c2785cac2ce18149f1c5df222a",
     "sha_in_history": true,
     "ref": "refs/heads/main",
     "ref_name": "main",
-    "run_id": "36394493708",
-    "run_url": "https://github.com/thorwhalen/penlike/actions/runs/36394493708",
+    "run_id": "39107750910",
+    "run_url": "https://github.com/thorwhalen/penlike/actions/runs/39107750910",
     "server_url": "https://github.com"
   },
   "tools": {
-    "epythet": "0.2.12",
+    "epythet": "0.2.17",
     "sphinx": "9.1.0",
     "docutils": "0.22.4",
-    "python": "3.12.14"
+    "python": "3.12.15"
   },
   "config": {
     "theme": "auto",
@@ -56,18 +56,20 @@
   },
   "site": {
     "modules_documented": 11,
-    "objects_documented": 99
+    "objects_documented": 102
   },
   "pypi": {
     "checked": true,
-    "latest": null,
-    "relation": "unknown",
+    "latest": "0.0.3",
+    "relation": "behind",
     "error": null
   },
-  "reproduce": "git clone https://github.com/thorwhalen/penlike && cd penlike\ngit checkout 61fb23ab2358037923bcf606c97860152250fb74\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "reproduce": "git clone https://github.com/thorwhalen/penlike && cd penlike\ngit checkout 298a7962319056c2785cac2ce18149f1c5df222a\npip install \"epythet==0.2.17\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
   "warnings": [],
   "alignment": {
-    "aligned": true,
-    "notes": []
+    "aligned": false,
+    "notes": [
+      "The documented version (0.0.2) is behind the latest release on PyPI (0.0.3): `pip install penlike` gives newer code than these docs describe."
+    ]
   }
 }

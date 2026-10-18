@@ -29,6 +29,7 @@ when more text arrives.
 
 | [`dp_means`](#penlike.routing.dp_means)(vectors, \*, lam[, max_iter])            | Cluster vectors without fixing the number of clusters (DP-means).               |
 |----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| [`excerpt`](#penlike.routing.excerpt)(doc, \*, words)                           | A contiguous passage of about `words` words from the middle of a long text.     |
 | [`nearest`](#penlike.routing.nearest)(vector, centroids)                        | The closest centroid to a vector, and the distance to it.                       |
 | [`propose`](#penlike.routing.propose)(docs, vectors, \*[, lam, min_size, ...])  | Look inside each register for separate groups of texts that could be registers. |
 | [`route`](#penlike.routing.route)(registers, docs, \*[, style, channel, ...]) | Choose the register for a piece of writing, and say why.                        |
@@ -51,25 +52,40 @@ A vector further than `lam` from every centre opens a new cluster; otherwise it
 joins the nearest. One parameter, deterministic, and sequential by nature, which
 is what registers that appear over time need.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]
-
 ```pycon
 >>> dp_means([[0.0], [0.1], [5.0], [5.1]], lam=1.0)
 [0, 0, 1, 1]
 ```
 
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]
+
+### penlike.routing.excerpt(doc, , words)
+
+A contiguous passage of about `words` words from the middle of a long text.
+
+The passage is whole paragraphs (whole sentences where one paragraph alone is
+longer than the target), taken from the middle half of the text, because the
+opening of a text is atypical of how the rest is written. Of the passages that
+could be taken there, the one nearest the target length wins, and of those the
+one nearest the middle. Returns the document with its text replaced by the
+passage, `excerpt` set, and `of_words` the length of the whole; `None` when
+the text has nothing to cut.
+
+* **Return type:**
+  [`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)] | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### penlike.routing.nearest(vector, centroids)
 
 The closest centroid to a vector, and the distance to it.
-
-* **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None), [`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ```pycon
 >>> nearest([0.0, 0.0], {"a": [0.0, 1.0], "b": [3.0, 3.0]})
 ('a', 0.7071)
 ```
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None), [`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### penlike.routing.propose(docs, vectors, , lam=1.25, min_size=5, min_separation=1.6)
 
@@ -105,7 +121,7 @@ that nobody mistakes a guess for a match.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
-### penlike.routing.select_exemplars(docs, , n=5, to=(), words=None, min_words=15, max_words=400)
+### penlike.routing.select_exemplars(docs, , n=5, to=(), words=None, min_words=15, max_words=400, max_excerpts=3, excerpt_words=150)
 
 Pick the texts to show as examples of a register.
 
@@ -113,6 +129,10 @@ Texts to the same readers come first. After that the choice is for *spread*, not
 for similarity of topic to the task: one text per reader or thread in turn,
 newest first, because examples narrow in topic pull the imitation toward their
 content and away from the style. `words` prefers texts near a target length.
+
+Texts longer than `max_words` are too long to show whole. When there is no text
+short enough, up to `max_excerpts` of the long ones are shown as excerpts (see
+[`excerpt()`](#penlike.routing.excerpt)) of about `words` (else `excerpt_words`) words, in the same order.
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]

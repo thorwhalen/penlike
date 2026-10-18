@@ -1,4 +1,4 @@
-> built 2026-09-28 07:58 UTC from 61fb23a (main) · penlike 0.0.1. Details: build_info.json
+> built 2026-10-18 07:29 UTC from 298a796 (main) · penlike 0.0.2. Details: build_info.json
 
 # index.html.md
 
@@ -254,13 +254,13 @@ The size of the readership: `one`, `few` (2 to 5), `many`, `public` or `unknown`
 Recipient count has a measured effect on how formally people write email, so it
 is part of the situation a text is filed under.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> audience_of(["a@example.org"]), audience_of(["a", "b"], ["c"]), audience_of([])
 ('one', 'few', 'unknown')
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### penlike.base.check_name(name)
 
@@ -268,9 +268,6 @@ Validate the name of a model or a register, which is also the name of its files.
 
 Lowercase letters, digits, `.`, `_` and `-`, starting with a letter or a
 digit, with no `..`. Anything else could name a file outside the data folder.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> check_name("me"), check_name("email.one")
@@ -281,17 +278,20 @@ Traceback (most recent call last):
 penlike.base.PenlikeError: '../outside' is not a usable name: use lowercase ...
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### penlike.base.doc_id(text)
 
 A stable id for a text: the first 16 hex digits of its SHA-256, whitespace-blind.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> doc_id("Hello  there.") == doc_id("Hello there. ")
 True
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### penlike.base.normalize_doc(raw, , source='')
 
@@ -301,23 +301,20 @@ Quoted material is removed, the date is put in ISO form, the audience is derived
 when it was not given, and the id is computed from the cleaned text. Unknown keys
 are kept under `flags` so that a custom sourcer can carry extra metadata.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> doc = normalize_doc({"text": "> quoted\nFine by me.", "date": "2020", "mood": "calm"})
 >>> doc["text"], doc["date"][:4], doc["flags"]
 ('Fine by me.', '2020', {'mood': 'calm'})
 ```
 
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
 ### penlike.base.parse_date(value)
 
 Turn a date in any common form into ISO 8601 UTC, or `None`.
 
 A naive value is read as UTC. A bare year or day is accepted.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> parse_date("2021-03-04")
@@ -330,6 +327,9 @@ A naive value is read as UTC. A bare year or day is accepted.
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### penlike.base.prose_of(text)
 
 The prose of a text: code blocks, inline code and bare links replaced by placeholders.
@@ -337,13 +337,13 @@ The prose of a text: code blocks, inline code and bare links replaced by placeho
 Style is measured on prose. Code and links are somebody else’s tokens, and they
 would swamp punctuation and word-length figures in technical writing.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> prose_of("Call `f(x)` then see https://example.org/a for more.")
 'Call CODE then see LINK for more.'
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### penlike.base.strip_quoted(text)
 
@@ -355,9 +355,6 @@ everything from a reply header (“On <date>, <someone> wrote:”, “Original
 Message”, a block of mail headers) onward goes. This is a heuristic over
 plain text: check a sample of what was gathered.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> strip_quoted("Sounds good.\n\nOn Mon, 1 Feb 2021, Ada wrote:\n> Shall we?")
 'Sounds good.'
@@ -367,17 +364,20 @@ plain text: check a sample of what was gathered.
 'Here is the plan.\n\nOn Monday I wrote:\nship it'
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### penlike.base.word_count(text)
 
 Count words (letters, with inner apostrophes).
-
-* **Return type:**
-  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 ```pycon
 >>> word_count("Don't stop, it's 3pm.")
 4
 ```
+
+* **Return type:**
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 
 # _autosummary/penlike.data.html.md
@@ -448,38 +448,38 @@ The result is JSON-ready. `scalars` holds one number per name in
 [`SCALAR_FEATURES`](_autosummary/penlike.features.html.md#penlike.features.SCALAR_FEATURES) (or `None`), `presence` one boolean per name in
 [`PRESENCE_FEATURES`](_autosummary/penlike.features.html.md#penlike.features.PRESENCE_FEATURES).
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> m = measure("We shipped it; nobody noticed. Odd, really odd!")
 >>> m["n_words"], m["presence"]["has_semicolon"], m["scalars"]["exclamation_per_100w"]
 (8, True, 12.5)
 ```
 
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
 ### penlike.features.sentences_of(text)
 
 Split prose into sentences, treating a line break as a boundary.
-
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ```pycon
 >>> sentences_of("It works. Does it? Yes!")
 ['It works.', 'Does it?', 'Yes!']
 ```
 
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
 ### penlike.features.words_of(text)
 
 The words of a text, lowercased.
-
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ```pycon
 >>> words_of("Don't Panic, it's fine.")
 ["don't", 'panic', "it's", 'fine']
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 
 # _autosummary/penlike.html.md
@@ -636,13 +636,13 @@ matches; it does not mean the draft would pass for the author’s.
 
 The data root: the argument, else `$PENLIKE_DATA_DIR`, else the user data folder.
 
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
-
 ```pycon
 >>> data_dir("somewhere").is_absolute()
 True
 ```
+
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
 ### penlike.docs(model=None, , register=None, excluded=False, limit=20, full=False, data_dir=None, files=None)
 
@@ -663,7 +663,9 @@ Keep texts out of the model without deleting them, or put them back with `undo`.
 Pick texts by the author to show as examples, for the register the request routes to.
 
 Texts to the same readers come first, then a spread over readers and dates.
-`words` prefers examples near the length of what is to be written.
+`words` prefers examples near the length of what is to be written. A register
+of long texts gives up to three excerpts of about `words` words instead:
+whole paragraphs from the middle of a text, labelled with the text’s id.
 
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
@@ -690,14 +692,14 @@ Link the skills and agents shipped with penlike into an agent host’s folders.
 
 The target defaults to `~/.claude`. Without `write` it only says what it would do.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
-
 ```pycon
 >>> result = install_skills()
 >>> result["dry_run"], len(result["skills"]) > 0
 (True, True)
 ```
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### penlike.measure(text)
 
@@ -733,14 +735,14 @@ Quoted material is removed, the date is put in ISO form, the audience is derived
 when it was not given, and the id is computed from the cleaned text. Unknown keys
 are kept under `flags` so that a custom sourcer can carry extra metadata.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> doc = normalize_doc({"text": "> quoted\nFine by me.", "date": "2020", "mood": "calm"})
 >>> doc["text"], doc["date"][:4], doc["flags"]
 ('Fine by me.', '2020', {'mood': 'calm'})
 ```
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### penlike.note(model, text, , register='general', source=None, data_dir=None, files=None)
 
@@ -816,15 +818,15 @@ Delete a model and everything in it. Without `yes` it only says what would go.
 
 Find the sourcer a name refers to: built-in, `module:function`, or `file.py:function`.
 
-* **Return type:**
-  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]]
-
 ```pycon
 >>> resolve_sourcer("files") is files
 True
 >>> resolve_sourcer("json:loads").__name__
 'loads'
 ```
+
+* **Return type:**
+  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]]
 
 ### penlike.route(, like=None, style=None, channel=None, to=None, audience=None, reply=False, data_dir=None, files=None)
 
@@ -977,15 +979,17 @@ Three operations:
 
 ### Functions
 
-| [`build_profile`](_autosummary/penlike.profile.html.md#penlike.profile.build_profile)(measurements, \*[, register, ...])   | Aggregate the measurements of a register's texts into its profile.                       |
-|-----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
-| [`compare`](_autosummary/penlike.profile.html.md#penlike.profile.compare)(measured, profile, \*[, norm, ...])        | Measure a draft against a register's profile and list what differs.                      |
-| [`contrast`](_autosummary/penlike.profile.html.md#penlike.profile.contrast)(profile, reference, \*[, top])            | What sets `profile` apart from `reference`: the largest differences, in both directions. |
-| [`function_word_vector`](_autosummary/penlike.profile.html.md#penlike.profile.function_word_vector)(measured, norm)               | A text's function-word rates as z-scores against `norm`, or `None` if too short.         |
-| [`norm_is_current`](_autosummary/penlike.profile.html.md#penlike.profile.norm_is_current)(norm)                              | Whether stored figures were made by this version's features, word list and distance.     |
-| [`render_profile`](_autosummary/penlike.profile.html.md#penlike.profile.render_profile)(profile, \*[, differences])         | A profile as plain lines an agent can follow when writing.                               |
-| [`style_vector`](_autosummary/penlike.profile.html.md#penlike.profile.style_vector)(measured, norm)                       | A text's style vector: each feature as a clipped z-score against `norm`.                 |
-| [`vector_distance`](_autosummary/penlike.profile.html.md#penlike.profile.vector_distance)(a, b)                              | Root-mean-square difference between two style vectors.                                   |
+| [`build_profile`](_autosummary/penlike.profile.html.md#penlike.profile.build_profile)(measurements, \*[, register, ...])   | Aggregate the measurements of a register's texts into its profile.                                                                                  |
+|-----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`compare`](_autosummary/penlike.profile.html.md#penlike.profile.compare)(measured, profile, \*[, norm, ...])        | Measure a draft against a register's profile and list what differs.                                                                                 |
+| [`contrast`](_autosummary/penlike.profile.html.md#penlike.profile.contrast)(profile, reference, \*[, top])            | What sets `profile` apart from `reference`: the largest differences, in both directions.                                                            |
+| [`function_word_vector`](_autosummary/penlike.profile.html.md#penlike.profile.function_word_vector)(measured, norm)               | A text's function-word rates as z-scores against `norm`, or `None` if too short.                                                                    |
+| [`norm_is_current`](_autosummary/penlike.profile.html.md#penlike.profile.norm_is_current)(norm)                              | Whether stored figures were made by this version's features, word list and distance.                                                                |
+| [`plain_number`](_autosummary/penlike.profile.html.md#penlike.profile.plain_number)(value, \*[, significant])             | A number as a reader writes it: never scientific notation, `significant` digits.                                                                    |
+| [`render_profile`](_autosummary/penlike.profile.html.md#penlike.profile.render_profile)(profile, \*[, differences])         | A profile as plain lines an agent can follow when writing.                                                                                          |
+| [`show_figure`](_autosummary/penlike.profile.html.md#penlike.profile.show_figure)(name, value)                           | A figure as a reader wants it: shares as percentages, counts and lengths as integers (to three digits when small), rates to two significant digits. |
+| [`style_vector`](_autosummary/penlike.profile.html.md#penlike.profile.style_vector)(measured, norm)                       | A text's style vector: each feature as a clipped z-score against `norm`.                                                                            |
+| [`vector_distance`](_autosummary/penlike.profile.html.md#penlike.profile.vector_distance)(a, b)                              | Root-mean-square difference between two style vectors.                                                                                              |
 
 ### penlike.profile.DISTANCE *= 'features-rms-z'*
 
@@ -1062,12 +1066,32 @@ Whether stored figures were made by this version’s features, word list and dis
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
+### penlike.profile.plain_number(value, , significant=2)
+
+A number as a reader writes it: never scientific notation, `significant` digits.
+
+```pycon
+>>> plain_number(0.01234), plain_number(12.34), plain_number(2840.0), plain_number(0)
+('0.012', '12', '2800', '0')
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### penlike.profile.render_profile(profile, , differences=None)
 
 A profile as plain lines an agent can follow when writing.
 
 Figures are given as the author’s typical value and range, because a target
 range is something a draft can be held to and a bare average is not.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### penlike.profile.show_figure(name, value)
+
+A figure as a reader wants it: shares as percentages, counts and lengths as
+integers (to three digits when small), rates to two significant digits.
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
@@ -1085,13 +1109,13 @@ A feature the text is too short to have counts as average (zero).
 
 Root-mean-square difference between two style vectors.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> vector_distance([0.0, 0.0], [3.0, 4.0])
 3.5355
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 
 # _autosummary/penlike.routing.html.md
@@ -1127,6 +1151,7 @@ when more text arrives.
 
 | [`dp_means`](_autosummary/penlike.routing.html.md#penlike.routing.dp_means)(vectors, \*, lam[, max_iter])            | Cluster vectors without fixing the number of clusters (DP-means).               |
 |----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| [`excerpt`](_autosummary/penlike.routing.html.md#penlike.routing.excerpt)(doc, \*, words)                           | A contiguous passage of about `words` words from the middle of a long text.     |
 | [`nearest`](_autosummary/penlike.routing.html.md#penlike.routing.nearest)(vector, centroids)                        | The closest centroid to a vector, and the distance to it.                       |
 | [`propose`](_autosummary/penlike.routing.html.md#penlike.routing.propose)(docs, vectors, \*[, lam, min_size, ...])  | Look inside each register for separate groups of texts that could be registers. |
 | [`route`](_autosummary/penlike.routing.html.md#penlike.routing.route)(registers, docs, \*[, style, channel, ...]) | Choose the register for a piece of writing, and say why.                        |
@@ -1149,25 +1174,40 @@ A vector further than `lam` from every centre opens a new cluster; otherwise it
 joins the nearest. One parameter, deterministic, and sequential by nature, which
 is what registers that appear over time need.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]
-
 ```pycon
 >>> dp_means([[0.0], [0.1], [5.0], [5.1]], lam=1.0)
 [0, 0, 1, 1]
 ```
 
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]
+
+### penlike.routing.excerpt(doc, , words)
+
+A contiguous passage of about `words` words from the middle of a long text.
+
+The passage is whole paragraphs (whole sentences where one paragraph alone is
+longer than the target), taken from the middle half of the text, because the
+opening of a text is atypical of how the rest is written. Of the passages that
+could be taken there, the one nearest the target length wins, and of those the
+one nearest the middle. Returns the document with its text replaced by the
+passage, `excerpt` set, and `of_words` the length of the whole; `None` when
+the text has nothing to cut.
+
+* **Return type:**
+  [`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)] | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### penlike.routing.nearest(vector, centroids)
 
 The closest centroid to a vector, and the distance to it.
-
-* **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None), [`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ```pycon
 >>> nearest([0.0, 0.0], {"a": [0.0, 1.0], "b": [3.0, 3.0]})
 ('a', 0.7071)
 ```
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None), [`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### penlike.routing.propose(docs, vectors, , lam=1.25, min_size=5, min_separation=1.6)
 
@@ -1203,7 +1243,7 @@ that nobody mistakes a guess for a match.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
-### penlike.routing.select_exemplars(docs, , n=5, to=(), words=None, min_words=15, max_words=400)
+### penlike.routing.select_exemplars(docs, , n=5, to=(), words=None, min_words=15, max_words=400, max_excerpts=3, excerpt_words=150)
 
 Pick the texts to show as examples of a register.
 
@@ -1211,6 +1251,10 @@ Texts to the same readers come first. After that the choice is for *spread*, not
 for similarity of topic to the task: one text per reader or thread in turn,
 newest first, because examples narrow in topic pull the imitation toward their
 content and away from the style. `words` prefers texts near a target length.
+
+Texts longer than `max_words` are too long to show whole. When there is no text
+short enough, up to `max_excerpts` of the long ones are shown as excerpts (see
+[`excerpt()`](_autosummary/penlike.routing.html.md#penlike.routing.excerpt)) of about `words` (else `excerpt_words`) words, in the same order.
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
@@ -1328,7 +1372,7 @@ sourcer written for one person’s odd archive needs no change here.
 | [`requirements`](_autosummary/penlike.sourcers.html.md#penlike.sourcers.requirements)()                                    | For each built-in sourcer: what it reads, and whether it can run here.                 |
 | [`resolve_sourcer`](_autosummary/penlike.sourcers.html.md#penlike.sourcers.resolve_sourcer)(source)                           | Find the sourcer a name refers to: built-in, `module:function`, or `file.py:function`. |
 
-### penlike.sourcers.SOURCERS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[...], [Iterable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]]]]* *= {'claude-sessions': <function claude_sessions>, 'correspond': <function correspond>, 'files': <function files>, 'github': <function github>, 'jsonl': <function jsonl>, 'mbox': <function mbox>}*
+### penlike.sourcers.SOURCERS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[..., [Iterable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]]]]* *= {'claude-sessions': <function claude_sessions>, 'correspond': <function correspond>, 'files': <function files>, 'github': <function github>, 'jsonl': <function jsonl>, 'mbox': <function mbox>}*
 
 The built-in sourcers, by the name used on the command line.
 
@@ -1414,15 +1458,15 @@ For each built-in sourcer: what it reads, and whether it can run here.
 
 Find the sourcer a name refers to: built-in, `module:function`, or `file.py:function`.
 
-* **Return type:**
-  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]]
-
 ```pycon
 >>> resolve_sourcer("files") is files
 True
 >>> resolve_sourcer("json:loads").__name__
 'loads'
 ```
+
+* **Return type:**
+  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]]
 
 
 # _autosummary/penlike.store.html.md
@@ -1503,13 +1547,13 @@ Return self, or explain how to make the model when it does not exist.
 
 The data root: the argument, else `$PENLIKE_DATA_DIR`, else the user data folder.
 
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
-
 ```pycon
 >>> data_dir("somewhere").is_absolute()
 True
 ```
+
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
 ### penlike.store.model_names(, data_dir=None, files=None)
 
@@ -1630,16 +1674,18 @@ False
 
 # About this build
 
-This documentation was built on **2026-09-28 07:58 UTC** from commit <a href="https://github.com/thorwhalen/penlike/commit/61fb23ab2358037923bcf606c97860152250fb74"><code>61fb23a</code></a> on branch <code>main</code>, for **penlike 0.0.1** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-18 07:29 UTC** from commit <a href="https://github.com/thorwhalen/penlike/commit/298a7962319056c2785cac2ce18149f1c5df222a"><code>298a796</code></a> on branch <code>main</code>, for **penlike 0.0.2** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.2) is behind the latest release on PyPI (0.0.3): `pip install penlike` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                           |
 |---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/penlike/commit/61fb23ab2358037923bcf606c97860152250fb74"><code>61fb23ab2358037923bcf606c97860152250fb74</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/penlike/commit/298a7962319056c2785cac2ce18149f1c5df222a"><code>298a7962319056c2785cac2ce18149f1c5df222a</code></a> |
 | Branch              | <code>main</code>                                                                                                                                         |
 | Tags at this commit | none                                                                                                                                                      |
 | Working tree        | clean                                                                                                                                                     |
@@ -1650,18 +1696,18 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/penlike</code>                                                            |
-| Run          | <a href="https://github.com/thorwhalen/penlike/actions/runs/36394493708">36394493708</a>   |
+| Run          | <a href="https://github.com/thorwhalen/penlike/actions/runs/39107750910">39107750910</a>   |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>61fb23ab2358037923bcf606c97860152250fb74</code> (in the history of the built commit) |
+| Event commit | <code>298a7962319056c2785cac2ce18149f1c5df222a</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.12  |
+| epythet  | 0.2.17  |
 | Sphinx   | 9.1.0   |
 | docutils | 0.22.4  |
-| Python   | 3.12.14 |
+| Python   | 3.12.15 |
 
 ## Configuration as resolved
 
@@ -1677,14 +1723,14 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-<code>penlike</code> is not on PyPI.
+Latest release: <a href="https://pypi.org/project/penlike/0.0.3/">0.0.3</a>, newer than the documented version (0.0.2).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/penlike && cd penlike
-git checkout 61fb23ab2358037923bcf606c97860152250fb74
-pip install "epythet==0.2.12"
+git checkout 298a7962319056c2785cac2ce18149f1c5df222a
+pip install "epythet==0.2.17"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

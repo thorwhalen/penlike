@@ -22,7 +22,9 @@ penlike.profile
       contrast
       function_word_vector
       norm_is_current
+      plain_number
       render_profile
+      show_figure
       style_vector
       vector_distance
    

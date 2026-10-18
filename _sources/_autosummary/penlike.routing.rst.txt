@@ -16,6 +16,7 @@ penlike.routing
    .. autosummary::
    
       dp_means
+      excerpt
       nearest
       propose
       route

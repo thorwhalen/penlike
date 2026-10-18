@@ -7,6 +7,7 @@
     setColorMode(localStorage._theme||"auto");
   </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d88b86f9" />
     <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -95,6 +96,7 @@ data-aria-dark="Switch to auto color mode">
 <li><a class="reference internal" href="#penlike.routing.DEFAULT_LAM"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LAM</span></code></a></li>
 <li><a class="reference internal" href="#penlike.routing.DEFAULT_MIN_SEPARATION"><code class="docutils literal notranslate"><span class="pre">DEFAULT_MIN_SEPARATION</span></code></a></li>
 <li><a class="reference internal" href="#penlike.routing.dp_means"><code class="docutils literal notranslate"><span class="pre">dp_means()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.routing.excerpt"><code class="docutils literal notranslate"><span class="pre">excerpt()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.routing.nearest"><code class="docutils literal notranslate"><span class="pre">nearest()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.routing.propose"><code class="docutils literal notranslate"><span class="pre">propose()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.routing.route"><code class="docutils literal notranslate"><span class="pre">route()</span></code></a></li>
@@ -176,19 +178,22 @@ when more text arrives.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#penlike.routing.dp_means" title="penlike.routing.dp_means"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dp_means</span></code></a>(vectors, *, lam[, max_iter])</p></td>
 <td><p>Cluster vectors without fixing the number of clusters (DP-means).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#penlike.routing.nearest" title="penlike.routing.nearest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nearest</span></code></a>(vector, centroids)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.routing.excerpt" title="penlike.routing.excerpt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">excerpt</span></code></a>(doc, *, words)</p></td>
+<td><p>A contiguous passage of about <code class="docutils literal notranslate"><span class="pre">words</span></code> words from the middle of a long text.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.routing.nearest" title="penlike.routing.nearest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nearest</span></code></a>(vector, centroids)</p></td>
 <td><p>The closest centroid to a vector, and the distance to it.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.routing.propose" title="penlike.routing.propose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">propose</span></code></a>(docs, vectors, *[, lam, min_size, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.routing.propose" title="penlike.routing.propose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">propose</span></code></a>(docs, vectors, *[, lam, min_size, ...])</p></td>
 <td><p>Look inside each register for separate groups of texts that could be registers.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#penlike.routing.route" title="penlike.routing.route"><code class="xref py py-obj docutils literal notranslate"><span class="pre">route</span></code></a>(registers, docs, *[, style, channel, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.routing.route" title="penlike.routing.route"><code class="xref py py-obj docutils literal notranslate"><span class="pre">route</span></code></a>(registers, docs, *[, style, channel, ...])</p></td>
 <td><p>Choose the register for a piece of writing, and say why.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.routing.select_exemplars" title="penlike.routing.select_exemplars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_exemplars</span></code></a>(docs, *[, n, to, words, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.routing.select_exemplars" title="penlike.routing.select_exemplars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_exemplars</span></code></a>(docs, *[, n, to, words, ...])</p></td>
 <td><p>Pick the texts to show as examples of a register.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#penlike.routing.situate" title="penlike.routing.situate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">situate</span></code></a>(doc)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.routing.situate" title="penlike.routing.situate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">situate</span></code></a>(doc)</p></td>
 <td><p>The situational register of a document, from its metadata alone.</p></td>
 </tr>
 </tbody>
@@ -213,30 +218,48 @@ when more text arrives.</p>
 <p>A vector further than <code class="docutils literal notranslate"><span class="pre">lam</span></code> from every centre opens a new cluster; otherwise it
 joins the nearest. One parameter, deterministic, and sequential by nature, which
 is what registers that appear over time need.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">dp_means</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">],</span> <span class="p">[</span><span class="mf">5.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">5.1</span><span class="p">]],</span> <span class="n">lam</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 </span><span data-line="2"><span class="go">[0, 0, 1, 1]</span>
 </span></pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.routing.excerpt">
+<span class="sig-prename descclassname"><span class="pre">penlike.routing.</span></span><span class="sig-name descname"><span class="pre">excerpt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">words</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/routing.html#excerpt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.routing.excerpt" title="Link to this definition">#</a></dt>
+<dd><p>A contiguous passage of about <code class="docutils literal notranslate"><span class="pre">words</span></code> words from the middle of a long text.</p>
+<p>The passage is whole paragraphs (whole sentences where one paragraph alone is
+longer than the target), taken from the middle half of the text, because the
+opening of a text is atypical of how the rest is written. Of the passages that
+could be taken there, the one nearest the target length wins, and of those the
+one nearest the middle. Returns the document with its text replaced by the
+passage, <code class="docutils literal notranslate"><span class="pre">excerpt</span></code> set, and <code class="docutils literal notranslate"><span class="pre">of_words</span></code> the length of the whole; <code class="docutils literal notranslate"><span class="pre">None</span></code> when
+the text has nothing to cut.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>] | <span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="penlike.routing.nearest">
 <span class="sig-prename descclassname"><span class="pre">penlike.routing.</span></span><span class="sig-name descname"><span class="pre">nearest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroids</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/routing.html#nearest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.routing.nearest" title="Link to this definition">#</a></dt>
 <dd><p>The closest centroid to a vector, and the distance to it.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">nearest</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="s2">"b"</span><span class="p">:</span> <span class="p">[</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]})</span>
 </span><span data-line="2"><span class="go">('a', 0.7071)</span>
 </span></pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span>, <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -257,7 +280,7 @@ correspondence. A proposal is a question to a person, never a decision.</p>
 the texts were mostly for, which is what is needed to give it a name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -272,22 +295,25 @@ reply); and last the register with the most text, reported as a fallback so
 that nobody mistakes a guess for a match.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="penlike.routing.select_exemplars">
-<span class="sig-prename descclassname"><span class="pre">penlike.routing.</span></span><span class="sig-name descname"><span class="pre">select_exemplars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">docs</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/routing.html#select_exemplars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.routing.select_exemplars" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">penlike.routing.</span></span><span class="sig-name descname"><span class="pre">select_exemplars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">docs</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_excerpts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excerpt_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/routing.html#select_exemplars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.routing.select_exemplars" title="Link to this definition">#</a></dt>
 <dd><p>Pick the texts to show as examples of a register.</p>
 <p>Texts to the same readers come first. After that the choice is for <em>spread</em>, not
 for similarity of topic to the task: one text per reader or thread in turn,
 newest first, because examples narrow in topic pull the imitation toward their
 content and away from the style. <code class="docutils literal notranslate"><span class="pre">words</span></code> prefers texts near a target length.</p>
+<p>Texts longer than <code class="docutils literal notranslate"><span class="pre">max_words</span></code> are too long to show whole. When there is no text
+short enough, up to <code class="docutils literal notranslate"><span class="pre">max_excerpts</span></code> of the long ones are shown as excerpts (see
+<a class="reference internal" href="#penlike.routing.excerpt" title="penlike.routing.excerpt"><code class="xref py py-func docutils literal notranslate"><span class="pre">excerpt()</span></code></a>) of about <code class="docutils literal notranslate"><span class="pre">words</span></code> (else <code class="docutils literal notranslate"><span class="pre">excerpt_words</span></code>) words, in the same order.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -301,7 +327,7 @@ opens a thread or answers in one, agent prompts and plain documents each under
 one key. Any other channel is filed as <code class="docutils literal notranslate"><span class="pre">&lt;channel&gt;.&lt;audience&gt;</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -348,7 +374,7 @@ one key. Any other channel is filed as <code class="docutils literal notranslate
     </div>
   </div>
 </footer>
-      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/documentation_options.js?v=e3a6060d"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

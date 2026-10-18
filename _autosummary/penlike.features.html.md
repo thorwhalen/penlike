@@ -57,35 +57,35 @@ The result is JSON-ready. `scalars` holds one number per name in
 [`SCALAR_FEATURES`](#penlike.features.SCALAR_FEATURES) (or `None`), `presence` one boolean per name in
 [`PRESENCE_FEATURES`](#penlike.features.PRESENCE_FEATURES).
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> m = measure("We shipped it; nobody noticed. Odd, really odd!")
 >>> m["n_words"], m["presence"]["has_semicolon"], m["scalars"]["exclamation_per_100w"]
 (8, True, 12.5)
 ```
 
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
 ### penlike.features.sentences_of(text)
 
 Split prose into sentences, treating a line break as a boundary.
-
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ```pycon
 >>> sentences_of("It works. Does it? Yes!")
 ['It works.', 'Does it?', 'Yes!']
 ```
 
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
 ### penlike.features.words_of(text)
 
 The words of a text, lowercased.
-
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ```pycon
 >>> words_of("Don't Panic, it's fine.")
 ["don't", 'panic', "it's", 'fine']
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]

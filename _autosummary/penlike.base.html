@@ -7,6 +7,7 @@
     setColorMode(localStorage._theme||"auto");
   </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d88b86f9" />
     <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=2ceb65ce" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -228,7 +229,7 @@ it stops before it. It is a default for warnings, never a silent filter.</p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="penlike.base.PenlikeError">
 <span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">PenlikeError</span></span><a class="reference internal" href="../_modules/penlike/base.html#PenlikeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.base.PenlikeError" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#Exception" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#Exception" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
 <p>An error whose message tells the caller what to do next.</p>
 </dd></dl>
 
@@ -244,15 +245,15 @@ it stops before it. It is a default for warnings, never a silent filter.</p>
 <dd><p>The size of the readership: <code class="docutils literal notranslate"><span class="pre">one</span></code>, <code class="docutils literal notranslate"><span class="pre">few</span></code> (2 to 5), <code class="docutils literal notranslate"><span class="pre">many</span></code>, <code class="docutils literal notranslate"><span class="pre">public</span></code> or <code class="docutils literal notranslate"><span class="pre">unknown</span></code>.</p>
 <p>Recipient count has a measured effect on how formally people write email, so it
 is part of the situation a text is filed under.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">audience_of</span><span class="p">([</span><span class="s2">"a@example.org"</span><span class="p">]),</span> <span class="n">audience_of</span><span class="p">([</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">],</span> <span class="p">[</span><span class="s2">"c"</span><span class="p">]),</span> <span class="n">audience_of</span><span class="p">([])</span>
 </span><span data-line="2"><span class="go">('one', 'few', 'unknown')</span>
 </span></pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -261,11 +262,6 @@ is part of the situation a text is filed under.</p>
 <dd><p>Validate the name of a model or a register, which is also the name of its files.</p>
 <p>Lowercase letters, digits, <code class="docutils literal notranslate"><span class="pre">.</span></code>, <code class="docutils literal notranslate"><span class="pre">_</span></code> and <code class="docutils literal notranslate"><span class="pre">-</span></code>, starting with a letter or a
 digit, with no <code class="docutils literal notranslate"><span class="pre">..</span></code>. Anything else could name a file outside the data folder.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">check_name</span><span class="p">(</span><span class="s2">"me"</span><span class="p">),</span> <span class="n">check_name</span><span class="p">(</span><span class="s2">"email.one"</span><span class="p">)</span>
 </span><span data-line="2"><span class="go">('me', 'email.one')</span>
 </span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">check_name</span><span class="p">(</span><span class="s2">"../outside"</span><span class="p">)</span>
@@ -274,21 +270,26 @@ digit, with no <code class="docutils literal notranslate"><span class="pre">..</
 </span><span data-line="6"><span class="gr">penlike.base.PenlikeError</span>: <span class="n">'../outside' is not a usable name: use lowercase ...</span>
 </span></pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="penlike.base.doc_id">
 <span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">doc_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/base.html#doc_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.base.doc_id" title="Link to this definition">#</a></dt>
 <dd><p>A stable id for a text: the first 16 hex digits of its SHA-256, whitespace-blind.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">doc_id</span><span class="p">(</span><span class="s2">"Hello  there."</span><span class="p">)</span> <span class="o">==</span> <span class="n">doc_id</span><span class="p">(</span><span class="s2">"Hello there. "</span><span class="p">)</span>
 </span><span data-line="2"><span class="go">True</span>
 </span></pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -298,16 +299,16 @@ digit, with no <code class="docutils literal notranslate"><span class="pre">..</
 <p>Quoted material is removed, the date is put in ISO form, the audience is derived
 when it was not given, and the id is computed from the cleaned text. Unknown keys
 are kept under <code class="docutils literal notranslate"><span class="pre">flags</span></code> so that a custom sourcer can carry extra metadata.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">doc</span> <span class="o">=</span> <span class="n">normalize_doc</span><span class="p">({</span><span class="s2">"text"</span><span class="p">:</span> <span class="s2">"&gt; quoted</span><span class="se">\n</span><span class="s2">Fine by me."</span><span class="p">,</span> <span class="s2">"date"</span><span class="p">:</span> <span class="s2">"2020"</span><span class="p">,</span> <span class="s2">"mood"</span><span class="p">:</span> <span class="s2">"calm"</span><span class="p">})</span>
 </span><span data-line="2"><span class="gp">&gt;&gt;&gt; </span><span class="n">doc</span><span class="p">[</span><span class="s2">"text"</span><span class="p">],</span> <span class="n">doc</span><span class="p">[</span><span class="s2">"date"</span><span class="p">][:</span><span class="mi">4</span><span class="p">],</span> <span class="n">doc</span><span class="p">[</span><span class="s2">"flags"</span><span class="p">]</span>
 </span><span data-line="3"><span class="go">('Fine by me.', '2020', {'mood': 'calm'})</span>
 </span></pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -315,11 +316,6 @@ are kept under <code class="docutils literal notranslate"><span class="pre">flag
 <span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">parse_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/base.html#parse_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.base.parse_date" title="Link to this definition">#</a></dt>
 <dd><p>Turn a date in any common form into ISO 8601 UTC, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 <p>A naive value is read as UTC. A bare year or day is accepted.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_date</span><span class="p">(</span><span class="s2">"2021-03-04"</span><span class="p">)</span>
 </span><span data-line="2"><span class="go">'2021-03-04T00:00:00+00:00'</span>
 </span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_date</span><span class="p">(</span><span class="s2">"Thu, 4 Mar 2021 10:00:00 +0100"</span><span class="p">)</span>
@@ -330,6 +326,11 @@ are kept under <code class="docutils literal notranslate"><span class="pre">flag
 </span><span data-line="8"><span class="go">True</span>
 </span></pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -338,15 +339,15 @@ are kept under <code class="docutils literal notranslate"><span class="pre">flag
 <dd><p>The prose of a text: code blocks, inline code and bare links replaced by placeholders.</p>
 <p>Style is measured on prose. Code and links are somebody else’s tokens, and they
 would swamp punctuation and word-length figures in technical writing.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">prose_of</span><span class="p">(</span><span class="s2">"Call `f(x)` then see https://example.org/a for more."</span><span class="p">)</span>
 </span><span data-line="2"><span class="go">'Call CODE then see LINK for more.'</span>
 </span></pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -358,11 +359,6 @@ answering is a model of their correspondents. Lines starting with <code class="d
 everything from a reply header (“On &lt;date&gt;, &lt;someone&gt; wrote:”, “Original
 Message”, a block of mail headers) onward goes. This is a heuristic over
 plain text: check a sample of what was gathered.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">strip_quoted</span><span class="p">(</span><span class="s2">"Sounds good.</span><span class="se">\n\n</span><span class="s2">On Mon, 1 Feb 2021, Ada wrote:</span><span class="se">\n</span><span class="s2">&gt; Shall we?"</span><span class="p">)</span>
 </span><span data-line="2"><span class="go">'Sounds good.'</span>
 </span><span data-line="3"><span class="gp">&gt;&gt;&gt; </span><span class="n">strip_quoted</span><span class="p">(</span><span class="s2">"&gt; earlier point</span><span class="se">\n</span><span class="s2">I agree with this."</span><span class="p">)</span>
@@ -371,21 +367,26 @@ plain text: check a sample of what was gathered.</p>
 </span><span data-line="6"><span class="go">'Here is the plan.\n\nOn Monday I wrote:\nship it'</span>
 </span></pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="penlike.base.word_count">
 <span class="sig-prename descclassname"><span class="pre">penlike.base.</span></span><span class="sig-name descname"><span class="pre">word_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/base.html#word_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.base.word_count" title="Link to this definition">#</a></dt>
 <dd><p>Count words (letters, with inner apostrophes).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="gp">&gt;&gt;&gt; </span><span class="n">word_count</span><span class="p">(</span><span class="s2">"Don't stop, it's 3pm."</span><span class="p">)</span>
 </span><span data-line="2"><span class="go">4</span>
 </span></pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -430,7 +431,7 @@ plain text: check a sample of what was gathered.</p>
     </div>
   </div>
 </footer>
-      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/documentation_options.js?v=e3a6060d"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

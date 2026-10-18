@@ -64,13 +64,13 @@ The size of the readership: `one`, `few` (2 to 5), `many`, `public` or `unknown`
 Recipient count has a measured effect on how formally people write email, so it
 is part of the situation a text is filed under.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> audience_of(["a@example.org"]), audience_of(["a", "b"], ["c"]), audience_of([])
 ('one', 'few', 'unknown')
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### penlike.base.check_name(name)
 
@@ -78,9 +78,6 @@ Validate the name of a model or a register, which is also the name of its files.
 
 Lowercase letters, digits, `.`, `_` and `-`, starting with a letter or a
 digit, with no `..`. Anything else could name a file outside the data folder.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> check_name("me"), check_name("email.one")
@@ -91,17 +88,20 @@ Traceback (most recent call last):
 penlike.base.PenlikeError: '../outside' is not a usable name: use lowercase ...
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### penlike.base.doc_id(text)
 
 A stable id for a text: the first 16 hex digits of its SHA-256, whitespace-blind.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> doc_id("Hello  there.") == doc_id("Hello there. ")
 True
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### penlike.base.normalize_doc(raw, , source='')
 
@@ -111,23 +111,20 @@ Quoted material is removed, the date is put in ISO form, the audience is derived
 when it was not given, and the id is computed from the cleaned text. Unknown keys
 are kept under `flags` so that a custom sourcer can carry extra metadata.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> doc = normalize_doc({"text": "> quoted\nFine by me.", "date": "2020", "mood": "calm"})
 >>> doc["text"], doc["date"][:4], doc["flags"]
 ('Fine by me.', '2020', {'mood': 'calm'})
 ```
 
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
 ### penlike.base.parse_date(value)
 
 Turn a date in any common form into ISO 8601 UTC, or `None`.
 
 A naive value is read as UTC. A bare year or day is accepted.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> parse_date("2021-03-04")
@@ -140,6 +137,9 @@ A naive value is read as UTC. A bare year or day is accepted.
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### penlike.base.prose_of(text)
 
 The prose of a text: code blocks, inline code and bare links replaced by placeholders.
@@ -147,13 +147,13 @@ The prose of a text: code blocks, inline code and bare links replaced by placeho
 Style is measured on prose. Code and links are somebody else’s tokens, and they
 would swamp punctuation and word-length figures in technical writing.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> prose_of("Call `f(x)` then see https://example.org/a for more.")
 'Call CODE then see LINK for more.'
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### penlike.base.strip_quoted(text)
 
@@ -165,9 +165,6 @@ everything from a reply header (“On <date>, <someone> wrote:”, “Original
 Message”, a block of mail headers) onward goes. This is a heuristic over
 plain text: check a sample of what was gathered.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> strip_quoted("Sounds good.\n\nOn Mon, 1 Feb 2021, Ada wrote:\n> Shall we?")
 'Sounds good.'
@@ -177,14 +174,17 @@ plain text: check a sample of what was gathered.
 'Here is the plan.\n\nOn Monday I wrote:\nship it'
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### penlike.base.word_count(text)
 
 Count words (letters, with inner apostrophes).
-
-* **Return type:**
-  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 ```pycon
 >>> word_count("Don't stop, it's 3pm.")
 4
 ```
+
+* **Return type:**
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
