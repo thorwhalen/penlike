@@ -63,12 +63,30 @@ def test_one_huge_paragraph_is_cut_at_sentences():
     assert found["text"].endswith(".") and 24 <= found["words"] <= 80
 
 
-def test_short_texts_are_still_shown_whole():
+def test_a_register_with_short_texts_keeps_showing_only_those():
     short = {"id": "s", "text": "a b c " * 10, "words": 30, "date": "2020-01-01"}
     long = _doc(["word " * 100] * 10)
-    picked = select_exemplars([short, long], n=5, words=100)
-    assert picked[0] is short and not picked[0].get("excerpt")
-    assert [d.get("excerpt") for d in picked] == [None, True]
+    assert select_exemplars([short, long], n=5, words=100) == [short]
+
+
+def test_excerpts_put_the_readers_texts_first():
+    mine = {**_doc(["word " * 100] * 10), "id": "mine", "to": ["a@example.org"]}
+    other = {**_doc(["word " * 100] * 10), "id": "other", "to": ["b@example.org"]}
+    picked = select_exemplars([other, mine], n=1, to=["a@example.org"], words=100)
+    assert [d["id"] for d in picked] == ["mine"]
+
+
+def test_text_without_sentence_ends_is_cut_by_length():
+    flat = _doc(["word " * 2000])
+    found = excerpt(flat, words=100)
+    assert found is not None and 50 <= found["words"] <= 200
+    unbroken = _doc([("word " * 400).strip()] * 3)
+    assert excerpt(unbroken, words=100)["words"] <= 200
+
+
+def test_degenerate_arguments_do_not_raise():
+    assert excerpt({"id": "x", "text": None}, words=100) is None
+    assert excerpt(_doc(["word " * 50] * 10), words=0)["words"] >= 1
 
 
 def test_a_text_with_nothing_to_cut_gives_no_excerpt():
@@ -87,3 +105,18 @@ def test_no_scientific_notation_in_a_brief(essays):
     text = penlike.brief(like="essayist", style="document", files=essays)["text"]
     assert not re.search(r"\d[eE][+-]\d", text)
     assert re.search(r"length in words: typically \d+ \(usual range \d+ to \d+\)", text)
+
+
+def test_small_lengths_keep_their_digits():
+    from penlike.profile import show_figure
+
+    assert show_figure("words", 2840.3) == "2840"
+    assert show_figure("sentence_len_mean", 14.8) == "14.8"
+    assert show_figure("sentence_len_sd", 0.4) == "0.4"
+    assert show_figure("comma_per_100w", 2.84) == "2.8"
+    assert show_figure("long_sentence_share", 0.124) == "12%"
+
+
+def test_measure_reports_lengths_as_the_summary_does():
+    found = penlike.measure("word " * 2840)
+    assert "words: 2840" in found["text"]

@@ -327,9 +327,9 @@ def select_exemplars(
     newest first, because examples narrow in topic pull the imitation toward their
     content and away from the style. ``words`` prefers texts near a target length.
 
-    Texts longer than ``max_words`` are too long to show whole. When the whole texts
-    do not fill ``n`` places, up to ``max_excerpts`` of those long texts fill the rest
-    as excerpts (see :func:`excerpt`) of about ``words`` (else ``excerpt_words``) words.
+    Texts longer than ``max_words`` are too long to show whole. When there is no text
+    short enough, up to ``max_excerpts`` of the long ones are shown as excerpts (see
+    :func:`excerpt`) of about ``words`` (else ``excerpt_words``) words, in the same order.
     """
     readers = {r.lower() for r in to}
     live = [doc for doc in docs if not doc.get("excluded")]
@@ -359,14 +359,15 @@ def select_exemplars(
     same = [d for d in pool if readers & {r.lower() for r in d.get("to", [])}]
     rest = [d for d in pool if d not in same]
     whole = (spread(same) + spread(rest))[:n]
-
-    room = min(n - len(whole), max_excerpts)
-    if room <= 0:
+    if whole:
         return whole
+
     target = words or excerpt_words
     long_texts = [doc for doc in live if doc.get("words", 0) > max_words]
-    excerpts = (excerpt(doc, words=target) for doc in spread(long_texts))
-    return whole + [found for found in excerpts if found][:room]
+    long_same = [d for d in long_texts if readers & {r.lower() for r in d.get("to", [])}]
+    long_rest = [d for d in long_texts if d not in long_same]
+    excerpts = (excerpt(doc, words=target) for doc in spread(long_same) + spread(long_rest))
+    return [found for found in excerpts if found][: min(n, max_excerpts)]
 
 
 _SENTENCE_RE = re.compile(r"(?<=[.!?])\s+")
@@ -383,14 +384,21 @@ def excerpt(doc: Mapping[str, Any], *, words: int) -> Mapping[str, Any] | None:
     passage, ``excerpt`` set, and ``of_words`` the length of the whole; ``None`` when
     the text has nothing to cut.
     """
+    words = max(int(words), 1)
     units: list[tuple[str, int]] = []  # (text, paragraph index)
-    for index, paragraph in enumerate(re.split(r"\n\s*\n", doc.get("text", "").strip())):
+    for index, paragraph in enumerate(re.split(r"\n\s*\n", (doc.get("text") or "").strip())):
         if not paragraph.strip():
             continue
+        parts = [paragraph.strip()]
         if len(paragraph.split()) > 2 * words:
-            units += [(part, index) for part in _SENTENCE_RE.split(paragraph.strip())]
-        else:
-            units.append((paragraph.strip(), index))
+            parts = _SENTENCE_RE.split(paragraph.strip())
+        for part in parts:
+            tokens = part.split()
+            if len(tokens) > 2 * words:  # no sentence ends to cut at: cut by length
+                parts_by_length = (tokens[i : i + words] for i in range(0, len(tokens), words))
+                units += [(" ".join(chunk), index) for chunk in parts_by_length]
+            else:
+                units.append((part, index))
     sizes = [len(text.split()) for text, _ in units]
     total = sum(sizes)
     if not units or total <= words:

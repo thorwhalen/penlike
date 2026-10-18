@@ -37,6 +37,7 @@ from penlike.profile import (
     build_profile,
     norm_is_current,
     plain_number,
+    show_figure,
     compare,
     contrast,
     render_profile,
@@ -1224,7 +1225,7 @@ def measure(text: str) -> dict:
     }
     lines = [f"{found['n_words']} words, {found['n_sentences']} sentences"]
     lines += [
-        f"{name}: {plain_number(value)}"
+        f"{name}: {show_figure(name, value)}"
         for name, value in found["scalars"].items()
         if value is not None
     ]

@@ -42,6 +42,7 @@ __all__ = [
     "norm_is_current",
     "plain_number",
     "render_profile",
+    "show_figure",
     "style_vector",
     "vector_distance",
 ]
@@ -418,6 +419,9 @@ def contrast(
 
 
 _COUNT_LIKE = ("words", "sentence_len_mean", "sentence_len_sd", "paragraph_len_mean")
+#: From this size up a count or length is shown as a whole number; below it, to three digits,
+#: so that a spread of 0.4 words does not read as 0.
+_WHOLE_FROM = 100
 
 
 def plain_number(value: float, *, significant: int = 2) -> str:
@@ -432,14 +436,19 @@ def plain_number(value: float, *, significant: int = 2) -> str:
     return format(rounded, "f")
 
 
-def _show(name: str, value: float) -> str:
+def show_figure(name: str, value: float) -> str:
     """A figure as a reader wants it: shares as percentages, counts and lengths as
-    integers, rates to two significant digits."""
+    integers (to three digits when small), rates to two significant digits."""
     if name.endswith("_share") or name.startswith("has_"):
         return f"{value:.0%}"
     if name in _COUNT_LIKE:
-        return f"{round(value):d}"
+        return (
+            f"{round(value):d}" if abs(value) >= _WHOLE_FROM else plain_number(value, significant=3)
+        )
     return plain_number(value)
+
+
+_show = show_figure
 
 
 def _describe(name: str, value: float, stats: Mapping[str, float]) -> str:
