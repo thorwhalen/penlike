@@ -22,6 +22,7 @@ from __future__ import annotations
 import functools
 import inspect
 import json
+import warnings as _warnings
 from collections import Counter
 from collections.abc import Mapping, MutableMapping
 from datetime import datetime, timezone
@@ -383,28 +384,32 @@ def gather(
             f"the sourcer {source!r} could not be called ({error}). A sourcer is "
             "def read(*refs, since=None, until=None, limit=None, me=(), **options)"
         ) from None
-    for raw in produced:
-        counts["read"] += 1
-        try:
-            doc = normalize_doc(raw, source=source if isinstance(source, str) else "custom")
-        except PenlikeError:
-            counts["not usable"] += 1
-            continue
-        if person and doc["is_self"] is False and not include_others:
-            counts["by someone else"] += 1
-        elif (low or high) and not doc["date"]:
-            counts["undated"] += 1
-        elif (low and doc["date"] < low) or (high and doc["date"] >= high):
-            counts["outside the dates"] += 1
-        elif doc["words"] < min_words:
-            counts["too short"] += 1
-        elif doc["id"] in known:
-            counts["already in the model"] += 1
-        else:
-            known.add(doc["id"])
-            added.append(doc)
-            if limit and len(added) >= limit:
-                break
+    # A sourcer warns about what it skipped (a dead link, a scanned PDF); every
+    # surface shows the result, so the warnings go there, not only to stderr.
+    with _warnings.catch_warnings(record=True) as caught:
+        _warnings.simplefilter("always")
+        for raw in produced:
+            counts["read"] += 1
+            try:
+                doc = normalize_doc(raw, source=source if isinstance(source, str) else "custom")
+            except PenlikeError:
+                counts["not usable"] += 1
+                continue
+            if person and doc["is_self"] is False and not include_others:
+                counts["by someone else"] += 1
+            elif (low or high) and not doc["date"]:
+                counts["undated"] += 1
+            elif (low and doc["date"] < low) or (high and doc["date"] >= high):
+                counts["outside the dates"] += 1
+            elif doc["words"] < min_words:
+                counts["too short"] += 1
+            elif doc["id"] in known:
+                counts["already in the model"] += 1
+            else:
+                known.add(doc["id"])
+                added.append(doc)
+                if limit and len(added) >= limit:
+                    break
     in_ai_era = sum(1 for doc in added if doc["date"] and doc["date"] >= parse_date(AI_ERA_START))
     unverified = sum(1 for doc in added if doc["is_self"] is None) if person else 0
     if added and not dry_run:
@@ -423,7 +428,7 @@ def gather(
         meta["built"] = None
         store.write_model(meta)
     skipped = {k: v for k, v in counts.items() if k != "read"}
-    warnings = []
+    warnings = [str(w.message) for w in caught if issubclass(w.category, UserWarning)]
     if in_ai_era:
         warnings.append(
             f"{in_ai_era} of the texts are dated on or after {AI_ERA_START}, when language "

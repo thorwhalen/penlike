@@ -341,7 +341,7 @@ def test_web_skips_a_dead_link_and_rejects_a_bad_ref(tmp_path):
     def broken(url):
         raise OSError("connection refused")
 
-    with pytest.warns(UserWarning, match="not fetched"):
+    with pytest.warns(UserWarning, match="not read"):
         assert list(sourcers.web("https://example.org/gone", get=broken)) == []
     with pytest.raises(penlike.base.PenlikeError, match="neither a URL"):
         list(sourcers.web(str(tmp_path / "missing.txt"), get=broken))
@@ -355,3 +355,30 @@ def test_gather_web_dry_run_counts_through_the_verb(tmp_path):
     penlike.new("t-pub", kind="corpus", basis="public", files=files)
     out = penlike.gather("t-pub", sourcer, ["https://example.org/a"], dry_run=True, files=files)
     assert out["added"] == 1 and not penlike.ModelStore("t-pub", files=files).read_docs()
+
+
+def test_page_date_skips_empty_candidates_and_sidebar_times():
+    pytest.importorskip("citeget")
+    html = (
+        '<html><head><meta property="article:published_time" content="">'
+        '<meta name="date" content="2012-05-06"></head><body>'
+        '<aside><time datetime="2024-01-01">Recent</time></aside>'
+        "<article><p>" + "Words of the essay. " * 30 + "</p></article></body></html>"
+    )
+    assert sourcers.page_doc(html)["date"].startswith("2012-05-06")
+    undated = html.replace('<meta name="date" content="2012-05-06">', "")
+    assert "date" not in sourcers.page_doc(undated)  # the sidebar <time> is not the article's
+
+
+def test_web_rejects_a_bad_timeout_and_gather_reports_skips():
+    pytest.importorskip("citeget")
+    with pytest.raises(penlike.base.PenlikeError, match="timeout"):
+        list(sourcers.web("https://example.org/a", timeout="30s"))
+    essay = (FIXTURES / "essay.html").read_text()
+    pages = {"https://example.org/a": essay, "https://example.org/b": None}
+    files = {}
+    penlike.new("t-skip", kind="corpus", basis="public", files=files)
+    sourcer = functools.partial(sourcers.web, get=pages.get)
+    out = penlike.gather("t-skip", sourcer, list(pages), dry_run=True, files=files)
+    assert out["added"] == 1
+    assert any("not an HTML page" in w for w in out["warnings"])
