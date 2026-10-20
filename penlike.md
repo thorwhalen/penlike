@@ -1,4 +1,4 @@
-> built 2026-10-20 11:38 UTC from d9970d1 (main) · penlike 0.0.3. Details: build_info.json
+> built 2026-10-20 11:44 UTC from ed822d4 (main) · penlike 0.0.4. Details: build_info.json
 
 # index.html.md
 
@@ -78,6 +78,7 @@ penlike sources
 | `github`          | what one login wrote: discussions, issues, pull requests and the comments on them, not line-by-line review comments (through the `gh` tool) |
 | `correspond`      | any channel of the [correspond](https://github.com/thorwhalen/correspond) package (`pip install 'penlike[correspond]'`)                     |
 | `files`           | text files, folders of them, `.html` pages (`penlike[web]`), `.pdf` text layers (`penlike[pdf]`), `.eml` messages                           |
+| `web`             | published web pages by URL, or files listing URLs (`penlike[web]`)                                                                          |
 | `jsonl`           | one JSON document per line                                                                                                                  |
 | `claude-sessions` | what you typed to a coding agent, which is rarely how you write to people                                                                   |
 
@@ -1352,7 +1353,7 @@ sourcer written for one person’s odd archive needs no change here.
 >>> sourcer.__name__
 'jsonl'
 >>> sorted(SOURCERS)
-['claude-sessions', 'correspond', 'files', 'github', 'jsonl', 'mbox']
+['claude-sessions', 'correspond', 'files', 'github', 'jsonl', 'mbox', 'web']
 ```
 
 ### Module Attributes
@@ -1372,8 +1373,9 @@ sourcer written for one person’s odd archive needs no change here.
 | [`page_doc`](_autosummary/penlike.sourcers.html.md#penlike.sourcers.page_doc)(html, \*[, url, ref])                    | A web page as a document: its main article only, with title and stated date.                  |
 | [`requirements`](_autosummary/penlike.sourcers.html.md#penlike.sourcers.requirements)()                                    | For each built-in sourcer: what it reads, and whether it can run here.                        |
 | [`resolve_sourcer`](_autosummary/penlike.sourcers.html.md#penlike.sourcers.resolve_sourcer)(source)                           | Find the sourcer a name refers to: built-in, `module:function`, or `file.py:function`.        |
+| [`web`](_autosummary/penlike.sourcers.html.md#penlike.sourcers.web)(\*refs[, join_pages, timeout, get])           | Published web pages, by URL or from files listing URLs: the main article of each.             |
 
-### penlike.sourcers.SOURCERS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[..., [Iterable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]]]]* *= {'claude-sessions': <function claude_sessions>, 'correspond': <function correspond>, 'files': <function files>, 'github': <function github>, 'jsonl': <function jsonl>, 'mbox': <function mbox>}*
+### penlike.sourcers.SOURCERS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[..., [Iterable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]]]]* *= {'claude-sessions': <function claude_sessions>, 'correspond': <function correspond>, 'files': <function files>, 'github': <function github>, 'jsonl': <function jsonl>, 'mbox': <function mbox>, 'web': <function web>}*
 
 The built-in sourcers, by the name used on the command line.
 
@@ -1482,6 +1484,19 @@ True
 
 * **Return type:**
   [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]]
+
+### penlike.sourcers.web(\*refs, join_pages=False, timeout=30, get=None, \*\*\_)
+
+Published web pages, by URL or from files listing URLs: the main article of each.
+
+Each page goes through [`page_doc()`](_autosummary/penlike.sourcers.html.md#penlike.sourcers.page_doc) (site chrome removed, date only when
+the page states one; the `web` extra). `join_pages` (`--option
+join_pages=true`) joins consecutive pages of one article (URLs differing only
+in `currentPage` or `page`) into one text. A page that cannot be fetched
+is skipped with a warning. `get` replaces the fetcher (`url -> html`).
+
+* **Return type:**
+  [`Iterator`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 
 # _autosummary/penlike.store.html.md
@@ -1689,18 +1704,16 @@ False
 
 # About this build
 
-This documentation was built on **2026-10-20 11:38 UTC** from commit <a href="https://github.com/thorwhalen/penlike/commit/d9970d1e3a1eb254e8a01f09090632101e3e5dcf"><code>d9970d1</code></a> on branch <code>main</code>, for **penlike 0.0.3** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 11:44 UTC** from commit <a href="https://github.com/thorwhalen/penlike/commit/ed822d41649624794db70e1689391b94ebeb9ecc"><code>ed822d4</code></a> on branch <code>main</code>, for **penlike 0.0.4** (from <code>pyproject.toml</code>).
 
-#### WARNING
-The documentation and the package may be misaligned:
-
-- The documented version (0.0.3) is behind the latest release on PyPI (0.0.4): `pip install penlike` gives newer code than these docs describe.
+#### NOTE
+Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
 
 ## Source
 
 |                     |                                                                                                                                                           |
 |---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/penlike/commit/d9970d1e3a1eb254e8a01f09090632101e3e5dcf"><code>d9970d1e3a1eb254e8a01f09090632101e3e5dcf</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/penlike/commit/ed822d41649624794db70e1689391b94ebeb9ecc"><code>ed822d41649624794db70e1689391b94ebeb9ecc</code></a> |
 | Branch              | <code>main</code>                                                                                                                                         |
 | Tags at this commit | none                                                                                                                                                      |
 | Working tree        | clean                                                                                                                                                     |
@@ -1711,9 +1724,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/penlike</code>                                                            |
-| Run          | <a href="https://github.com/thorwhalen/penlike/actions/runs/39416219547">39416219547</a>   |
+| Run          | <a href="https://github.com/thorwhalen/penlike/actions/runs/39416880531">39416880531</a>   |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>d9970d1e3a1eb254e8a01f09090632101e3e5dcf</code> (in the history of the built commit) |
+| Event commit | <code>ed822d41649624794db70e1689391b94ebeb9ecc</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -1738,13 +1751,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/penlike/0.0.4/">0.0.4</a>, newer than the documented version (0.0.3).
+Latest release: <a href="https://pypi.org/project/penlike/0.0.4/">0.0.4</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/penlike && cd penlike
-git checkout d9970d1e3a1eb254e8a01f09090632101e3e5dcf
+git checkout ed822d41649624794db70e1689391b94ebeb9ecc
 pip install "epythet==0.2.19"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
@@ -1788,7 +1801,7 @@ Source: [`penlike/data/skills/penlike-model`](https://github.com/thorwhalen/penl
 
 ### `penlike-source`
 
-Choose, read and filter the texts a penlike style model is built from, including writing a custom sourcer for an archive penlike cannot read yet. Use when asked “where should my style model get its texts”, “use my sent emails”, “use my GitHub discussions”, “use my old blog posts”, “only texts from before 2023”, “read this mailbox export”, “import this Slack or chat export”, “make a sourcer for X”, “filter out AI-written text from my sources”, “screen my corpus for AI text”, “how much would it cost to screen”, or when penlike gather needs a source. Covers the built-in sourcers (files, jsonl, mbox, correspond, github, claude-sessions), the date cutoff that keeps machine-written text out, the custom sourcer contract, and optional screening with its cost tiers stated before anything runs.
+Choose, read and filter the texts a penlike style model is built from, including writing a custom sourcer for an archive penlike cannot read yet. Use when asked “where should my style model get its texts”, “use my sent emails”, “use my GitHub discussions”, “use my old blog posts”, “model this essayist from their website”, “read these URLs”, “only texts from before 2023”, “read this mailbox export”, “import this Slack or chat export”, “make a sourcer for X”, “filter out AI-written text from my sources”, “screen my corpus for AI text”, “how much would it cost to screen”, or when penlike gather needs a source. Covers the built-in sourcers (files, web, jsonl, mbox, correspond, github, claude-sessions), public-basis corpora of published authors, the date cutoff that keeps machine-written text out, the custom sourcer contract, and optional screening with its cost tiers stated before anything runs.
 
 ```bash
 gh skill install thorwhalen/penlike penlike-source --agent claude-code

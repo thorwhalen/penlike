@@ -25,7 +25,7 @@ sourcer written for one person’s odd archive needs no change here.
 >>> sourcer.__name__
 'jsonl'
 >>> sorted(SOURCERS)
-['claude-sessions', 'correspond', 'files', 'github', 'jsonl', 'mbox']
+['claude-sessions', 'correspond', 'files', 'github', 'jsonl', 'mbox', 'web']
 ```
 
 ### Module Attributes
@@ -45,8 +45,9 @@ sourcer written for one person’s odd archive needs no change here.
 | [`page_doc`](#penlike.sourcers.page_doc)(html, \*[, url, ref])                    | A web page as a document: its main article only, with title and stated date.                  |
 | [`requirements`](#penlike.sourcers.requirements)()                                    | For each built-in sourcer: what it reads, and whether it can run here.                        |
 | [`resolve_sourcer`](#penlike.sourcers.resolve_sourcer)(source)                           | Find the sourcer a name refers to: built-in, `module:function`, or `file.py:function`.        |
+| [`web`](#penlike.sourcers.web)(\*refs[, join_pages, timeout, get])           | Published web pages, by URL or from files listing URLs: the main article of each.             |
 
-### penlike.sourcers.SOURCERS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[..., [Iterable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]]]]* *= {'claude-sessions': <function claude_sessions>, 'correspond': <function correspond>, 'files': <function files>, 'github': <function github>, 'jsonl': <function jsonl>, 'mbox': <function mbox>}*
+### penlike.sourcers.SOURCERS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[..., [Iterable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]]]]* *= {'claude-sessions': <function claude_sessions>, 'correspond': <function correspond>, 'files': <function files>, 'github': <function github>, 'jsonl': <function jsonl>, 'mbox': <function mbox>, 'web': <function web>}*
 
 The built-in sourcers, by the name used on the command line.
 
@@ -155,3 +156,16 @@ True
 
 * **Return type:**
   [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]]
+
+### penlike.sourcers.web(\*refs, join_pages=False, timeout=30, get=None, \*\*\_)
+
+Published web pages, by URL or from files listing URLs: the main article of each.
+
+Each page goes through [`page_doc()`](#penlike.sourcers.page_doc) (site chrome removed, date only when
+the page states one; the `web` extra). `join_pages` (`--option
+join_pages=true`) joins consecutive pages of one article (URLs differing only
+in `currentPage` or `page`) into one text. A page that cannot be fetched
+is skipped with a warning. `get` replaces the fetcher (`url -> html`).
+
+* **Return type:**
+  [`Iterator`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]

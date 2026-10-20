@@ -23,4 +23,5 @@ penlike.sourcers
       page_doc
       requirements
       resolve_sourcer
+      web
    
