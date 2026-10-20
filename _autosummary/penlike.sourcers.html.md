@@ -35,15 +35,16 @@ sourcer written for one person’s odd archive needs no change here.
 
 ### Functions
 
-| [`claude_sessions`](#penlike.sourcers.claude_sessions)(\*refs, \*\*_)                    | What the author typed to a coding agent, from saved Claude Code session logs.          |
-|----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| [`correspond`](#penlike.sourcers.correspond)(\*refs[, since, limit, registry])      | Conversations read through `correspond`, the facade over communication channels.       |
-| [`files`](#penlike.sourcers.files)(\*refs[, me])                               | Text files and folders of them (`.txt`, `.md`, `.rst`), and `.eml` messages.           |
-| [`github`](#penlike.sourcers.github)(\*refs[, since, until, limit, kinds, run]) | What one GitHub user wrote: discussions, issues, pull requests and comments on them.   |
-| [`jsonl`](#penlike.sourcers.jsonl)(\*refs, \*\*_)                              | JSON Lines files, one document per line: the interchange format for custom sources.    |
-| [`mbox`](#penlike.sourcers.mbox)(\*refs[, me])                                | Mailbox archives in mbox format, such as a mail export from a webmail provider.        |
-| [`requirements`](#penlike.sourcers.requirements)()                                    | For each built-in sourcer: what it reads, and whether it can run here.                 |
-| [`resolve_sourcer`](#penlike.sourcers.resolve_sourcer)(source)                           | Find the sourcer a name refers to: built-in, `module:function`, or `file.py:function`. |
+| [`claude_sessions`](#penlike.sourcers.claude_sessions)(\*refs, \*\*_)                    | What the author typed to a coding agent, from saved Claude Code session logs.                 |
+|----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| [`correspond`](#penlike.sourcers.correspond)(\*refs[, since, limit, registry])      | Conversations read through `correspond`, the facade over communication channels.              |
+| [`files`](#penlike.sourcers.files)(\*refs[, me])                               | Text files and folders of them (`.txt`, `.md`, `.rst`, `.html`, `.pdf`), and `.eml` messages. |
+| [`github`](#penlike.sourcers.github)(\*refs[, since, until, limit, kinds, run]) | What one GitHub user wrote: discussions, issues, pull requests and comments on them.          |
+| [`jsonl`](#penlike.sourcers.jsonl)(\*refs, \*\*_)                              | JSON Lines files, one document per line: the interchange format for custom sources.           |
+| [`mbox`](#penlike.sourcers.mbox)(\*refs[, me])                                | Mailbox archives in mbox format, such as a mail export from a webmail provider.               |
+| [`page_doc`](#penlike.sourcers.page_doc)(html, \*[, url, ref])                    | A web page as a document: its main article only, with title and stated date.                  |
+| [`requirements`](#penlike.sourcers.requirements)()                                    | For each built-in sourcer: what it reads, and whether it can run here.                        |
+| [`resolve_sourcer`](#penlike.sourcers.resolve_sourcer)(source)                           | Find the sourcer a name refers to: built-in, `module:function`, or `file.py:function`.        |
 
 ### penlike.sourcers.SOURCERS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[..., [Iterable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]]]]* *= {'claude-sessions': <function claude_sessions>, 'correspond': <function correspond>, 'files': <function files>, 'github': <function github>, 'jsonl': <function jsonl>, 'mbox': <function mbox>}*
 
@@ -73,11 +74,14 @@ works, including one you add yourself. Needs `pip install 'penlike[correspond]'`
 
 ### penlike.sourcers.files(\*refs, me=(), \*\*\_)
 
-Text files and folders of them (`.txt`, `.md`, `.rst`), and `.eml` messages.
+Text files and folders of them (`.txt`, `.md`, `.rst`, `.html`, `.pdf`), and `.eml` messages.
 
 A folder is read recursively. A text file is one document; it has no date (a
 file’s modification time says when it was copied, not when it was written) and
-no addressee, so it is filed as a `document`.
+no addressee, so it is filed as a `document`. An `.html` file is reduced to
+its main article, dated only when the page says so (see [`page_doc()`](#penlike.sourcers.page_doc); the
+`web` extra). A `.pdf` is read from its text layer (the `pdf` extra); one
+without, such as a scan, is skipped with a warning.
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
@@ -119,6 +123,17 @@ rest are left undecided.
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
+
+### penlike.sourcers.page_doc(html, , url='', ref='')
+
+A web page as a document: its main article only, with title and stated date.
+
+Site chrome (navigation, sidebars, footers) is removed by `citeget`’s
+main-content extraction (the `web` extra). The date comes from the page’s
+metadata (`article:published_time`, `<time datetime>`) or is left out.
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)] | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### penlike.sourcers.requirements()
 

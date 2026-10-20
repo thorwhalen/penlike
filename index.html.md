@@ -73,7 +73,7 @@ penlike sources
 | `mbox`            | a mailbox archive, such as a webmail export                                                                                                 |
 | `github`          | what one login wrote: discussions, issues, pull requests and the comments on them, not line-by-line review comments (through the `gh` tool) |
 | `correspond`      | any channel of the [correspond](https://github.com/thorwhalen/correspond) package (`pip install 'penlike[correspond]'`)                     |
-| `files`           | text files, folders of them, `.eml` messages                                                                                                |
+| `files`           | text files, folders of them, `.html` pages (`penlike[web]`), `.pdf` text layers (`penlike[pdf]`), `.eml` messages                           |
 | `jsonl`           | one JSON document per line                                                                                                                  |
 | `claude-sessions` | what you typed to a coding agent, which is rarely how you write to people                                                                   |
 

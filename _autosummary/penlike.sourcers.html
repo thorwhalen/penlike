@@ -100,6 +100,7 @@ data-aria-dark="Switch to auto color mode">
 <li><a class="reference internal" href="#penlike.sourcers.github"><code class="docutils literal notranslate"><span class="pre">github()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.sourcers.jsonl"><code class="docutils literal notranslate"><span class="pre">jsonl()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.sourcers.mbox"><code class="docutils literal notranslate"><span class="pre">mbox()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.sourcers.page_doc"><code class="docutils literal notranslate"><span class="pre">page_doc()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.sourcers.requirements"><code class="docutils literal notranslate"><span class="pre">requirements()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.sourcers.resolve_sourcer"><code class="docutils literal notranslate"><span class="pre">resolve_sourcer()</span></code></a></li>
 </ul>
@@ -185,7 +186,7 @@ sourcer written for one person’s odd archive needs no change here.</p>
 <td><p>Conversations read through <code class="docutils literal notranslate"><span class="pre">correspond</span></code>, the facade over communication channels.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#penlike.sourcers.files" title="penlike.sourcers.files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">files</span></code></a>(*refs[, me])</p></td>
-<td><p>Text files and folders of them (<code class="docutils literal notranslate"><span class="pre">.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">.md</span></code>, <code class="docutils literal notranslate"><span class="pre">.rst</span></code>), and <code class="docutils literal notranslate"><span class="pre">.eml</span></code> messages.</p></td>
+<td><p>Text files and folders of them (<code class="docutils literal notranslate"><span class="pre">.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">.md</span></code>, <code class="docutils literal notranslate"><span class="pre">.rst</span></code>, <code class="docutils literal notranslate"><span class="pre">.html</span></code>, <code class="docutils literal notranslate"><span class="pre">.pdf</span></code>), and <code class="docutils literal notranslate"><span class="pre">.eml</span></code> messages.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#penlike.sourcers.github" title="penlike.sourcers.github"><code class="xref py py-obj docutils literal notranslate"><span class="pre">github</span></code></a>(*refs[, since, until, limit, kinds, run])</p></td>
 <td><p>What one GitHub user wrote: discussions, issues, pull requests and comments on them.</p></td>
@@ -196,10 +197,13 @@ sourcer written for one person’s odd archive needs no change here.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#penlike.sourcers.mbox" title="penlike.sourcers.mbox"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mbox</span></code></a>(*refs[, me])</p></td>
 <td><p>Mailbox archives in mbox format, such as a mail export from a webmail provider.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.sourcers.requirements" title="penlike.sourcers.requirements"><code class="xref py py-obj docutils literal notranslate"><span class="pre">requirements</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.sourcers.page_doc" title="penlike.sourcers.page_doc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">page_doc</span></code></a>(html, *[, url, ref])</p></td>
+<td><p>A web page as a document: its main article only, with title and stated date.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.sourcers.requirements" title="penlike.sourcers.requirements"><code class="xref py py-obj docutils literal notranslate"><span class="pre">requirements</span></code></a>()</p></td>
 <td><p>For each built-in sourcer: what it reads, and whether it can run here.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#penlike.sourcers.resolve_sourcer" title="penlike.sourcers.resolve_sourcer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_sourcer</span></code></a>(source)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.sourcers.resolve_sourcer" title="penlike.sourcers.resolve_sourcer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_sourcer</span></code></a>(source)</p></td>
 <td><p>Find the sourcer a name refers to: built-in, <code class="docutils literal notranslate"><span class="pre">module:function</span></code>, or <code class="docutils literal notranslate"><span class="pre">file.py:function</span></code>.</p></td>
 </tr>
 </tbody>
@@ -242,10 +246,13 @@ works, including one you add yourself. Needs <code class="docutils literal notra
 <dl class="py function">
 <dt class="sig sig-object py" id="penlike.sourcers.files">
 <span class="sig-prename descclassname"><span class="pre">penlike.sourcers.</span></span><span class="sig-name descname"><span class="pre">files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">refs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">me</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/sourcers.html#files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.sourcers.files" title="Link to this definition">#</a></dt>
-<dd><p>Text files and folders of them (<code class="docutils literal notranslate"><span class="pre">.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">.md</span></code>, <code class="docutils literal notranslate"><span class="pre">.rst</span></code>), and <code class="docutils literal notranslate"><span class="pre">.eml</span></code> messages.</p>
+<dd><p>Text files and folders of them (<code class="docutils literal notranslate"><span class="pre">.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">.md</span></code>, <code class="docutils literal notranslate"><span class="pre">.rst</span></code>, <code class="docutils literal notranslate"><span class="pre">.html</span></code>, <code class="docutils literal notranslate"><span class="pre">.pdf</span></code>), and <code class="docutils literal notranslate"><span class="pre">.eml</span></code> messages.</p>
 <p>A folder is read recursively. A text file is one document; it has no date (a
 file’s modification time says when it was copied, not when it was written) and
-no addressee, so it is filed as a <code class="docutils literal notranslate"><span class="pre">document</span></code>.</p>
+no addressee, so it is filed as a <code class="docutils literal notranslate"><span class="pre">document</span></code>. An <code class="docutils literal notranslate"><span class="pre">.html</span></code> file is reduced to
+its main article, dated only when the page says so (see <a class="reference internal" href="#penlike.sourcers.page_doc" title="penlike.sourcers.page_doc"><code class="xref py py-func docutils literal notranslate"><span class="pre">page_doc()</span></code></a>; the
+<code class="docutils literal notranslate"><span class="pre">web</span></code> extra). A <code class="docutils literal notranslate"><span class="pre">.pdf</span></code> is read from its text layer (the <code class="docutils literal notranslate"><span class="pre">pdf</span></code> extra); one
+without, such as a scan, is skipped with a warning.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</span></p>
@@ -295,6 +302,20 @@ rest are left undecided.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.sourcers.page_doc">
+<span class="sig-prename descclassname"><span class="pre">penlike.sourcers.</span></span><span class="sig-name descname"><span class="pre">page_doc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/sourcers.html#page_doc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.sourcers.page_doc" title="Link to this definition">#</a></dt>
+<dd><p>A web page as a document: its main article only, with title and stated date.</p>
+<p>Site chrome (navigation, sidebars, footers) is removed by <code class="docutils literal notranslate"><span class="pre">citeget</span></code>’s
+main-content extraction (the <code class="docutils literal notranslate"><span class="pre">web</span></code> extra). The date comes from the page’s
+metadata (<code class="docutils literal notranslate"><span class="pre">article:published_time</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;time</span> <span class="pre">datetime&gt;</span></code>) or is left out.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>] | <span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -369,7 +390,7 @@ rest are left undecided.</p>
     </div>
   </div>
 </footer>
-      <script src="../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../_static/documentation_options.js?v=47de8214"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

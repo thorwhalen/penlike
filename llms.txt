@@ -19,7 +19,7 @@
 - [penlike.store](_autosummary/penlike.store.html.md): Where models live, and the one object that reads and writes them.
 - [penlike.tools](_autosummary/penlike.tools.html.md): The verbs: every operation penlike offers, as plain functions returning JSON-ready dicts.
 - [For AI agents](ai-agents.html.md): &#96;penlike&#96; ships artifacts for coding agents alongside its code. This page lists
-- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-18 07:29 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-20 11:38 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
 
 ## Optional
 

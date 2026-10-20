@@ -20,6 +20,7 @@ penlike.sourcers
       github
       jsonl
       mbox
+      page_doc
       requirements
       resolve_sourcer
    
