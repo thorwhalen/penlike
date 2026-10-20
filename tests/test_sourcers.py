@@ -295,3 +295,63 @@ def test_a_folder_mixes_text_html_and_pdf(tmp_path):
         (tmp_path / name).write_bytes((FIXTURES / name).read_bytes())
     (tmp_path / "draft.md").write_text("A short draft.")
     assert len(list(sourcers.files(str(tmp_path)))) == 3
+
+
+# --- the web sourcer: an injected fetcher serves saved pages (no network) -----
+
+
+def _page(title, body, *, date=None):
+    meta = f'<meta property="article:published_time" content="{date}">' if date else ""
+    nav = "<nav><a href='/'>Home</a> <a href='/essays'>Essays</a></nav>"
+    return f"<html><head><title>{title}</title>{meta}</head><body>{nav}<article><p>{body}</p></article></body></html>"
+
+
+def test_web_reads_urls_and_url_files_with_an_injected_fetcher(tmp_path):
+    pytest.importorskip("citeget")
+    essay = (FIXTURES / "essay.html").read_text()
+    pages = {"https://example.org/small-tools": essay, "https://example.org/pdf": None}
+    listing = tmp_path / "urls.txt"
+    listing.write_text("# essays\nhttps://example.org/small-tools\n\nhttps://example.org/pdf\n")
+    with pytest.warns(UserWarning, match="not an HTML page"):
+        docs = list(sourcers.web(str(listing), get=pages.get))
+    (doc,) = docs
+    assert doc["url"] == "https://example.org/small-tools" and doc["title"] == "On Small Tools"
+    assert doc["date"].startswith("2014-06-02") and "Subscribe" not in doc["text"]
+
+
+def test_web_joins_the_pages_of_one_article(tmp_path):
+    pytest.importorskip("citeget")
+    base = "https://example.org/essay?id=7"
+    pages = {
+        base: _page("Essay", "First page sentence. " * 30, date="2011-02-03"),
+        f"{base}&currentPage=2": _page("Essay", "Second page sentence. " * 30),
+        "https://example.org/other": _page("Other", "Another essay sentence. " * 30),
+    }
+    docs = list(sourcers.web(*pages, get=pages.get, join_pages="true"))
+    assert [d["url"] for d in docs] == [base, "https://example.org/other"]
+    joined = docs[0]["text"]
+    assert joined.index("First page") < joined.index("Second page")
+    assert docs[0]["date"].startswith("2011-02-03")
+    assert len(list(sourcers.web(*pages, get=pages.get))) == 3
+
+
+def test_web_skips_a_dead_link_and_rejects_a_bad_ref(tmp_path):
+    pytest.importorskip("citeget")
+
+    def broken(url):
+        raise OSError("connection refused")
+
+    with pytest.warns(UserWarning, match="not fetched"):
+        assert list(sourcers.web("https://example.org/gone", get=broken)) == []
+    with pytest.raises(penlike.base.PenlikeError, match="neither a URL"):
+        list(sourcers.web(str(tmp_path / "missing.txt"), get=broken))
+
+
+def test_gather_web_dry_run_counts_through_the_verb(tmp_path):
+    pytest.importorskip("citeget")
+    essay = (FIXTURES / "essay.html").read_text()
+    sourcer = functools.partial(sourcers.web, get={"https://example.org/a": essay}.get)
+    files = {}
+    penlike.new("t-pub", kind="corpus", basis="public", files=files)
+    out = penlike.gather("t-pub", sourcer, ["https://example.org/a"], dry_run=True, files=files)
+    assert out["added"] == 1 and not penlike.ModelStore("t-pub", files=files).read_docs()
