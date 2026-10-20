@@ -20,7 +20,7 @@ sourcer written for one person's odd archive needs no change here.
 >>> sourcer.__name__
 'jsonl'
 >>> sorted(SOURCERS)
-['claude-sessions', 'correspond', 'files', 'github', 'jsonl', 'mbox']
+['claude-sessions', 'correspond', 'files', 'github', 'jsonl', 'mbox', 'web']
 """
 
 from __future__ import annotations
@@ -50,6 +50,7 @@ __all__ = [
     "page_doc",
     "requirements",
     "resolve_sourcer",
+    "web",
 ]
 
 _TEXT_SUFFIXES = (".txt", ".md", ".markdown", ".rst", ".text")
@@ -58,7 +59,10 @@ _HTML_SUFFIXES = (".html", ".htm")
 _MIN_PDF_WORDS_PER_PAGE = 20
 _WEB_EXTRA = "pip install 'penlike[web]'"
 _PDF_EXTRA = "pip install 'penlike[pdf]'"
-_DATE_META = ("article:published_time", "datePublished", "date", "DC.date.issued")
+# Query parameters that number the pages of one article (``?currentPage=2``).
+_PAGE_PARAMS = ("currentPage", "page")
+_WEB_TIMEOUT = 30
+_DATE_META = ("article:published_time", "datePublished", "DC.date.issued", "date")
 _DEFAULT_SESSIONS_DIR = "~/.claude/projects"
 _GITHUB_PAGE_SIZE = 25
 
@@ -135,12 +139,18 @@ def _page_date(html: str) -> str | None:
         + soup.find_all("meta", attrs={"name": name})
         + soup.find_all("meta", attrs={"itemprop": name})
     ]
-    found += [tag.get("datetime") for tag in soup.find_all("time")]
+    # A <time> counts only where it dates the article, not a sidebar or a comment.
+    found += [t.get("datetime") for t in soup.find_all("time", attrs={"itemprop": "datePublished"})]
+    article = soup.find("article")
+    if article is not None and (stamp := article.find("time")) is not None:
+        found.append(stamp.get("datetime"))
     for value in found:
         try:
-            return parse_date(value)
+            date = parse_date(value) if value else None
         except PenlikeError:
             continue
+        if date:
+            return date
     return None
 
 
@@ -171,6 +181,13 @@ def page_doc(html: str, *, url: str = "", ref: str = "") -> dict[str, Any] | Non
     return {**doc, "date": date} if date else doc
 
 
+def _html_file_doc(path: Path) -> dict[str, Any] | None:
+    doc = page_doc(path.read_text(encoding="utf-8", errors="replace"), ref=str(path))
+    if doc and not doc["title"]:
+        doc["title"] = path.stem
+    return doc
+
+
 def _pdf_doc(path: Path) -> dict[str, Any] | None:
     try:
         from pypdf import PdfReader
@@ -192,6 +209,110 @@ def _pdf_doc(path: Path) -> dict[str, Any] | None:
         "title": path.stem,
         "ref": str(path),
     }
+
+
+def _fetch_html(url: str, *, timeout: int = _WEB_TIMEOUT) -> str | None:
+    """The HTML at ``url``, through citeget's guard on private destinations; None if not HTML."""
+    try:
+        from citeget import netguard
+    except ImportError:
+        raise PenlikeError(f"the web sourcer needs citeget: {_WEB_EXTRA}") from None
+    response = netguard.get(url, timeout=timeout)
+    response.raise_for_status()
+    content_type = response.headers.get("content-type", "html").lower()
+    if "html" not in content_type:
+        return None
+    if "charset" not in content_type:  # requests would assume ISO-8859-1
+        response.encoding = response.apparent_encoding
+    return response.text
+
+
+def _urls(refs: Iterable[str]) -> Iterator[str]:
+    """URLs given directly, or listed one per line in a file (a ``#`` line is a comment)."""
+    for ref in refs:
+        if re.match(r"(?i)https?://", ref):
+            yield ref
+            continue
+        path = Path(os.path.expanduser(ref))
+        if not path.is_file():
+            raise PenlikeError(f"{ref}: neither a URL nor a file of URLs")
+        for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+            line = line.strip()
+            if line and not line.startswith("#"):
+                yield line
+
+
+def _article_key(url: str) -> str:
+    """``url`` without the query parameters that number an article's pages."""
+    from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+
+    parts = urlsplit(url)
+    query = sorted((k, v) for k, v in parse_qsl(parts.query) if k not in _PAGE_PARAMS)
+    return urlunsplit(parts._replace(query=urlencode(query)))
+
+
+def _join_pages(docs: Iterable[dict[str, Any]]) -> Iterator[dict[str, Any]]:
+    """One document per article: *consecutive* pages of the same article joined in order.
+
+    The key drops the page parameters and sorts the rest, so ``?id=7&page=2`` and
+    ``?page=3&id=7`` are one article. List an article's pages together.
+    """
+    from itertools import groupby
+
+    for key, group in groupby(docs, key=lambda d: _article_key(d["url"])):
+        pages = list(group)
+        first = pages[0]
+        if len(pages) == 1:
+            yield first
+            continue
+        yield {
+            **first,
+            "text": "\n\n".join(p["text"] for p in pages),
+            "url": key,
+            "ref": key,
+        }
+
+
+def web(
+    *refs: str,
+    join_pages: bool = False,
+    timeout: int = _WEB_TIMEOUT,
+    get: Callable[[str], str | None] | None = None,
+    **_: Any,
+) -> Iterator[dict[str, Any]]:
+    """Published web pages, by URL or from files listing URLs: the main article of each.
+
+    Each page goes through :func:`page_doc` (site chrome removed, date only when
+    the page states one; the ``web`` extra). ``join_pages`` (``--option
+    join_pages=true``) joins consecutive pages of one article (URLs differing only
+    in ``currentPage`` or ``page``) into one text. A page that cannot be fetched
+    is skipped with a warning. ``get`` replaces the fetcher (``url -> html``).
+    """
+    try:
+        seconds = float(timeout)
+    except (TypeError, ValueError):
+        raise PenlikeError(f"timeout must be a number of seconds, got {timeout!r}") from None
+    fetch = get or (lambda url: _fetch_html(url, timeout=seconds))
+
+    def pages() -> Iterator[dict[str, Any]]:
+        for url in _urls(refs):
+            try:
+                html = fetch(url)
+                doc = None if html is None else page_doc(html, url=url)
+            except PenlikeError:
+                raise
+            except Exception as error:  # one bad page must not end the whole gather
+                warnings.warn(f"{url}: not read ({error}). Skipped.", stacklevel=3)
+                continue
+            if html is None:
+                warnings.warn(f"{url}: not an HTML page. Skipped.", stacklevel=3)
+            elif doc:
+                yield doc
+
+    if str(join_pages).lower() in ("1", "true", "yes"):
+        yield from _join_pages(pages())
+    else:
+        yield from pages()  # lazily, so a gather with a limit stops fetching
 
 
 def _email_doc(message: Any, *, me: Iterable[str], ref: str) -> dict[str, Any] | None:
@@ -242,13 +363,14 @@ def files(*refs: str, me: Iterable[str] = (), **_: Any) -> Iterator[dict[str, An
         if suffix in (".eml", ".pdf", *_HTML_SUFFIXES):
             if suffix == ".eml":
                 doc = _email_doc(message_from_bytes(path.read_bytes()), me=me, ref=str(path))
-            elif suffix == ".pdf":
-                doc = _pdf_doc(path)
             else:
-                html = path.read_text(encoding="utf-8", errors="replace")
-                doc = page_doc(html, ref=str(path))
-                if doc and not doc["title"]:
-                    doc["title"] = path.stem
+                try:
+                    doc = _pdf_doc(path) if suffix == ".pdf" else _html_file_doc(path)
+                except PenlikeError:
+                    raise
+                except Exception as error:  # one damaged file must not end the gather
+                    warnings.warn(f"{path}: not read ({error}). Skipped.", stacklevel=2)
+                    continue
             if doc:
                 yield doc
             continue
@@ -539,6 +661,7 @@ SOURCERS: dict[str, Callable[..., Iterable[dict[str, Any]]]] = {
     "correspond": correspond,
     "github": github,
     "claude-sessions": claude_sessions,
+    "web": web,
 }
 
 
@@ -581,6 +704,7 @@ def requirements() -> dict[str, dict[str, Any]]:
     have_gh = shutil.which("gh") is not None
     ready = {
         "correspond": (have_correspond, "pip install 'penlike[correspond]'"),
+        "web": (importlib.util.find_spec("citeget") is not None, _WEB_EXTRA),
         "github": (
             have_gh,
             "install the GitHub CLI (https://cli.github.com) and run: gh auth login",

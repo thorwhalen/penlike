@@ -1,6 +1,6 @@
 ---
 name: penlike-source
-description: Choose, read and filter the texts a penlike style model is built from, including writing a custom sourcer for an archive penlike cannot read yet. Use when asked "where should my style model get its texts", "use my sent emails", "use my GitHub discussions", "use my old blog posts", "only texts from before 2023", "read this mailbox export", "import this Slack or chat export", "make a sourcer for X", "filter out AI-written text from my sources", "screen my corpus for AI text", "how much would it cost to screen", or when penlike gather needs a source. Covers the built-in sourcers (files, jsonl, mbox, correspond, github, claude-sessions), the date cutoff that keeps machine-written text out, the custom sourcer contract, and optional screening with its cost tiers stated before anything runs.
+description: Choose, read and filter the texts a penlike style model is built from, including writing a custom sourcer for an archive penlike cannot read yet. Use when asked "where should my style model get its texts", "use my sent emails", "use my GitHub discussions", "use my old blog posts", "model this essayist from their website", "read these URLs", "only texts from before 2023", "read this mailbox export", "import this Slack or chat export", "make a sourcer for X", "filter out AI-written text from my sources", "screen my corpus for AI text", "how much would it cost to screen", or when penlike gather needs a source. Covers the built-in sourcers (files, web, jsonl, mbox, correspond, github, claude-sessions), public-basis corpora of published authors, the date cutoff that keeps machine-written text out, the custom sourcer contract, and optional screening with its cost tiers stated before anything runs.
 license: MIT
 metadata:
   audience: users
@@ -46,6 +46,7 @@ penlike sources
 | `github` | what one login wrote: discussions, issues, pull requests, comments | `penlike gather me github quinn --until 2023-01-01` |
 | `correspond` | any channel of the `correspond` package | `penlike gather me correspond github:example/loader#12` |
 | `files` | text files, folders of them, `.html` pages (`penlike[web]`), `.pdf` text layers (`penlike[pdf]`), `.eml` messages | `penlike gather me files ~/writing/essays` |
+| `web` | published pages by URL, or files listing URLs (`penlike[web]`) | `penlike gather t-pg web urls.txt --dry-run` |
 | `jsonl` | one JSON document per line | `penlike gather me jsonl ~/exports/chat.jsonl` |
 | `claude-sessions` | what the user typed to a coding agent | `penlike gather me claude-sessions` |
 
@@ -57,6 +58,18 @@ Notes on each:
 - **github.** Narrow it with `login@owner/repo` or `login@owner`. It uses the `gh` login, so private repositories that login can read are included; say so to the user. `--option 'kinds=["discussion"]'` keeps discussions only.
 - **correspond.** Reads one conversation per reference. Its email channel reads a single folder, so point it at the sent folder to read what the user wrote.
 - **claude-sessions.** How a person writes to an agent is rarely how they write to people. These texts get their own register, `agent`, and should not be the basis for writing to humans. Offer it; do not default to it.
+
+## Published authors: public-basis corpora
+
+A model of a published author (`penlike new t-pg --kind corpus --basis public`) reads their published writing, through `web` (URLs) or `files` (saved `.html` and `.pdf`).
+
+- **Where to take texts from.** The author's own site first, then the original publication, or its copy on `web.archive.org` when the original is gone. Avoid aggregators and reposts: they add chrome, cut paragraphs, and often re-edit.
+- **The cutoff still applies.** Use texts published before 2023 (`--until 2023-01-01`). A page is dated only when its metadata states a date (`article:published_time`, `<time datetime>`); an undated page is dropped by `--until`, so check the dry-run counts and add a dated `jsonl` line by hand if the date is known from elsewhere.
+- **Articles split over pages.** `--option join_pages=true` joins consecutive URLs that differ only in `currentPage` or `page` into one text. List the pages in order.
+- **PDFs.** Only the text layer is read. A scan has none: penlike warns and skips it, and it needs OCR first.
+- **The texts stay in the data folder.** They are read into the model's store, never into a repository or a published document.
+
+Check a gather with `penlike docs <model> --full`: no menus, footers or subscription boxes should remain.
 
 ## When no sourcer fits: write one
 
