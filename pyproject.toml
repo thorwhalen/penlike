@@ -56,6 +56,14 @@ docs = [
     "sphinx>=6.0",
     "sphinx-rtd-theme>=1.0",
 ]
+# Published writing: web pages (and .html files) reduced to their main article.
+web = [
+    "citeget>=0.2.22",
+]
+# The text layer of .pdf files.
+pdf = [
+    "pypdf",
+]
 # Reading conversations through the fleet facade over communication channels.
 correspond = [
     "correspond",
@@ -163,6 +171,10 @@ enabled = false
 
 [tool.wads.ci.quality.mypy]
 enabled = false
+
+[tool.wads.ci.install]
+# tests read saved .html and .pdf fixtures through the optional readers
+extras = ["web", "pdf"]
 
 [tool.wads.ci.testing]
 enabled = true
