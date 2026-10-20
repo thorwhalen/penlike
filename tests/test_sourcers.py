@@ -249,3 +249,49 @@ def test_a_sourcer_with_the_wrong_signature_is_explained():
     penlike.new("quinn", files=files)
     with pytest.raises(penlike.PenlikeError, match="A sourcer is"):
         penlike.gather("quinn", bare, ["x"], files=files)
+
+
+# --- published writing: .html and .pdf files (saved fixtures, no network) -----
+
+from pathlib import Path
+
+FIXTURES = Path(__file__).parent / "fixtures"
+
+
+def test_html_file_keeps_the_article_and_drops_the_site_chrome():
+    pytest.importorskip("citeget")
+    (doc,) = sourcers.files(str(FIXTURES / "essay.html"))
+    assert doc["title"] == "On Small Tools" and doc["channel"] == "document"
+    assert doc["date"].startswith("2014-06-02")
+    assert "written in an afternoon" in doc["text"]
+    for chrome in ("Subscribe", "Copyright", "About Quinn"):
+        assert chrome not in doc["text"]
+
+
+def test_html_without_a_stated_date_stays_undated(tmp_path):
+    pytest.importorskip("citeget")
+    page = tmp_path / "note.html"
+    page.write_text("<html><body><article><p>" + "A plain sentence. " * 30 + "</p></article></body></html>")
+    (doc,) = sourcers.files(str(page))
+    assert "date" not in doc and doc["title"] == "note"
+
+
+def test_pdf_text_layer_is_read():
+    pytest.importorskip("pypdf")
+    (doc,) = sourcers.files(str(FIXTURES / "essay.pdf"))
+    assert "written in an afternoon" in doc["text"] and doc["title"] == "essay"
+
+
+def test_a_scanned_pdf_warns_and_yields_nothing():
+    pytest.importorskip("pypdf")
+    with pytest.warns(UserWarning, match="no text layer"):
+        assert list(sourcers.files(str(FIXTURES / "scan.pdf"))) == []
+
+
+def test_a_folder_mixes_text_html_and_pdf(tmp_path):
+    pytest.importorskip("citeget")
+    pytest.importorskip("pypdf")
+    for name in ("essay.html", "essay.pdf"):
+        (tmp_path / name).write_bytes((FIXTURES / name).read_bytes())
+    (tmp_path / "draft.md").write_text("A short draft.")
+    assert len(list(sourcers.files(str(tmp_path)))) == 3

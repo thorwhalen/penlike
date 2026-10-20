@@ -32,6 +32,7 @@ import os
 import re
 import shutil
 import subprocess
+import warnings
 from collections.abc import Callable, Iterable, Iterator
 from pathlib import Path
 from typing import Any
@@ -46,11 +47,18 @@ __all__ = [
     "github",
     "jsonl",
     "mbox",
+    "page_doc",
     "requirements",
     "resolve_sourcer",
 ]
 
 _TEXT_SUFFIXES = (".txt", ".md", ".markdown", ".rst", ".text")
+_HTML_SUFFIXES = (".html", ".htm")
+# A PDF page with fewer words than this has no usable text layer (a scan, say).
+_MIN_PDF_WORDS_PER_PAGE = 20
+_WEB_EXTRA = "pip install 'penlike[web]'"
+_PDF_EXTRA = "pip install 'penlike[pdf]'"
+_DATE_META = ("article:published_time", "datePublished", "date", "DC.date.issued")
 _DEFAULT_SESSIONS_DIR = "~/.claude/projects"
 _GITHUB_PAGE_SIZE = 25
 
@@ -115,6 +123,77 @@ def _message_text(message: Any) -> str:
     return _html.unescape(re.sub(r"<[^>]+>", "", text)).replace("\xa0", " ")
 
 
+def _page_date(html: str) -> str | None:
+    """The publication date a page states in its metadata, else None (never guessed)."""
+    from bs4 import BeautifulSoup
+
+    soup = BeautifulSoup(html, "html.parser")
+    found = [
+        tag.get("content")
+        for name in _DATE_META
+        for tag in soup.find_all("meta", attrs={"property": name})
+        + soup.find_all("meta", attrs={"name": name})
+        + soup.find_all("meta", attrs={"itemprop": name})
+    ]
+    found += [tag.get("datetime") for tag in soup.find_all("time")]
+    for value in found:
+        try:
+            return parse_date(value)
+        except PenlikeError:
+            continue
+    return None
+
+
+def page_doc(html: str, *, url: str = "", ref: str = "") -> dict[str, Any] | None:
+    """A web page as a document: its main article only, with title and stated date.
+
+    Site chrome (navigation, sidebars, footers) is removed by ``citeget``'s
+    main-content extraction (the ``web`` extra). The date comes from the page's
+    metadata (``article:published_time``, ``<time datetime>``) or is left out.
+    """
+    try:
+        from citeget.fetch import html_to_markdown, page_title
+    except ImportError:
+        raise PenlikeError(f"reading web pages needs citeget: {_WEB_EXTRA}") from None
+    text = html_to_markdown(html, source_url=url, content="main", include_links=False)
+    text = re.sub(r"^\s*<!--.*?-->\s*", "", text, flags=re.S)  # citeget's provenance line
+    if not text.strip():
+        return None
+    doc = {
+        "text": text,
+        "channel": "document",
+        "kind": "document",
+        "title": page_title(html) or "",
+        "ref": ref or url,
+        **({"url": url} if url else {}),
+    }
+    date = _page_date(html)
+    return {**doc, "date": date} if date else doc
+
+
+def _pdf_doc(path: Path) -> dict[str, Any] | None:
+    try:
+        from pypdf import PdfReader
+    except ImportError:
+        raise PenlikeError(f"{path}: reading PDFs needs pypdf: {_PDF_EXTRA}") from None
+    pages = [page.extract_text() or "" for page in PdfReader(str(path)).pages]
+    text = "\n\n".join(pages)
+    if len(text.split()) < _MIN_PDF_WORDS_PER_PAGE * max(len(pages), 1):
+        warnings.warn(
+            f"{path}: no text layer ({len(text.split())} words on {len(pages)} "
+            "page(s)); a scan needs OCR first. Skipped.",
+            stacklevel=3,
+        )
+        return None
+    return {
+        "text": text,
+        "channel": "document",
+        "kind": "document",
+        "title": path.stem,
+        "ref": str(path),
+    }
+
+
 def _email_doc(message: Any, *, me: Iterable[str], ref: str) -> dict[str, Any] | None:
     sender = _addresses(message.get("From"))
     labels = str(message.get("X-Gmail-Labels") or "")
@@ -147,17 +226,29 @@ def _email_doc(message: Any, *, me: Iterable[str], ref: str) -> dict[str, Any] |
 
 
 def files(*refs: str, me: Iterable[str] = (), **_: Any) -> Iterator[dict[str, Any]]:
-    """Text files and folders of them (``.txt``, ``.md``, ``.rst``), and ``.eml`` messages.
+    """Text files and folders of them (``.txt``, ``.md``, ``.rst``, ``.html``, ``.pdf``), and ``.eml`` messages.
 
     A folder is read recursively. A text file is one document; it has no date (a
     file's modification time says when it was copied, not when it was written) and
-    no addressee, so it is filed as a ``document``.
+    no addressee, so it is filed as a ``document``. An ``.html`` file is reduced to
+    its main article, dated only when the page says so (see :func:`page_doc`; the
+    ``web`` extra). A ``.pdf`` is read from its text layer (the ``pdf`` extra); one
+    without, such as a scan, is skipped with a warning.
     """
     from email import message_from_bytes
 
-    for path in _paths(refs, (*_TEXT_SUFFIXES, ".eml")):
-        if path.suffix.lower() == ".eml":
-            doc = _email_doc(message_from_bytes(path.read_bytes()), me=me, ref=str(path))
+    for path in _paths(refs, (*_TEXT_SUFFIXES, *_HTML_SUFFIXES, ".pdf", ".eml")):
+        suffix = path.suffix.lower()
+        if suffix in (".eml", ".pdf", *_HTML_SUFFIXES):
+            if suffix == ".eml":
+                doc = _email_doc(message_from_bytes(path.read_bytes()), me=me, ref=str(path))
+            elif suffix == ".pdf":
+                doc = _pdf_doc(path)
+            else:
+                html = path.read_text(encoding="utf-8", errors="replace")
+                doc = page_doc(html, ref=str(path))
+                if doc and not doc["title"]:
+                    doc["title"] = path.stem
             if doc:
                 yield doc
             continue

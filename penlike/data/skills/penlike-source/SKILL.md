@@ -45,7 +45,7 @@ penlike sources
 | `mbox` | a mailbox archive, such as a webmail export | `penlike gather me mbox ~/mail/sent.mbox --until 2023-01-01` |
 | `github` | what one login wrote: discussions, issues, pull requests, comments | `penlike gather me github quinn --until 2023-01-01` |
 | `correspond` | any channel of the `correspond` package | `penlike gather me correspond github:example/loader#12` |
-| `files` | text files, folders of them, `.eml` messages | `penlike gather me files ~/writing/essays` |
+| `files` | text files, folders of them, `.html` pages (`penlike[web]`), `.pdf` text layers (`penlike[pdf]`), `.eml` messages | `penlike gather me files ~/writing/essays` |
 | `jsonl` | one JSON document per line | `penlike gather me jsonl ~/exports/chat.jsonl` |
 | `claude-sessions` | what the user typed to a coding agent | `penlike gather me claude-sessions` |
 
