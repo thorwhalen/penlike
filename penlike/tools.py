@@ -1061,9 +1061,15 @@ def guide(*, data_dir: str | None = None, files: MutableMapping | None = None) -
             "summary": "no guide yet",
             "path": where,
             "guide": "",
-            "text": f"No author-choice guide yet. Start one with: penlike guide-add \"...\" (file: {where})",
+            "text": f'No author-choice guide yet. Start one with: penlike guide-add "..." (file: {where})',
         }
-    return {"ok": True, "summary": f"{len(text.splitlines())} lines", "path": where, "guide": text, "text": text}
+    return {
+        "ok": True,
+        "summary": f"{len(text.splitlines())} lines",
+        "path": where,
+        "guide": text,
+        "text": text,
+    }
 
 
 def guide_add(
