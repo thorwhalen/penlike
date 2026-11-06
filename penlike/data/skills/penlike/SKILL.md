@@ -16,11 +16,13 @@ Everything in a model is private. Read it, use it, and never copy it into a repo
 
 ```bash
 penlike models
+penlike guide
 ```
 
 - No model at all: stop and offer to build one (skill `penlike-model`). Do not imitate a person from memory or from a guess.
 - "Like me" means the default model (marked `*`). "Like <name>" or "in <style>" names a model or a register.
 - A model marked `provisional` rests on little text. Say so when you hand over the result.
+- **When the request leaves the choice of author open** ("make this sound good", "use whichever of my authors fits", a pipeline that mixes voices), the **author-choice guide** decides: `penlike guide` prints the user's own rules on which model fits which subject, audience and part of a text, and what not to overdo. Follow it over your own taste. Say which models you chose and why, and record a lesson worth keeping with `penlike guide-add "<one line>" --source <request or essay>`. With no guide, choose the default model alone and say that the guide is empty.
 
 ## Step 1: say what the situation is
 
@@ -110,6 +112,8 @@ Write in a person's style only for that person or with their agreement. Do not p
 
 ```bash
 penlike models
+penlike guide
+penlike guide-add "..." --source <where it came from>
 penlike registers me
 penlike route --like me --channel email --to ada@example.org
 penlike brief --like me --style email.one

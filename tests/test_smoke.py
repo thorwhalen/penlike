@@ -267,3 +267,19 @@ def test_a_named_channel_is_not_overridden_by_the_reader(model):
 def test_show_keeps_addresses_and_paths_to_itself(model):
     shown = penlike.show("quinn", files=model)
     assert "quinn@example.org" not in json.dumps(shown)
+
+
+def test_the_guide_is_empty_then_kept_as_a_dated_log():
+    files = {}
+    empty = penlike.guide(files=files)
+    assert empty["guide"] == "" and "guide-add" in empty["text"]
+    added = penlike.guide_add(
+        "Deadpan essayist for subjects about measurement.", source="request", files=files
+    )
+    assert added["entry"].endswith("[source: request]")
+    penlike.guide_add("A verbose stylist only for a few passages.", files=files)
+    text = penlike.guide(files=files)["guide"]
+    assert text.startswith("# Author-choice guide") and "## Log" in text
+    assert text.count("\n- 20") == 2 and "[inferred]" in text
+    with pytest.raises(penlike.PenlikeError):
+        penlike.guide_add("   ", files=files)

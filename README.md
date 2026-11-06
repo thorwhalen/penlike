@@ -141,6 +141,17 @@ penlike screen me --tier cheap --run
 
 Without `--run`, nothing is changed and the cost is stated. Flagged texts are excluded, never deleted: `penlike exclude me <id> --undo` puts one back. No detector is reliable on one short text, and each accuses some human writing. The date is the tier to trust. Screening uses [ductus](https://github.com/thorwhalen/ductus).
 
+## Which author, when: the guide
+
+A model says how one author writes. When you hold several (yourself, a few published styles) the open question is which one fits a given subject, audience or part of a text, and what not to overdo. That is the **author-choice guide**: one private prose file, `config/guide.md` under the data folder, that you or an agent on your behalf keeps.
+
+```bash
+penlike guide                                              # read it before choosing a model
+penlike guide-add "The deadpan one for anything about measurement." --source "essay 12 review"
+```
+
+`guide-add` appends a dated line to the guide's log (a line without `--source` is marked as the agent's inference); larger edits go in the file itself. The `penlike` skill reads the guide whenever a request leaves the choice of author open.
+
 ## Writing to someone, in your voice
 
 penlike answers "how does the author write?". [acquaint](https://github.com/thorwhalen/acquaint) answers a different question: "what does this reader need?". To write to a known person in your own voice, use both: penlike for the voice, acquaint for the reader. The `penlike` skill does this when acquaint is installed.
