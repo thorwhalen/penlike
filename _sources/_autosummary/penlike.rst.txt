@@ -25,6 +25,8 @@
       normalize_doc
       note
       notes
+      guide
+      guide_add
       propose
       register_add
       register_edit

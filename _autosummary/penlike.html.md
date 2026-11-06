@@ -38,6 +38,8 @@ Everything a model holds is private and lives under the user’s data folder
 | [`normalize_doc`](#penlike.normalize_doc)(raw, \*[, source])                    | Make a well-formed document from whatever a sourcer yielded.                              |
 | [`note`](#penlike.note)(model, text, \*[, register, source, ...])      | Record something about how the author writes that numbers do not capture.                 |
 | [`notes`](#penlike.notes)([model, register, data_dir, files])           | Read the notes on a model: one register's, or all of them.                                |
+| [`guide`](#penlike.guide)(\*[, data_dir, files])                        | The author-choice guide: which model to write with, in which situation.                   |
+| [`guide_add`](#penlike.guide_add)(text, \*[, source, data_dir, files])      | Append one dated line to the author-choice guide's log.                                   |
 | [`propose`](#penlike.propose)([model, lam, min_size, ...])                | Look for registers nobody named yet: groups of texts that are written differently.        |
 | [`register_add`](#penlike.register_add)(model, name, \*[, parent, ...])        | Name a register and put texts in it, from a proposal or from a list of text ids.          |
 | [`register_edit`](#penlike.register_edit)(model, register, \*[, name, ...])     | Give a register a display name or a description.                                          |
@@ -196,6 +198,32 @@ settings to the sourcer. `dry_run` counts without storing.
 
 The result says how many kept texts are dated in the era of language models,
 because those may not be the author’s own words.
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+
+### penlike.guide(, data_dir=None, files=None)
+
+The author-choice guide: which model to write with, in which situation.
+
+Models say how an author writes; the guide says when to write like whom (the
+subject, the audience, the part of the text) and what not to overdo. It is kept
+by the person or by an agent on their behalf, with `guide-add` for a dated line
+or by editing the file. Read it whenever a request leaves the choice of author
+open.
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+
+### penlike.guide_add(text, , source=None, data_dir=None, files=None)
+
+Append one dated line to the author-choice guide’s log.
+
+The line records a preference or a lesson about which model to use when, for
+example “DFW only for a few sarcastic passages, never a whole section”.
+`source` says where it came from (a request, an essay, a review); a line with
+none is the agent’s own inference and is marked so. Larger edits go in the file
+itself (`penlike guide` prints its path).
 
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)

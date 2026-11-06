@@ -109,6 +109,8 @@ data-aria-dark="Switch to auto color mode">
 <li><a class="reference internal" href="#penlike.exclude"><code class="docutils literal notranslate"><span class="pre">exclude()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.exemplars"><code class="docutils literal notranslate"><span class="pre">exemplars()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.gather"><code class="docutils literal notranslate"><span class="pre">gather()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.guide"><code class="docutils literal notranslate"><span class="pre">guide()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.guide_add"><code class="docutils literal notranslate"><span class="pre">guide_add()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.install_skills"><code class="docutils literal notranslate"><span class="pre">install_skills()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.measure"><code class="docutils literal notranslate"><span class="pre">measure()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.models"><code class="docutils literal notranslate"><span class="pre">models()</span></code></a></li>
@@ -225,6 +227,12 @@ afterwards.</p>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#penlike.notes" title="penlike.notes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">notes</span></code></a>([model, register, data_dir, files])</p></td>
 <td><p>Read the notes on a model: one register's, or all of them.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.guide" title="penlike.guide"><code class="xref py py-obj docutils literal notranslate"><span class="pre">guide</span></code></a>(*[, data_dir, files])</p></td>
+<td><p>The author-choice guide: which model to write with, in which situation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.guide_add" title="penlike.guide_add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">guide_add</span></code></a>(text, *[, source, data_dir, files])</p></td>
+<td><p>Append one dated line to the author-choice guide's log.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#penlike.propose" title="penlike.propose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">propose</span></code></a>([model, lam, min_size, ...])</p></td>
 <td><p>Look for registers nobody named yet: groups of texts that are written differently.</p></td>
@@ -461,6 +469,38 @@ Texts already in the model are skipped. <code class="docutils literal notranslat
 settings to the sourcer. <code class="docutils literal notranslate"><span class="pre">dry_run</span></code> counts without storing.</p>
 <p>The result says how many kept texts are dated in the era of language models,
 because those may not be the author’s own words.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.guide">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">guide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#guide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.guide" title="Link to this definition">#</a></dt>
+<dd><p>The author-choice guide: which model to write with, in which situation.</p>
+<p>Models say how an author writes; the guide says when to write like whom (the
+subject, the audience, the part of the text) and what not to overdo. It is kept
+by the person or by an agent on their behalf, with <code class="docutils literal notranslate"><span class="pre">guide-add</span></code> for a dated line
+or by editing the file. Read it whenever a request leaves the choice of author
+open.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.guide_add">
+<span class="sig-prename descclassname"><span class="pre">penlike.</span></span><span class="sig-name descname"><span class="pre">guide_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/tools.html#guide_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.guide_add" title="Link to this definition">#</a></dt>
+<dd><p>Append one dated line to the author-choice guide’s log.</p>
+<p>The line records a preference or a lesson about which model to use when, for
+example “DFW only for a few sarcastic passages, never a whole section”.
+<code class="docutils literal notranslate"><span class="pre">source</span></code> says where it came from (a request, an essay, a review); a line with
+none is the agent’s own inference and is marked so. Larger edits go in the file
+itself (<code class="docutils literal notranslate"><span class="pre">penlike</span> <span class="pre">guide</span></code> prints its path).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
@@ -814,7 +854,7 @@ one key. Any other channel is filed as <code class="docutils literal notranslate
     </div>
   </div>
 </footer>
-      <script src="../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../_static/documentation_options.js?v=282f96c0"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

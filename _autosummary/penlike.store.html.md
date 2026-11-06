@@ -9,6 +9,7 @@ root, one folder per kind of data:
 ```default
 <data root>/
     config/settings.json            the default model
+    config/guide.md                 the author-choice guide: which model, when
     models/<name>/model.json        what the model is of, and on what basis
     models/<name>/docs.jsonl        the documents, one per line
     models/<name>/registers.json    the registers and their names
@@ -37,9 +38,11 @@ folder can be swapped for any other store without touching the rest:
 
 | [`data_dir`](#penlike.store.data_dir)([data_dir])                          | The data root: the argument, else `$PENLIKE_DATA_DIR`, else the user data folder.   |
 |------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| [`guide`](#penlike.store.guide)(\*[, data_dir, files])                  | The author-choice guide, `""` when none was ever written.                           |
 | [`model_names`](#penlike.store.model_names)(\*[, data_dir, files])            | The names of the models in the store, sorted.                                       |
 | [`settings`](#penlike.store.settings)(\*[, data_dir, files])               | The settings, `{}` when none were ever written.                                     |
 | [`text_files`](#penlike.store.text_files)(root)                              | A `dol` files store under `root`: `/`-separated keys, UTF-8 text values.            |
+| [`write_guide`](#penlike.store.write_guide)(text, \*[, data_dir, files])      | Replace the author-choice guide.                                                    |
 | [`write_settings`](#penlike.store.write_settings)(values, \*[, data_dir, files]) | Replace the settings.                                                               |
 
 ### Classes
@@ -82,6 +85,16 @@ True
 * **Return type:**
   [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
+### penlike.store.guide(, data_dir=None, files=None)
+
+The author-choice guide, `""` when none was ever written.
+
+The guide says which model to write with in which situation. It is prose, kept
+by the person or by an agent on their behalf, and read before a model is chosen.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### penlike.store.model_names(, data_dir=None, files=None)
 
 The names of the models in the store, sorted.
@@ -104,6 +117,13 @@ Folders are made on write and never on read, and a delete is permanent.
 
 * **Return type:**
   [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### penlike.store.write_guide(text, , data_dir=None, files=None)
+
+Replace the author-choice guide.
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### penlike.store.write_settings(values, , data_dir=None, files=None)
 

@@ -9,9 +9,11 @@ penlike.store
    .. autosummary::
    
       data_dir
+      guide
       model_names
       settings
       text_files
+      write_guide
       write_settings
    
    .. rubric:: Classes

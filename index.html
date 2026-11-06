@@ -100,6 +100,7 @@ data-aria-dark="Switch to auto color mode">
 <li><a class="reference internal" href="#registers">Registers</a></li>
 <li><a class="reference internal" href="#one-person-a-group-a-corpus">One person, a group, a corpus</a></li>
 <li><a class="reference internal" href="#screening-for-machine-written-text-optional">Screening for machine-written text (optional)</a></li>
+<li><a class="reference internal" href="#which-author-when-the-guide">Which author, when: the guide</a></li>
 <li><a class="reference internal" href="#writing-to-someone-in-your-voice">Writing to someone, in your voice</a></li>
 <li><a class="reference internal" href="#from-python">From Python</a></li>
 <li><a class="reference internal" href="#limits">Limits</a></li>
@@ -348,6 +349,15 @@ data-aria-dark="Switch to auto color mode">
 </div>
 <p>Without <code class="docutils literal notranslate"><span class="pre">--run</span></code>, nothing is changed and the cost is stated. Flagged texts are excluded, never deleted: <code class="docutils literal notranslate"><span class="pre">penlike</span> <span class="pre">exclude</span> <span class="pre">me</span> <span class="pre">&lt;id&gt;</span> <span class="pre">--undo</span></code> puts one back. No detector is reliable on one short text, and each accuses some human writing. The date is the tier to trust. Screening uses <a class="reference external" href="https://github.com/thorwhalen/ductus">ductus</a>.</p>
 </section>
+<section id="which-author-when-the-guide">
+<h2>Which author, when: the guide<a class="headerlink" href="#which-author-when-the-guide" title="Link to this heading">#</a></h2>
+<p>A model says how one author writes. When you hold several (yourself, a few published styles) the open question is which one fits a given subject, audience or part of a text, and what not to overdo. That is the <strong>author-choice guide</strong>: one private prose file, <code class="docutils literal notranslate"><span class="pre">config/guide.md</span></code> under the data folder, that you or an agent on your behalf keeps.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">penlike<span class="w"> </span>guide<span class="w">                                              </span><span class="c1"># read it before choosing a model</span>
+</span><span data-line="2">penlike<span class="w"> </span>guide-add<span class="w"> </span><span class="s2">"The deadpan one for anything about measurement."</span><span class="w"> </span>--source<span class="w"> </span><span class="s2">"essay 12 review"</span>
+</span></pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">guide-add</span></code> appends a dated line to the guide’s log (a line without <code class="docutils literal notranslate"><span class="pre">--source</span></code> is marked as the agent’s inference); larger edits go in the file itself. The <code class="docutils literal notranslate"><span class="pre">penlike</span></code> skill reads the guide whenever a request leaves the choice of author open.</p>
+</section>
 <section id="writing-to-someone-in-your-voice">
 <h2>Writing to someone, in your voice<a class="headerlink" href="#writing-to-someone-in-your-voice" title="Link to this heading">#</a></h2>
 <p>penlike answers “how does the author write?”. <a class="reference external" href="https://github.com/thorwhalen/acquaint">acquaint</a> answers a different question: “what does this reader need?”. To write to a known person in your own voice, use both: penlike for the voice, acquaint for the reader. The <code class="docutils literal notranslate"><span class="pre">penlike</span></code> skill does this when acquaint is installed.</p>
@@ -391,7 +401,7 @@ data-aria-dark="Switch to auto color mode">
 </section>
 </section>
 
-<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-20 11:44 UTC from <a href="https://github.com/thorwhalen/penlike/commit/ed822d41649624794db70e1689391b94ebeb9ecc">ed822d4</a> (main) · penlike 0.0.4 · <a href="about-this-build.html">about this build</a></p>
+<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-11-06 10:24 UTC from <a href="https://github.com/thorwhalen/penlike/commit/b699114c7a81c1a475abf02465c5ce902195f6bb">b699114</a> (main) · penlike 0.0.5 · <a href="about-this-build.html">about this build</a></p>
         </article><button class="back-to-top" type="button">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
@@ -426,7 +436,7 @@ data-aria-dark="Switch to auto color mode">
     </div>
   </div>
 </footer>
-      <script src="_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="_static/documentation_options.js?v=282f96c0"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>

@@ -99,9 +99,11 @@ data-aria-dark="Switch to auto color mode">
 </ul>
 </li>
 <li><a class="reference internal" href="#penlike.store.data_dir"><code class="docutils literal notranslate"><span class="pre">data_dir()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.store.guide"><code class="docutils literal notranslate"><span class="pre">guide()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.store.model_names"><code class="docutils literal notranslate"><span class="pre">model_names()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.store.settings"><code class="docutils literal notranslate"><span class="pre">settings()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.store.text_files"><code class="docutils literal notranslate"><span class="pre">text_files()</span></code></a></li>
+<li><a class="reference internal" href="#penlike.store.write_guide"><code class="docutils literal notranslate"><span class="pre">write_guide()</span></code></a></li>
 <li><a class="reference internal" href="#penlike.store.write_settings"><code class="docutils literal notranslate"><span class="pre">write_settings()</span></code></a></li>
 </ul>
 </div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
@@ -149,12 +151,13 @@ profiles, the notes. None of it belongs in a repository. It lives under the data
 root, one folder per kind of data:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="o">&lt;</span><span class="n">data</span> <span class="n">root</span><span class="o">&gt;/</span>
 </span><span data-line="2">    <span class="n">config</span><span class="o">/</span><span class="n">settings</span><span class="o">.</span><span class="n">json</span>            <span class="n">the</span> <span class="n">default</span> <span class="n">model</span>
-</span><span data-line="3">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">model</span><span class="o">.</span><span class="n">json</span>        <span class="n">what</span> <span class="n">the</span> <span class="n">model</span> <span class="ow">is</span> <span class="n">of</span><span class="p">,</span> <span class="ow">and</span> <span class="n">on</span> <span class="n">what</span> <span class="n">basis</span>
-</span><span data-line="4">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">docs</span><span class="o">.</span><span class="n">jsonl</span>        <span class="n">the</span> <span class="n">documents</span><span class="p">,</span> <span class="n">one</span> <span class="n">per</span> <span class="n">line</span>
-</span><span data-line="5">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">registers</span><span class="o">.</span><span class="n">json</span>    <span class="n">the</span> <span class="n">registers</span> <span class="ow">and</span> <span class="n">their</span> <span class="n">names</span>
-</span><span data-line="6">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">profiles</span><span class="o">/&lt;</span><span class="n">register</span><span class="o">&gt;.</span><span class="n">json</span>
-</span><span data-line="7">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">notes</span><span class="o">/&lt;</span><span class="n">register</span><span class="o">&gt;.</span><span class="n">md</span>
-</span><span data-line="8">    <span class="n">work</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/...</span>                 <span class="n">batch</span> <span class="n">files</span> <span class="n">handed</span> <span class="n">to</span> <span class="n">reader</span> <span class="n">agents</span>
+</span><span data-line="3">    <span class="n">config</span><span class="o">/</span><span class="n">guide</span><span class="o">.</span><span class="n">md</span>                 <span class="n">the</span> <span class="n">author</span><span class="o">-</span><span class="n">choice</span> <span class="n">guide</span><span class="p">:</span> <span class="n">which</span> <span class="n">model</span><span class="p">,</span> <span class="n">when</span>
+</span><span data-line="4">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">model</span><span class="o">.</span><span class="n">json</span>        <span class="n">what</span> <span class="n">the</span> <span class="n">model</span> <span class="ow">is</span> <span class="n">of</span><span class="p">,</span> <span class="ow">and</span> <span class="n">on</span> <span class="n">what</span> <span class="n">basis</span>
+</span><span data-line="5">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">docs</span><span class="o">.</span><span class="n">jsonl</span>        <span class="n">the</span> <span class="n">documents</span><span class="p">,</span> <span class="n">one</span> <span class="n">per</span> <span class="n">line</span>
+</span><span data-line="6">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">registers</span><span class="o">.</span><span class="n">json</span>    <span class="n">the</span> <span class="n">registers</span> <span class="ow">and</span> <span class="n">their</span> <span class="n">names</span>
+</span><span data-line="7">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">profiles</span><span class="o">/&lt;</span><span class="n">register</span><span class="o">&gt;.</span><span class="n">json</span>
+</span><span data-line="8">    <span class="n">models</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">notes</span><span class="o">/&lt;</span><span class="n">register</span><span class="o">&gt;.</span><span class="n">md</span>
+</span><span data-line="9">    <span class="n">work</span><span class="o">/&lt;</span><span class="n">name</span><span class="o">&gt;/...</span>                 <span class="n">batch</span> <span class="n">files</span> <span class="n">handed</span> <span class="n">to</span> <span class="n">reader</span> <span class="n">agents</span>
 </span></pre></div>
 </div>
 <p>The data root is the <code class="docutils literal notranslate"><span class="pre">data_dir</span></code> argument, else <code class="docutils literal notranslate"><span class="pre">$PENLIKE_DATA_DIR</span></code>, else
@@ -177,14 +180,20 @@ folder can be swapped for any other store without touching the rest:</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#penlike.store.data_dir" title="penlike.store.data_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_dir</span></code></a>([data_dir])</p></td>
 <td><p>The data root: the argument, else <code class="docutils literal notranslate"><span class="pre">$PENLIKE_DATA_DIR</span></code>, else the user data folder.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#penlike.store.model_names" title="penlike.store.model_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_names</span></code></a>(*[, data_dir, files])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.store.guide" title="penlike.store.guide"><code class="xref py py-obj docutils literal notranslate"><span class="pre">guide</span></code></a>(*[, data_dir, files])</p></td>
+<td><p>The author-choice guide, <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> when none was ever written.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.store.model_names" title="penlike.store.model_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_names</span></code></a>(*[, data_dir, files])</p></td>
 <td><p>The names of the models in the store, sorted.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.store.settings" title="penlike.store.settings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">settings</span></code></a>(*[, data_dir, files])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.store.settings" title="penlike.store.settings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">settings</span></code></a>(*[, data_dir, files])</p></td>
 <td><p>The settings, <code class="docutils literal notranslate"><span class="pre">{}</span></code> when none were ever written.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#penlike.store.text_files" title="penlike.store.text_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">text_files</span></code></a>(root)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#penlike.store.text_files" title="penlike.store.text_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">text_files</span></code></a>(root)</p></td>
 <td><p>A <code class="docutils literal notranslate"><span class="pre">dol</span></code> files store under <code class="docutils literal notranslate"><span class="pre">root</span></code>: <code class="docutils literal notranslate"><span class="pre">/</span></code>-separated keys, UTF-8 text values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#penlike.store.write_guide" title="penlike.store.write_guide"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_guide</span></code></a>(text, *[, data_dir, files])</p></td>
+<td><p>Replace the author-choice guide.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#penlike.store.write_settings" title="penlike.store.write_settings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_settings</span></code></a>(values, *[, data_dir, files])</p></td>
 <td><p>Replace the settings.</p></td>
@@ -251,6 +260,19 @@ relative path to text works, which is how tests run without touching a disk.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="penlike.store.guide">
+<span class="sig-prename descclassname"><span class="pre">penlike.store.</span></span><span class="sig-name descname"><span class="pre">guide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#guide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.store.guide" title="Link to this definition">#</a></dt>
+<dd><p>The author-choice guide, <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> when none was ever written.</p>
+<p>The guide says which model to write with in which situation. It is prose, kept
+by the person or by an agent on their behalf, and read before a model is chosen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="penlike.store.model_names">
 <span class="sig-prename descclassname"><span class="pre">penlike.store.</span></span><span class="sig-name descname"><span class="pre">model_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#model_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.store.model_names" title="Link to this definition">#</a></dt>
 <dd><p>The names of the models in the store, sorted.</p>
@@ -280,6 +302,17 @@ relative path to text works, which is how tests run without touching a disk.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutableMapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="penlike.store.write_guide">
+<span class="sig-prename descclassname"><span class="pre">penlike.store.</span></span><span class="sig-name descname"><span class="pre">write_guide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/penlike/store.html#write_guide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#penlike.store.write_guide" title="Link to this definition">#</a></dt>
+<dd><p>Replace the author-choice guide.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -337,7 +370,7 @@ relative path to text works, which is how tests run without touching a disk.</p>
     </div>
   </div>
 </footer>
-      <script src="../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../_static/documentation_options.js?v=282f96c0"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

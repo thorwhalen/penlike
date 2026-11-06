@@ -52,7 +52,7 @@ data lives, and `situate`, which loads a function from a module or a file.
 
 What a model can be a model of. The kind changes what is kept and what is said.
 
-### penlike.tools.TOOLS *= [<function models>, <function new>, <function use>, <function show>, <function remove>, <function sources>, <function gather>, <function docs>, <function exclude>, <function screen>, <function build>, <function registers>, <function propose>, <function register_add>, <function register_edit>, <function register_merge>, <function assign>, <function note>, <function notes>, <function route>, <function exemplars>, <function brief>, <function measure>, <function check>, <function batches>, <function install_skills>]*
+### penlike.tools.TOOLS *= [<function models>, <function new>, <function use>, <function show>, <function remove>, <function sources>, <function gather>, <function docs>, <function exclude>, <function screen>, <function build>, <function registers>, <function propose>, <function register_add>, <function register_edit>, <function register_merge>, <function assign>, <function note>, <function notes>, <function guide>, <function guide_add>, <function route>, <function exemplars>, <function brief>, <function measure>, <function check>, <function batches>, <function install_skills>]*
 
 The single list every surface is built from.
 

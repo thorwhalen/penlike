@@ -1,4 +1,4 @@
-> built 2026-10-20 11:44 UTC from ed822d4 (main) · penlike 0.0.4. Details: build_info.json
+> built 2026-11-06 10:24 UTC from b699114 (main) · penlike 0.0.5. Details: build_info.json
 
 # index.html.md
 
@@ -146,6 +146,17 @@ penlike screen me --tier cheap --run
 | `agent` | an agent reads each text                                                                      | model tokens, in proportion to the corpus                              |
 
 Without `--run`, nothing is changed and the cost is stated. Flagged texts are excluded, never deleted: `penlike exclude me <id> --undo` puts one back. No detector is reliable on one short text, and each accuses some human writing. The date is the tier to trust. Screening uses [ductus](https://github.com/thorwhalen/ductus).
+
+## Which author, when: the guide
+
+A model says how one author writes. When you hold several (yourself, a few published styles) the open question is which one fits a given subject, audience or part of a text, and what not to overdo. That is the **author-choice guide**: one private prose file, `config/guide.md` under the data folder, that you or an agent on your behalf keeps.
+
+```bash
+penlike guide                                              # read it before choosing a model
+penlike guide-add "The deadpan one for anything about measurement." --source "essay 12 review"
+```
+
+`guide-add` appends a dated line to the guide’s log (a line without `--source` is marked as the agent’s inference); larger edits go in the file itself. The `penlike` skill reads the guide whenever a request leaves the choice of author open.
 
 ## Writing to someone, in your voice
 
@@ -525,6 +536,8 @@ Everything a model holds is private and lives under the user’s data folder
 | [`normalize_doc`](_autosummary/penlike.html.md#penlike.normalize_doc)(raw, \*[, source])                    | Make a well-formed document from whatever a sourcer yielded.                              |
 | [`note`](_autosummary/penlike.html.md#penlike.note)(model, text, \*[, register, source, ...])      | Record something about how the author writes that numbers do not capture.                 |
 | [`notes`](_autosummary/penlike.html.md#penlike.notes)([model, register, data_dir, files])           | Read the notes on a model: one register's, or all of them.                                |
+| [`guide`](_autosummary/penlike.html.md#penlike.guide)(\*[, data_dir, files])                        | The author-choice guide: which model to write with, in which situation.                   |
+| [`guide_add`](_autosummary/penlike.html.md#penlike.guide_add)(text, \*[, source, data_dir, files])      | Append one dated line to the author-choice guide's log.                                   |
 | [`propose`](_autosummary/penlike.html.md#penlike.propose)([model, lam, min_size, ...])                | Look for registers nobody named yet: groups of texts that are written differently.        |
 | [`register_add`](_autosummary/penlike.html.md#penlike.register_add)(model, name, \*[, parent, ...])        | Name a register and put texts in it, from a proposal or from a list of text ids.          |
 | [`register_edit`](_autosummary/penlike.html.md#penlike.register_edit)(model, register, \*[, name, ...])     | Give a register a display name or a description.                                          |
@@ -683,6 +696,32 @@ settings to the sourcer. `dry_run` counts without storing.
 
 The result says how many kept texts are dated in the era of language models,
 because those may not be the author’s own words.
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+
+### penlike.guide(, data_dir=None, files=None)
+
+The author-choice guide: which model to write with, in which situation.
+
+Models say how an author writes; the guide says when to write like whom (the
+subject, the audience, the part of the text) and what not to overdo. It is kept
+by the person or by an agent on their behalf, with `guide-add` for a dated line
+or by editing the file. Read it whenever a request leaves the choice of author
+open.
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+
+### penlike.guide_add(text, , source=None, data_dir=None, files=None)
+
+Append one dated line to the author-choice guide’s log.
+
+The line records a preference or a lesson about which model to use when, for
+example “DFW only for a few sarcastic passages, never a whole section”.
+`source` says where it came from (a request, an essay, a review); a line with
+none is the agent’s own inference and is marked so. Larger edits go in the file
+itself (`penlike guide` prints its path).
 
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
@@ -1512,6 +1551,7 @@ root, one folder per kind of data:
 ```default
 <data root>/
     config/settings.json            the default model
+    config/guide.md                 the author-choice guide: which model, when
     models/<name>/model.json        what the model is of, and on what basis
     models/<name>/docs.jsonl        the documents, one per line
     models/<name>/registers.json    the registers and their names
@@ -1540,9 +1580,11 @@ folder can be swapped for any other store without touching the rest:
 
 | [`data_dir`](_autosummary/penlike.store.html.md#penlike.store.data_dir)([data_dir])                          | The data root: the argument, else `$PENLIKE_DATA_DIR`, else the user data folder.   |
 |------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| [`guide`](_autosummary/penlike.store.html.md#penlike.store.guide)(\*[, data_dir, files])                  | The author-choice guide, `""` when none was ever written.                           |
 | [`model_names`](_autosummary/penlike.store.html.md#penlike.store.model_names)(\*[, data_dir, files])            | The names of the models in the store, sorted.                                       |
 | [`settings`](_autosummary/penlike.store.html.md#penlike.store.settings)(\*[, data_dir, files])               | The settings, `{}` when none were ever written.                                     |
 | [`text_files`](_autosummary/penlike.store.html.md#penlike.store.text_files)(root)                              | A `dol` files store under `root`: `/`-separated keys, UTF-8 text values.            |
+| [`write_guide`](_autosummary/penlike.store.html.md#penlike.store.write_guide)(text, \*[, data_dir, files])      | Replace the author-choice guide.                                                    |
 | [`write_settings`](_autosummary/penlike.store.html.md#penlike.store.write_settings)(values, \*[, data_dir, files]) | Replace the settings.                                                               |
 
 ### Classes
@@ -1585,6 +1627,16 @@ True
 * **Return type:**
   [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
+### penlike.store.guide(, data_dir=None, files=None)
+
+The author-choice guide, `""` when none was ever written.
+
+The guide says which model to write with in which situation. It is prose, kept
+by the person or by an agent on their behalf, and read before a model is chosen.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### penlike.store.model_names(, data_dir=None, files=None)
 
 The names of the models in the store, sorted.
@@ -1607,6 +1659,13 @@ Folders are made on write and never on read, and a delete is permanent.
 
 * **Return type:**
   [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### penlike.store.write_guide(text, , data_dir=None, files=None)
+
+Replace the author-choice guide.
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### penlike.store.write_settings(values, , data_dir=None, files=None)
 
@@ -1672,7 +1731,7 @@ data lives, and `situate`, which loads a function from a module or a file.
 
 What a model can be a model of. The kind changes what is kept and what is said.
 
-### penlike.tools.TOOLS *= [<function models>, <function new>, <function use>, <function show>, <function remove>, <function sources>, <function gather>, <function docs>, <function exclude>, <function screen>, <function build>, <function registers>, <function propose>, <function register_add>, <function register_edit>, <function register_merge>, <function assign>, <function note>, <function notes>, <function route>, <function exemplars>, <function brief>, <function measure>, <function check>, <function batches>, <function install_skills>]*
+### penlike.tools.TOOLS *= [<function models>, <function new>, <function use>, <function show>, <function remove>, <function sources>, <function gather>, <function docs>, <function exclude>, <function screen>, <function build>, <function registers>, <function propose>, <function register_add>, <function register_edit>, <function register_merge>, <function assign>, <function note>, <function notes>, <function guide>, <function guide_add>, <function route>, <function exemplars>, <function brief>, <function measure>, <function check>, <function batches>, <function install_skills>]*
 
 The single list every surface is built from.
 
@@ -1704,7 +1763,7 @@ False
 
 # About this build
 
-This documentation was built on **2026-10-20 11:44 UTC** from commit <a href="https://github.com/thorwhalen/penlike/commit/ed822d41649624794db70e1689391b94ebeb9ecc"><code>ed822d4</code></a> on branch <code>main</code>, for **penlike 0.0.4** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-11-06 10:24 UTC** from commit <a href="https://github.com/thorwhalen/penlike/commit/b699114c7a81c1a475abf02465c5ce902195f6bb"><code>b699114</code></a> on branch <code>main</code>, for **penlike 0.0.5** (from <code>pyproject.toml</code>).
 
 #### NOTE
 Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
@@ -1713,7 +1772,7 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 |                     |                                                                                                                                                           |
 |---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/penlike/commit/ed822d41649624794db70e1689391b94ebeb9ecc"><code>ed822d41649624794db70e1689391b94ebeb9ecc</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/penlike/commit/b699114c7a81c1a475abf02465c5ce902195f6bb"><code>b699114c7a81c1a475abf02465c5ce902195f6bb</code></a> |
 | Branch              | <code>main</code>                                                                                                                                         |
 | Tags at this commit | none                                                                                                                                                      |
 | Working tree        | clean                                                                                                                                                     |
@@ -1724,18 +1783,18 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/penlike</code>                                                            |
-| Run          | <a href="https://github.com/thorwhalen/penlike/actions/runs/39416880531">39416880531</a>   |
+| Run          | <a href="https://github.com/thorwhalen/penlike/actions/runs/42202224976">42202224976</a>   |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>ed822d41649624794db70e1689391b94ebeb9ecc</code> (in the history of the built commit) |
+| Event commit | <code>b699114c7a81c1a475abf02465c5ce902195f6bb</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.19  |
+| epythet  | 0.2.22  |
 | Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
-| Python   | 3.12.15 |
+| Python   | 3.12.16 |
 
 ## Configuration as resolved
 
@@ -1751,14 +1810,14 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/penlike/0.0.4/">0.0.4</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/penlike/0.0.5/">0.0.5</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/penlike && cd penlike
-git checkout ed822d41649624794db70e1689391b94ebeb9ecc
-pip install "epythet==0.2.19"
+git checkout b699114c7a81c1a475abf02465c5ce902195f6bb
+pip install "epythet==0.2.22"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 
