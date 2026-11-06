@@ -6,6 +6,7 @@ root, one folder per kind of data::
 
     <data root>/
         config/settings.json            the default model
+        config/guide.md                 the author-choice guide: which model, when
         models/<name>/model.json        what the model is of, and on what basis
         models/<name>/docs.jsonl        the documents, one per line
         models/<name>/registers.json    the registers and their names
@@ -43,15 +44,18 @@ __all__ = [
     "DATA_DIR_ENVVAR",
     "ModelStore",
     "data_dir",
+    "guide",
     "model_names",
     "settings",
     "text_files",
+    "write_guide",
     "write_settings",
 ]
 
 APP_NAME = "penlike"
 DATA_DIR_ENVVAR = "PENLIKE_DATA_DIR"
 _SETTINGS_KEY = "config/settings.json"
+_GUIDE_KEY = "config/guide.md"
 
 
 def data_dir(data_dir: str | os.PathLike | None = None) -> Path:
@@ -117,6 +121,23 @@ def write_settings(
 ) -> None:
     """Replace the settings."""
     _files(files, data_dir)[_SETTINGS_KEY] = json.dumps(values, indent=2) + "\n"
+
+
+def guide(*, data_dir: Any = None, files: MutableMapping[str, str] | None = None) -> str:
+    """The author-choice guide, ``""`` when none was ever written.
+
+    The guide says which model to write with in which situation. It is prose, kept
+    by the person or by an agent on their behalf, and read before a model is chosen.
+    """
+    files = _files(files, data_dir)
+    return files[_GUIDE_KEY] if _GUIDE_KEY in files else ""
+
+
+def write_guide(
+    text: str, *, data_dir: Any = None, files: MutableMapping[str, str] | None = None
+) -> None:
+    """Replace the author-choice guide."""
+    _files(files, data_dir)[_GUIDE_KEY] = text if text.endswith("\n") else text + "\n"
 
 
 def model_names(

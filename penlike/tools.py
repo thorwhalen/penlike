@@ -50,6 +50,8 @@ from penlike.store import (
     model_names,
     settings,
     write_settings,
+    guide as _read_guide,
+    write_guide as _write_guide,
 )
 
 __all__ = [
@@ -1027,6 +1029,68 @@ def notes(
     }
 
 
+# -- the guide ------------------------------------------------------------------------
+
+_GUIDE_HEADER = (
+    "# Author-choice guide\n\n"
+    "Which model to write with, in which situation. Read it before choosing a model; "
+    "keep it with `penlike guide-add`, or edit the file by hand.\n"
+)
+_GUIDE_LOG = "## Log"
+
+
+def guide(*, data_dir: str | None = None, files: MutableMapping | None = None) -> dict:
+    """The author-choice guide: which model to write with, in which situation.
+
+    Models say how an author writes; the guide says when to write like whom (the
+    subject, the audience, the part of the text) and what not to overdo. It is kept
+    by the person or by an agent on their behalf, with ``guide-add`` for a dated line
+    or by editing the file. Read it whenever a request leaves the choice of author
+    open.
+    """
+    text = _read_guide(data_dir=data_dir, files=files)
+    where = str(_data_dir(data_dir) / "config" / "guide.md") if files is None else "config/guide.md"
+    if not text.strip():
+        return {
+            "ok": True,
+            "summary": "no guide yet",
+            "path": where,
+            "guide": "",
+            "text": f"No author-choice guide yet. Start one with: penlike guide-add \"...\" (file: {where})",
+        }
+    return {"ok": True, "summary": f"{len(text.splitlines())} lines", "path": where, "guide": text, "text": text}
+
+
+def guide_add(
+    text: str,
+    *,
+    source: str | None = None,
+    data_dir: str | None = None,
+    files: MutableMapping | None = None,
+) -> dict:
+    """Append one dated line to the author-choice guide's log.
+
+    The line records a preference or a lesson about which model to use when, for
+    example "DFW only for a few sarcastic passages, never a whole section".
+    ``source`` says where it came from (a request, an essay, a review); a line with
+    none is the agent's own inference and is marked so. Larger edits go in the file
+    itself (``penlike guide`` prints its path).
+    """
+    line = " ".join(text.split())
+    if not line:
+        raise PenlikeError("the guide line is empty")
+    stamp = _now()[:10]
+    tag = f" [source: {source}]" if source else " [inferred]"
+    entry = f"- {stamp}: {line}{tag}"
+    current = _read_guide(data_dir=data_dir, files=files) or _GUIDE_HEADER
+    if _GUIDE_LOG in current:
+        current = current.rstrip("\n") + "\n" + entry + "\n"
+    else:
+        current = current.rstrip("\n") + f"\n\n{_GUIDE_LOG}\n\n{entry}\n"
+    _write_guide(current, data_dir=data_dir, files=files)
+    return {"ok": True, "summary": "added one line to the guide", "entry": entry}
+
+
 # -- writing -------------------------------------------------------------------------
 
 
@@ -1387,7 +1451,7 @@ TOOLS = [
     models, new, use, show, remove,
     sources, gather, docs, exclude, screen,
     build, registers, propose, register_add, register_edit, register_merge, assign,
-    note, notes,
+    note, notes, guide, guide_add,
     route, exemplars, brief, measure, check,
     batches, install_skills,
 ]  # fmt: skip
