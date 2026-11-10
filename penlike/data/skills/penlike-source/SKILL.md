@@ -49,6 +49,7 @@ penlike sources
 | `web` | published pages by URL, or files listing URLs (`penlike[web]`) | `penlike gather t-pg web urls.txt --dry-run` |
 | `jsonl` | one JSON document per line | `penlike gather me jsonl ~/exports/chat.jsonl` |
 | `claude-sessions` | what the user typed to a coding agent | `penlike gather me claude-sessions` |
+| `history` | what the user typed to a coding agent, from Claude Code's prompt history, across machines | `penlike gather me history ~/.claude/history.jsonl mac.jsonl tw.jsonl` |
 
 Useful flags: `--since`, `--until`, `--limit`, `--dry-run` (count without storing), `--min-words`, `--option key=value` (passed to the sourcer). Always run with `--dry-run` first on a large source and show the user the counts.
 
@@ -58,6 +59,7 @@ Notes on each:
 - **github.** Narrow it with `login@owner/repo` or `login@owner`. It uses the `gh` login, so private repositories that login can read are included; say so to the user. `--option 'kinds=["discussion"]'` keeps discussions only.
 - **correspond.** Reads one conversation per reference. Its email channel reads a single folder, so point it at the sent folder to read what the user wrote.
 - **claude-sessions.** How a person writes to an agent is rarely how they write to people. These texts get their own register, `agent`, and should not be the basis for writing to humans. Offer it; do not default to it.
+- **history.** Same register caveat as claude-sessions (`agent`). It reads only what was typed, and outlives purged transcripts. Slash and bang commands and agent-written dispatch briefs are dropped (`--option drop_commands=false` or `drop_briefs=false` keeps them); short prompts follow `--min-words`. Long pastes are left out, short ones stay: screen for pasted credentials before building. penlike warns when `config2py` is installed and a prompt looks like it holds one.
 
 ## Published authors: public-basis corpora
 
