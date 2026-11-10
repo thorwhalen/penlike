@@ -77,6 +77,7 @@ penlike sources
 | `web`             | published web pages by URL, or files listing URLs (`penlike[web]`)                                                                          |
 | `jsonl`           | one JSON document per line                                                                                                                  |
 | `claude-sessions` | what you typed to a coding agent, which is rarely how you write to people                                                                   |
+| `history`         | your Claude Code prompt history, one file per machine: what you typed, short pastes included (screen it for pasted credentials)             |
 
 When none fits, a sourcer is a plain function that yields dicts, referenced by where it lives:
 

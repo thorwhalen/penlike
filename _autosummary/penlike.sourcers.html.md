@@ -25,7 +25,7 @@ sourcer written for one person’s odd archive needs no change here.
 >>> sourcer.__name__
 'jsonl'
 >>> sorted(SOURCERS)
-['claude-sessions', 'correspond', 'files', 'github', 'jsonl', 'mbox', 'web']
+['claude-sessions', 'correspond', 'files', 'github', 'history', 'jsonl', 'mbox', 'web']
 ```
 
 ### Module Attributes
@@ -35,19 +35,20 @@ sourcer written for one person’s odd archive needs no change here.
 
 ### Functions
 
-| [`claude_sessions`](#penlike.sourcers.claude_sessions)(\*refs, \*\*_)                    | What the author typed to a coding agent, from saved Claude Code session logs.                 |
-|----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| [`correspond`](#penlike.sourcers.correspond)(\*refs[, since, limit, registry])      | Conversations read through `correspond`, the facade over communication channels.              |
-| [`files`](#penlike.sourcers.files)(\*refs[, me])                               | Text files and folders of them (`.txt`, `.md`, `.rst`, `.html`, `.pdf`), and `.eml` messages. |
-| [`github`](#penlike.sourcers.github)(\*refs[, since, until, limit, kinds, run]) | What one GitHub user wrote: discussions, issues, pull requests and comments on them.          |
-| [`jsonl`](#penlike.sourcers.jsonl)(\*refs, \*\*_)                              | JSON Lines files, one document per line: the interchange format for custom sources.           |
-| [`mbox`](#penlike.sourcers.mbox)(\*refs[, me])                                | Mailbox archives in mbox format, such as a mail export from a webmail provider.               |
-| [`page_doc`](#penlike.sourcers.page_doc)(html, \*[, url, ref])                    | A web page as a document: its main article only, with title and stated date.                  |
-| [`requirements`](#penlike.sourcers.requirements)()                                    | For each built-in sourcer: what it reads, and whether it can run here.                        |
-| [`resolve_sourcer`](#penlike.sourcers.resolve_sourcer)(source)                           | Find the sourcer a name refers to: built-in, `module:function`, or `file.py:function`.        |
-| [`web`](#penlike.sourcers.web)(\*refs[, join_pages, timeout, get])           | Published web pages, by URL or from files listing URLs: the main article of each.             |
+| [`claude_sessions`](#penlike.sourcers.claude_sessions)(\*refs, \*\*_)                     | What the author typed to a coding agent, from saved Claude Code session logs.                 |
+|-----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| [`correspond`](#penlike.sourcers.correspond)(\*refs[, since, limit, registry])       | Conversations read through `correspond`, the facade over communication channels.              |
+| [`files`](#penlike.sourcers.files)(\*refs[, me])                                | Text files and folders of them (`.txt`, `.md`, `.rst`, `.html`, `.pdf`), and `.eml` messages. |
+| [`github`](#penlike.sourcers.github)(\*refs[, since, until, limit, kinds, run])  | What one GitHub user wrote: discussions, issues, pull requests and comments on them.          |
+| [`history`](#penlike.sourcers.history)(\*refs[, drop_commands, drop_briefs, ...]) | What the author typed to a coding agent, from Claude Code's prompt history, across machines.  |
+| [`jsonl`](#penlike.sourcers.jsonl)(\*refs, \*\*_)                               | JSON Lines files, one document per line: the interchange format for custom sources.           |
+| [`mbox`](#penlike.sourcers.mbox)(\*refs[, me])                                 | Mailbox archives in mbox format, such as a mail export from a webmail provider.               |
+| [`page_doc`](#penlike.sourcers.page_doc)(html, \*[, url, ref])                     | A web page as a document: its main article only, with title and stated date.                  |
+| [`requirements`](#penlike.sourcers.requirements)()                                     | For each built-in sourcer: what it reads, and whether it can run here.                        |
+| [`resolve_sourcer`](#penlike.sourcers.resolve_sourcer)(source)                            | Find the sourcer a name refers to: built-in, `module:function`, or `file.py:function`.        |
+| [`web`](#penlike.sourcers.web)(\*refs[, join_pages, timeout, get])            | Published web pages, by URL or from files listing URLs: the main article of each.             |
 
-### penlike.sourcers.SOURCERS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[..., [Iterable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]]]]* *= {'claude-sessions': <function claude_sessions>, 'correspond': <function correspond>, 'files': <function files>, 'github': <function github>, 'jsonl': <function jsonl>, 'mbox': <function mbox>, 'web': <function web>}*
+### penlike.sourcers.SOURCERS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[..., [Iterable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]]]]* *= {'claude-sessions': <function claude_sessions>, 'correspond': <function correspond>, 'files': <function files>, 'github': <function github>, 'history': <function history>, 'jsonl': <function jsonl>, 'mbox': <function mbox>, 'web': <function web>}*
 
 The built-in sourcers, by the name used on the command line.
 
@@ -100,6 +101,31 @@ Limits: GitHub search returns at most 1000 threads per query; the first 100
 comments of a thread are read (50 for a discussion, with 50 replies each);
 review comments on the lines of a pull request are not read. `kinds` keeps
 `discussion`, `issue` (which includes pull requests) or both.
+
+* **Return type:**
+  [`Iterator`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
+
+### penlike.sourcers.history(\*refs, drop_commands=True, drop_briefs=True, brief_markers=('Reply in at most five lines',), labels=None, \*\*\_)
+
+What the author typed to a coding agent, from Claude Code’s prompt history, across machines.
+
+Unlike `claude_sessions`, which digs prompts out of session transcripts, this
+reads the prompt history file itself (`history.jsonl`): it needs no wrapper
+filtering, and it outlives the transcripts that servers purge. Pass one history
+file per machine. Each file’s label (`labels[path]`, else the parent folder for
+`history.jsonl`, else the file name) starts the `ref`, which is
+`<label>:<session id>`, one per session as for `claude_sessions`.
+
+Long pastes are stored apart and replaced in the text by placeholders such as
+`[Pasted text #1 +40 lines]`, which are removed here; a short paste is part of
+the text and stays. Filters, each switchable: slash and bang commands
+(`drop_commands`); agent-written dispatch briefs, which contain one of
+`brief_markers` or open by naming the agent’s role and run long
+(`drop_briefs`). Short prompts are dropped by `gather`’s `min_words`.
+
+Typed prompts often hold pasted passwords and keys. When `config2py` is
+installed, the first prompt read that looks like it holds a credential raises
+a warning; the texts are kept, so screen the corpus before building a model.
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
