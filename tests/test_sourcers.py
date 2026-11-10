@@ -473,6 +473,7 @@ def test_history_date_ref_and_register(tmp_path, monkeypatch):
 def test_history_ref_labels(tmp_path, monkeypatch):
     _fake_config2py(monkeypatch)
     monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("USERPROFILE", str(tmp_path))  # what expanduser reads on Windows
     dotted = _history_file(tmp_path / ".claude-iq" / "history.jsonl", ["one two three four"])
     named = _history_file(tmp_path / "tw.jsonl", ["one two three four"])
     mapped = _history_file(tmp_path / "other" / "history.jsonl", ["one two three four"])
