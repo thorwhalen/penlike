@@ -20,7 +20,7 @@ sourcer written for one person's odd archive needs no change here.
 >>> sourcer.__name__
 'jsonl'
 >>> sorted(SOURCERS)
-['claude-sessions', 'correspond', 'files', 'github', 'jsonl', 'mbox', 'web']
+['claude-sessions', 'correspond', 'files', 'github', 'history', 'jsonl', 'mbox', 'web']
 """
 
 from __future__ import annotations
@@ -33,7 +33,8 @@ import re
 import shutil
 import subprocess
 import warnings
-from collections.abc import Callable, Iterable, Iterator
+from collections.abc import Callable, Iterable, Iterator, Mapping
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -45,6 +46,7 @@ __all__ = [
     "correspond",
     "files",
     "github",
+    "history",
     "jsonl",
     "mbox",
     "page_doc",
@@ -65,6 +67,19 @@ _WEB_TIMEOUT = 30
 _DATE_META = ("article:published_time", "datePublished", "DC.date.issued", "date")
 _DEFAULT_SESSIONS_DIR = "~/.claude/projects"
 _GITHUB_PAGE_SIZE = 25
+_DEFAULT_HISTORY_FILE = "~/.claude/history.jsonl"
+_HISTORY_FILENAME = "history.jsonl"
+_HISTORY_BRIEF_MARKERS = ("Reply in at most five lines",)
+# A dispatch brief opens by naming the agent's role ("You are a reviewer", "You are
+# repo-sweep (opus, high)") and runs long; "You are right, ..." is the author typing.
+_HISTORY_BRIEF_START = re.compile(r"\AYou are (?:an? |the |[\w.-]+ \()")
+_HISTORY_BRIEF_MIN_WORDS = 30
+# A slash or bang command is one token after the sigil; "/srv/app/x.py fails" is prose.
+_HISTORY_COMMAND = re.compile(r"\A[/!][\w:-]+(?:\s|\Z)")
+# Claude Code's stand-ins for pasted text and images, not the author's words.
+_HISTORY_PLACEHOLDER = re.compile(r"\[(?:Pasted text|Image) #\d+[^\]]*\]")
+# Below this a timestamp is in seconds, not milliseconds (1e11 ms is March 1973).
+_MS_THRESHOLD = 1e11
 
 
 def _paths(refs: Iterable[str], suffixes: tuple[str, ...]) -> Iterator[Path]:
@@ -653,6 +668,113 @@ def claude_sessions(*refs: str, **_: Any) -> Iterator[dict[str, Any]]:
                 }
 
 
+def _history_label(path: Path, labels: Mapping[str, str] | None) -> str:
+    for key, label in (labels or {}).items():
+        if Path(os.path.expanduser(key)).resolve() == path.resolve():
+            return str(label)
+    if path.name == _HISTORY_FILENAME:
+        parent = path.resolve().parent.name.lstrip(".")
+        if parent:
+            return parent
+    return path.stem
+
+
+def _is_brief(text: str, markers: tuple[str, ...]) -> bool:
+    if any(m in text.lower() for m in markers):
+        return True
+    return bool(_HISTORY_BRIEF_START.match(text)) and len(text.split()) >= _HISTORY_BRIEF_MIN_WORDS
+
+
+def history(
+    *refs: str,
+    drop_commands: bool = True,
+    drop_briefs: bool = True,
+    brief_markers: Iterable[str] = _HISTORY_BRIEF_MARKERS,
+    labels: Mapping[str, str] | None = None,
+    **_: Any,
+) -> Iterator[dict[str, Any]]:
+    """What the author typed to a coding agent, from Claude Code's prompt history, across machines.
+
+    Unlike ``claude_sessions``, which digs prompts out of session transcripts, this
+    reads the prompt history file itself (``history.jsonl``): it needs no wrapper
+    filtering, and it outlives the transcripts that servers purge. Pass one history
+    file per machine. Each file's label (``labels[path]``, else the parent folder for
+    ``history.jsonl``, else the file name) starts the ``ref``, which is
+    ``<label>:<session id>``, one per session as for ``claude_sessions``.
+
+    Long pastes are stored apart and replaced in the text by placeholders such as
+    ``[Pasted text #1 +40 lines]``, which are removed here; a short paste is part of
+    the text and stays. Filters, each switchable: slash and bang commands
+    (``drop_commands``); agent-written dispatch briefs, which contain one of
+    ``brief_markers`` or open by naming the agent's role and run long
+    (``drop_briefs``). Short prompts are dropped by ``gather``'s ``min_words``.
+
+    Typed prompts often hold pasted passwords and keys. When ``config2py`` is
+    installed, the first prompt read that looks like it holds a credential raises
+    a warning; the texts are kept, so screen the corpus before building a model.
+    """
+    markers = tuple(m.lower() for m in brief_markers)
+    try:
+        from config2py import has_secret
+    except ImportError:
+        has_secret = None
+    warned = False
+    for path in _paths(refs or (_DEFAULT_HISTORY_FILE,), (".jsonl",)):
+        label = _history_label(path, labels)
+        with path.open(encoding="utf-8", errors="replace") as lines:
+            for line in lines:
+                try:
+                    record = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if not isinstance(record, dict):
+                    continue
+                text, stamp = record.get("display"), record.get("timestamp")
+                if not isinstance(text, str):
+                    continue
+                if isinstance(stamp, bool) or not isinstance(stamp, (int, float)):
+                    continue
+                text = _HISTORY_PLACEHOLDER.sub("", text).strip()
+                if not text:
+                    continue
+                if drop_commands and _HISTORY_COMMAND.match(text):
+                    continue
+                if drop_briefs and _is_brief(text, markers):
+                    continue
+                if not warned:
+                    if has_secret is None:
+                        warned = True
+                        warnings.warn(
+                            "history: pasted credentials were not screened; "
+                            "installing config2py enables the check",
+                            UserWarning,
+                            stacklevel=2,
+                        )
+                    elif has_secret(text):
+                        warned = True
+                        warnings.warn(
+                            "history: a prompt read looks like it holds a credential, and "
+                            "others may; the texts were kept, so screen the corpus before "
+                            "building a model",
+                            UserWarning,
+                            stacklevel=2,
+                        )
+                seconds = stamp / 1000 if stamp >= _MS_THRESHOLD else stamp
+                date = datetime.fromtimestamp(seconds, timezone.utc).isoformat()
+                session = record.get("sessionId")
+                yield {
+                    "text": text,
+                    "date": date,
+                    "channel": "agent",
+                    "kind": "prompt",
+                    "audience": "agent",
+                    "is_self": True,
+                    "ref": f"{label}:{session}"
+                    if isinstance(session, str) and session
+                    else f"{label}:{date}",
+                }
+
+
 #: The built-in sourcers, by the name used on the command line.
 SOURCERS: dict[str, Callable[..., Iterable[dict[str, Any]]]] = {
     "files": files,
@@ -661,6 +783,7 @@ SOURCERS: dict[str, Callable[..., Iterable[dict[str, Any]]]] = {
     "correspond": correspond,
     "github": github,
     "claude-sessions": claude_sessions,
+    "history": history,
     "web": web,
 }
 

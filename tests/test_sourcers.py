@@ -3,6 +3,8 @@
 import functools
 import json
 import mailbox
+import sys
+import warnings
 from email.message import EmailMessage
 from types import SimpleNamespace
 
@@ -271,7 +273,9 @@ def test_html_file_keeps_the_article_and_drops_the_site_chrome():
 def test_html_without_a_stated_date_stays_undated(tmp_path):
     pytest.importorskip("citeget")
     page = tmp_path / "note.html"
-    page.write_text("<html><body><article><p>" + "A plain sentence. " * 30 + "</p></article></body></html>")
+    page.write_text(
+        "<html><body><article><p>" + "A plain sentence. " * 30 + "</p></article></body></html>"
+    )
     (doc,) = sourcers.files(str(page))
     assert "date" not in doc and doc["title"] == "note"
 
@@ -382,3 +386,133 @@ def test_web_rejects_a_bad_timeout_and_gather_reports_skips():
     out = penlike.gather("t-skip", sourcer, list(pages), dry_run=True, files=files)
     assert out["added"] == 1
     assert any("not an HTML page" in w for w in out["warnings"])
+
+
+# --- history ---------------------------------------------------------------
+
+_MS = 1_700_000_000_000  # 2023-11-14T22:13:20+00:00
+
+
+def _history_file(path, entries):
+    rows = []
+    for i, entry in enumerate(entries):
+        row = {"timestamp": _MS + i * 1000, "project": "/x", "sessionId": "s"}
+        row.update(entry if isinstance(entry, dict) else {"display": entry})
+        rows.append(json.dumps(row))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(rows))
+    return str(path)
+
+
+def _fake_config2py(monkeypatch, flagged=()):
+    module = SimpleNamespace(has_secret=lambda text: text in flagged)
+    monkeypatch.setitem(sys.modules, "config2py", module)
+
+
+_BRIEF = "You are sweep-bot (opus, high). " + " ".join(["Work the issues in order."] * 8)
+
+
+def test_history_filters(tmp_path, monkeypatch):
+    _fake_config2py(monkeypatch)
+    path = tmp_path / "h.jsonl"
+    _history_file(
+        path,
+        [
+            "please rename the loader module",
+            "/clear",
+            "  !ls -la /tmp",
+            _BRIEF,
+            "Do it. Reply in at most five lines, please",
+            "You are right, the loader should stay where it is",
+            "/srv/proj/x.py has a bug in the loader",
+            {
+                "display": "keep what I typed here [Pasted text #1 +40 lines]",
+                "pastedContents": {"1": "SECRET PASTE"},
+            },
+            {"display": "[Image #2]"},
+            {"display": ""},
+            {"timestamp": _MS},
+        ],
+    )
+    with path.open("a") as out:
+        out.write("\nnot json\n")
+    found = list(sourcers.history(str(path)))
+    assert [d["text"] for d in found] == [
+        "please rename the loader module",
+        "You are right, the loader should stay where it is",
+        "/srv/proj/x.py has a bug in the loader",
+        "keep what I typed here",
+    ]
+    assert "SECRET PASTE" not in json.dumps(found) and "Pasted text" not in json.dumps(found)
+
+
+def test_history_filters_can_be_turned_off(tmp_path, monkeypatch):
+    _fake_config2py(monkeypatch)
+    path = _history_file(tmp_path / "h.jsonl", ["/clear", _BRIEF, "Reply in at most five lines"])
+    assert len(list(sourcers.history(path, drop_commands=False, drop_briefs=False))) == 3
+    assert len(list(sourcers.history(path, brief_markers=()))) == 1  # the marker-only entry stays
+
+
+def test_history_date_ref_and_register(tmp_path, monkeypatch):
+    _fake_config2py(monkeypatch)
+    path = _history_file(
+        tmp_path / "mac.jsonl",
+        [
+            "please rename the loader module",
+            {"display": "seconds, not ms", "timestamp": _MS // 1000, "sessionId": ""},
+        ],
+    )
+    doc, in_seconds = sourcers.history(path)
+    assert doc["date"] == "2023-11-14T22:13:20+00:00"
+    assert doc["ref"] == "mac:s", "one ref per session, as claude-sessions does"
+    assert in_seconds["date"] == "2023-11-14T22:13:20+00:00"
+    assert in_seconds["ref"] == "mac:2023-11-14T22:13:20+00:00", "no session id: the date"
+    assert penlike.situate(penlike.normalize_doc(doc)) == "agent"
+
+
+def test_history_ref_labels(tmp_path, monkeypatch):
+    _fake_config2py(monkeypatch)
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("USERPROFILE", str(tmp_path))  # what expanduser reads on Windows
+    dotted = _history_file(tmp_path / ".claude-iq" / "history.jsonl", ["one two three four"])
+    named = _history_file(tmp_path / "tw.jsonl", ["one two three four"])
+    mapped = _history_file(tmp_path / "other" / "history.jsonl", ["one two three four"])
+    found = list(
+        sourcers.history(dotted, named, mapped, labels={"~/other/history.jsonl": "laptop"})
+    )
+    assert [d["ref"].split(":")[0] for d in found] == ["claude-iq", "tw", "laptop"]
+
+
+def test_history_warns_but_never_shows_the_text(tmp_path, monkeypatch):
+    leaked = "use this token " + "sk-" + "abcdefghijklmnop"
+    _fake_config2py(monkeypatch, flagged={leaked})
+    path = _history_file(tmp_path / "h.jsonl", [leaked, "a harmless typed prompt"])
+    with pytest.warns(UserWarning) as caught:
+        found = list(sourcers.history(path))
+    assert len(found) == 2 and len(caught) == 1
+    message = str(caught[0].message)
+    assert "credential" in message and "screen the corpus" in message
+    assert "sk-" not in message and "abcdefgh" not in message
+
+
+def test_history_warns_even_when_gather_stops_early(tmp_path, monkeypatch):
+    leaked = "use this token " + "sk-" + "abcdefghijklmnop" + " in the loader config"
+    _fake_config2py(monkeypatch, flagged={leaked})
+    path = _history_file(
+        tmp_path / "h.jsonl", [leaked] + [f"prompt number {i} about the loader" for i in range(5)]
+    )
+    files = {}
+    penlike.new("quinn", files=files)
+    result = penlike.gather("quinn", "history", [path], limit=1, files=files)
+    assert any("credential" in w for w in result["warnings"])
+
+
+def test_history_warns_when_config2py_is_missing(tmp_path, monkeypatch):
+    monkeypatch.setitem(sys.modules, "config2py", None)
+    path = _history_file(tmp_path / "h.jsonl", ["a harmless typed prompt"])
+    with pytest.warns(UserWarning, match="config2py"):
+        assert len(list(sourcers.history(path))) == 1
+    empty = _history_file(tmp_path / "e.jsonl", ["/clear"])
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")  # nothing read, so nothing to warn about
+        assert list(sourcers.history(empty)) == []
